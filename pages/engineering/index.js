@@ -7,39 +7,6 @@ import { Box, Text, Heading } from "@chakra-ui/react";
 
 import Header from "components/Header";
 
-const inter = Inter({ subsets: ["latin"] });
-const IPFSCode = `pragma solidity ^0.8.0;
-
-contract MusicSharingPlatform {
-    
-    struct Song {
-        string title;
-        string artist;
-        string album;
-        string ipfsHash;
-    }
-
-    mapping(uint => Song) public songs;
-    uint public songCount;
-
-    event SongUploaded(
-        string title,
-        string artist,
-        string album,
-        string ipfsHash
-    );
-
-    function uploadSong(string memory _title, string memory _artist, string memory _album, string memory _ipfsHash) public {
-        songCount++;
-        songs[songCount] = Song(_title, _artist, _album, _ipfsHash);
-        emit SongUploaded(_title, _artist, _album, _ipfsHash);
-    }
-
-    function getSong(uint _songId) public view returns (string memory title, string memory artist, string memory album, string memory ipfsHash) {
-        return (songs[_songId].title, songs[_songId].artist, songs[_songId].album, songs[_songId].ipfsHash);
-    }
-}
-`;
 const PaymentCode = `pragma solidity ^0.8.0;
 
 interface IERC20 {
@@ -208,14 +175,15 @@ export default function Home() {
           its metadata and IPFS hash as arguments. This function increments the
           songCount and adds a new entry to the songs mapping with the provided
           metadata and hash. The function also emits a SongUploaded event with
-          the uploaded song's metadata and hash. The getSong function allows a
-          user to retrieve the metadata and IPFS hash for a specific song, given
-          its ID. This function returns a tuple with the song's title, artist,
-          album, and IPFS hash. This contract provides a basic implementation
-          for uploading and retrieving songs on a blockchain-based music sharing
-          platform, but it would need to be extended to include additional
-          functionality such as payment processing, user authentication, and
-          content moderation, among many other features.
+          the uploaded song&apos;s metadata and hash. The getSong function
+          allows a user to retrieve the metadata and IPFS hash for a specific
+          song, given its ID. This function returns a tuple with the song&apos;s
+          title, artist, album, and IPFS hash. This contract provides a basic
+          implementation for uploading and retrieving songs on a
+          blockchain-based music sharing platform, but it would need to be
+          extended to include additional functionality such as payment
+          processing, user authentication, and content moderation, among many
+          other features.
         </Text>
       </Box>
     </Box>
