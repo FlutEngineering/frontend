@@ -47,6 +47,7 @@ export default function Home() {
         >
           FLUT
         </Text>
+
         <Box
           display="flex"
           justifyContent="center"
