@@ -47,7 +47,7 @@ const Header = () => (
       </Link>
       <Link
         href={"https://t.me/+BhXkKrFweoAzODcx"}
-        key={"Medium"}
+        key={"Telegram"}
         _notFirst={{ ml: { base: 2, lg: 4 } }}
         isExternal
       >
@@ -58,7 +58,7 @@ const Header = () => (
         />
       </Link>
       <Link
-        href={"https://medium.com/@finneganmcdoogle"}
+        href={"https://medium.com/@team_83271"}
         key={"Medium"}
         _notFirst={{ ml: { base: 2, lg: 4 } }}
         isExternal
@@ -70,7 +70,7 @@ const Header = () => (
         />
       </Link>
       <Link
-        href={"https://twitter.com/FinneganMcDoogl"}
+        href={"https://twitter.com/TheMagicFlut"}
         key={"Twitter"}
         _notFirst={{ ml: { base: 2, lg: 4 } }}
         isExternal
