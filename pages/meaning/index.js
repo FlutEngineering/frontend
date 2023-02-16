@@ -33,18 +33,28 @@ export default function Home() {
           alignItems="center"
           fontSize="5xl"
           paddingY="15vh"
+          textAlign="center"
         >
           Why it Matters
         </Text>
 
-        <Text fontSize="large" lineHeight="260%" marginX="15vw">
+        <Text
+          fontSize="large"
+          lineHeight="260%"
+          marginX={{ base: "0", medium: "15vw" }}
+        >
           Manifesto: The music industry has long been plagued by issues of
           centralized control, lack of transparency, and unfair compensation for
           artists and musicians. FLUTE can address these problems by creating a
           decentralized music ecosystem that empowers musicians, artists, and
           music lovers.
         </Text>
-        <Text fontSize="large" lineHeight="260%" marginX="15vw" paddingY="10">
+        <Text
+          fontSize="large"
+          lineHeight="260%"
+          marginX={{ base: "0", medium: "15vw" }}
+          paddingY="10"
+        >
           FLUTE enables artists and musicians to publish their work and receive
           fair compensation in the form of FLUTE tokens. These tokens can then
           be used to purchase & stream music, merchandise, and other services
@@ -59,7 +69,11 @@ export default function Home() {
           decentralized platform that fosters creativity, innovation, and fair
           compensation for all involved.
         </Text>
-        <Text fontSize="large" lineHeight="260%" marginX="15vw">
+        <Text
+          fontSize="large"
+          lineHeight="260%"
+          marginX={{ base: "0", medium: "15vw" }}
+        >
           This will provide an opportunity for music lovers and supporters to
           directly contribute to the success of their favorite artists and
           musicians. FLUTE token is a powerful solution to the problems facing
@@ -72,7 +86,12 @@ export default function Home() {
           Together, we can create a brighter future for artists, musicians, and
           music lovers worldwide.
         </Text>
-        <Text fontSize="large" lineHeight="260%" marginX="15vw">
+        <Text
+          fontSize="large"
+          lineHeight="260%"
+          marginX={{ base: "0", medium: "15vw" }}
+          paddingY="10"
+        >
           Together, we can create a brighter future for artists, musicians, and
           music lovers worldwide.
         </Text>

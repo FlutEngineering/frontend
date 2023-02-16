@@ -83,11 +83,11 @@ export default function Home() {
             <p className={inter.className}>(Coming Soon)</p>
           </Link>
 
-          <Link target="_blank" className={styles.card}>
+          <Link href="/community" className={styles.card}>
             <h2 className={inter.className}>
               Community <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>(Coming Soon)</p>
+            <p className={inter.className}>Our museum of community Art</p>
           </Link>
 
           <Link href="/engineering" className={styles.card}>

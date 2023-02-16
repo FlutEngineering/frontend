@@ -73,6 +73,7 @@ contract MusicSharingPlatform {
     }
 }
 `;
+
 export default function Home() {
   return (
     <Box>
@@ -99,6 +100,7 @@ export default function Home() {
           alignItems="center"
           fontSize="5xl"
           paddingY="15vh"
+          textAlign="center"
         >
           How to Build it
         </Text>
@@ -106,7 +108,7 @@ export default function Home() {
         <Text
           fontSize="large"
           lineHeight="260%"
-          marginX="15vw"
+          marginX={{ base: "0", medium: "15vw" }}
           paddingBottom="15vh"
           textAlign="center"
         >
@@ -116,8 +118,8 @@ export default function Home() {
         <Text
           fontSize="large"
           lineHeight="260%"
-          marginX="15vw"
           paddingBottom="15vh"
+          marginX={{ base: "0", medium: "15vw" }}
         >
           One approach could be to store the audio files as IPFS (InterPlanetary
           File System) hashes on the blockchain. IPFS is a decentralized file
@@ -157,6 +159,7 @@ export default function Home() {
         >
           For example..
         </Text>
+
         <CodeBlock
           text={PaymentCode}
           language={"javascript"}
@@ -165,7 +168,12 @@ export default function Home() {
           borderRadius="15"
         />
 
-        <Text fontSize="large" lineHeight="260%" paddingY="15vh" marginX="15vw">
+        <Text
+          fontSize="large"
+          lineHeight="260%"
+          paddingY="15vh"
+          marginX={{ base: "0", medium: "15vw" }}
+        >
           In this contract, we define a struct Song that contains the metadata
           for each song, including its title, artist, album, and IPFS hash. We
           also define a mapping songs that maps each song ID to its
