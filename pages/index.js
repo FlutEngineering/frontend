@@ -4,6 +4,8 @@ import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import Typed from "react-typed";
 import { render } from "react-dom";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import AudioUploader from "../components/AudioUploader";
 
 import {
   Box,
@@ -17,10 +19,19 @@ import {
 
 import { FaMediumM, FaTwitter, FaTelegram } from "react-icons/fa";
 import Header from "components/Header";
+// import FlutBalance from "components/FlutBalance";
+
+// import { useBalance } from "wagmi";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  // const { data, isError, isLoading } = useBalance({
+  //   address: "0x4F08705FB8F33AffC231ed66e626B40E84A71870",
+  // });
+
+  // if (isLoading) return <div>Fetching balance…</div>;
+  // if (isError) return <div>Error fetching balance</div>;
   return (
     <Box>
       <Head>
@@ -47,7 +58,15 @@ export default function Home() {
         >
           FLUT
         </Text>
-
+        <ConnectButton
+          accountStatus={{
+            smallScreen: "avatar",
+            largeScreen: "full",
+          }}
+        />
+        {/* <Text>
+          {data?.formatted} {data?.symbol}
+        </Text> */}
         <Box
           display="flex"
           justifyContent="center"
