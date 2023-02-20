@@ -95,11 +95,11 @@ export default function Home() {
             </p>
           </Link>
 
-          <Link className={styles.card} target="_blank">
+          <Link className={styles.card} href="/jobs">
             <h2 className={inter.className}>
               Jobs <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>(Coming Soon)</p>
+            <p className={inter.className}>Current Engineering Jobs</p>
           </Link>
 
           <Link href="/community" className={styles.card}>
@@ -109,11 +109,13 @@ export default function Home() {
             <p className={inter.className}>Our museum of community Art</p>
           </Link>
 
-          <Link href="/engineering" className={styles.card}>
+          <Link target="_blank" className={styles.card}>
             <h2 className={inter.className}>
               Architecture <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>Take a Look under the Hood</p>
+            <p className={inter.className}>
+              Take a Look under the Hood (Updates Coming Shortly)
+            </p>
           </Link>
         </div>
       </Box>

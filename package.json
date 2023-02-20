@@ -28,5 +28,9 @@
     "react-query": "^3.39.3",
     "react-typed": "^1.2.0",
     "wagmi": "^0.11.5"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.28",
+    "typescript": "4.9.5"
   }
 }
