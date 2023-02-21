@@ -21,7 +21,6 @@ import {
   IoCodeOutline,
   IoLogoJavascript,
 } from "react-icons/io5";
-import styles from "@/styles/Home.module.css";
 
 import Header from "components/Header";
 
@@ -43,7 +42,7 @@ const Feature = ({ text, icon, iconBg }) => {
   );
 };
 
-export default function SplitWithImage() {
+const SplitWithImage = () => {
   return (
     <Box
       display="flex"
@@ -117,11 +116,8 @@ export default function SplitWithImage() {
             music lovers can enjoy high-quality content at a lower cost. 👍 Our
             chart is here:
           </Text>
-          <Link
-            target="https://www.dextools.io/app/en/ether/pair-explorer/0xe532b04d2f2e921dfec69e132e9214d2f82df304"
-            className={styles.card}
-          >
-            <Text>
+          <Link target="https://www.dextools.io/app/en/ether/pair-explorer/0xe532b04d2f2e921dfec69e132e9214d2f82df304">
+            <Text color="blue.500">
               https://www.dextools.io/app/en/ether/pair-explorer/0xe532b04d2f2e921dfec69e132e9214d2f82df304
             </Text>
           </Link>
@@ -144,25 +140,27 @@ export default function SplitWithImage() {
             don't accept Crypto, we either have to find an anonymous credit card
             option, or build the infrastructure ourselves. The platform itself
             is relatively straight-forward:
-            <Link
-              paddingY="15vh"
-              target="https://www.dextools.io/app/en/ether/pair-explorer/0xe532b04d2f2e921dfec69e132e9214d2f82df304"
-            >
-              <Text color="blue.500">
-                https://medium.com/@team_83271/manifesto-9de8fa7439d0
-              </Text>
-            </Link>
+          </Text>
+          <Link
+            paddingY="1vh"
+            target="https://www.dextools.io/app/en/ether/pair-explorer/0xe532b04d2f2e921dfec69e132e9214d2f82df304"
+          >
+            <Text color="blue.500">
+              https://medium.com/@team_83271/manifesto-9de8fa7439d0
+            </Text>
+          </Link>
+          <Text>
             You will need to email team@flut.cloud with your resume discussing
             how you would approach the problem. You will need to be precise. For
             example:
           </Text>
           <Text>
-            'I am a typescript FE developer who enjoys using ChakraUI and
+            I am a typescript FE developer who enjoys using ChakraUI and
             reac-query to handle data-fetching. I like Wagmi and Rainbow kit for
             ease of implementation even though Wagmi is buggy and releases
             breaking changes faster than I like. I would use Filebase with an
             express server to overcome the KYC obstacle through Pinata. (OR I
-            know a way to pay with VISA using crypto)... etc...'
+            know a way to pay with VISA using crypto)... etc...
           </Text>
           <Text>
             There are many approaches. We need to know that you understand how
@@ -182,4 +180,5 @@ export default function SplitWithImage() {
       </SimpleGrid>
     </Box>
   );
-}
+};
+export default SplitWithImage;

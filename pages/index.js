@@ -99,7 +99,7 @@ export default function Home() {
             <h2 className={inter.className}>
               Jobs <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>Current Engineering Jobs</p>
+            <p className={inter.className}>Engineering Jobs</p>
           </Link>
 
           <Link href="/community" className={styles.card}>
@@ -114,7 +114,7 @@ export default function Home() {
               Architecture <span>-&gt;</span>
             </h2>
             <p className={inter.className}>
-              Take a Look under the Hood (Updates Coming Shortly)
+              Take a Look under the Hood (Coming Soon)
             </p>
           </Link>
         </div>
