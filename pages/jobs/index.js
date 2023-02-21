@@ -137,9 +137,9 @@ const SplitWithImage = () => {
             As an engineer, your first goal is to work with or build an IPFS
             gateway. Normally this is easy since you can simply sign up for a
             service like Pinata which handles a lot of coding for us. Since they
-            don't accept Crypto, we either have to find an anonymous credit card
-            option, or build the infrastructure ourselves. The platform itself
-            is relatively straight-forward:
+            do not accept Crypto, we either have to find an anonymous credit
+            card option, or build the infrastructure ourselves. The platform
+            itself is relatively straight-forward:
           </Text>
           <Link
             paddingY="1vh"
@@ -164,7 +164,7 @@ const SplitWithImage = () => {
           </Text>
           <Text>
             There are many approaches. We need to know that you understand how
-            to build. This is a well-paid position that moves fast. You'll be
+            to build. This is a well-paid position that moves fast. You will be
             working directly with me as well as our community. This position is
             remote, decentralized, and very fun. 🎉
           </Text>
