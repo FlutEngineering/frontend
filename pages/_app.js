@@ -1,7 +1,11 @@
 import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  darkTheme,
+} from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -27,7 +31,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiClient = createClient({
-  autoConnect: true,
+  autoConnect: false,
   connectors,
   provider,
 });
@@ -37,7 +41,7 @@ export default function App({ Component, pageProps }) {
     <ChakraProvider>
       <QueryClientProvider client={queryClient}>
         <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider chains={chains}>
+          <RainbowKitProvider chains={chains} theme={darkTheme()}>
             <Component {...pageProps} />
           </RainbowKitProvider>
         </WagmiConfig>
