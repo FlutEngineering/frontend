@@ -25,10 +25,9 @@ const HeaderNoEther = () => {
         alignItems="center"
         justifyContent="center"
         flexDirection={{ base: "column", md: "row" }}
+        marginX="5"
       >
-        <Box width="15vw" height="1vh" />
         <Text color="grey">team@flut.cloud</Text>
-        <Box width="2vw" height="1vh" />
       </Box>
 
       <HStack>

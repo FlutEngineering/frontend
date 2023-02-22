@@ -1,22 +1,28 @@
-import { Box, Image, Text, Link } from "@chakra-ui/react";
+import { Box, Image, Text, Link, Flex } from "@chakra-ui/react";
 import Header from "components/Header";
 import HeaderNoEther from "./HeaderNoEther";
 
 const Layout = ({ children }) => {
   return (
-    <Box>
+    <Flex
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      paddingTop="5vh"
+    >
+      <HeaderNoEther />
+
       <Box
         display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
+        flexDirection={{ base: "column", md: "row" }}
         alignItems="center"
         padding="6rem"
         minHeight="100vh"
+        // marginTop="-5vh"
       >
-        <HeaderNoEther />
         {children}
       </Box>
-    </Box>
+    </Flex>
   );
 };
 
