@@ -33,10 +33,12 @@ import {
   AccordionPanel,
   AccordionIcon,
   SimpleGrid,
+  HStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import Layout from "components/Layout";
 import { useBalance, useAccount } from "wagmi";
+import axios from "axios";
 
 const IMAGES = [
   "/cowboyFlute.jpeg",
@@ -52,7 +54,7 @@ const IMAGES = [
   "/cowboyFlute.jpeg",
 ];
 
-const ImageGallery = () => {
+const ImageGallery = ({ imageURLs }) => {
   return (
     // <Box maxW="70vw" mx="auto" overflowX="auto">
     <Box
@@ -65,12 +67,16 @@ const ImageGallery = () => {
       mb={8}
     >
       {/* <SimpleGrid columns={[1, 2, 3, 4]} spacing={4} minW="800px"> */}
-      {IMAGES.map((image, index) => (
+      {imageURLs?.map((image, index) => (
         <Image
           key={index}
           src={image}
           margin="2"
           width={{ base: "15vw", lg: "10vw" }}
+          _hover={{
+            transform: "scale(1.05)",
+            transition: "transform 0.2s",
+          }}
         />
       ))}
       {/* </SimpleGrid> */}
@@ -86,12 +92,35 @@ const Profile = () => {
     address: address,
     token: "0x4f08705fb8f33affc231ed66e626b40e84a71870",
   });
+  const [imgURLs, setImgURLs] = useState([""]);
+
+  axios
+    .get("https://midjourney.com/showcase/recent/")
+    .then(function (response) {
+      const paragraph = response.data;
+      const regex = `https:\/\/cdn\.midjourney\.com\/[a-z0-9-/_]*\.png`;
+      const allImgUrls = [...paragraph.matchAll(regex)];
+      const oddImgUrls = allImgUrls.map((element, index) => {
+        if (index % 2 === 0) {
+          return element;
+        }
+      });
+
+      setImgURLs(oddImgUrls);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .finally(function () {
+      // always executed
+    });
 
   return (
     <Layout>
       <VStack>
         <Card width={{ base: "90vw", md: "42vw", lg: "30vw" }} height="40vh">
-          <CardHeader>
+          <CardBody>
             <Flex direction="row" justifyContent="space-evenly">
               <Tooltip label="click me">
                 <Avatar
@@ -107,8 +136,6 @@ const Profile = () => {
               </Tooltip>
               <ConnectButton showBalance={false} />
             </Flex>
-          </CardHeader>
-          <CardBody>
             <Text
               fontSize="3xl"
               paddingY="5"
@@ -118,18 +145,38 @@ const Profile = () => {
               ${Math.trunc(data?.formatted)} FLUT
             </Text>
 
-            <Text fontWeight="bold" color="gray.700">
-              Followers
-            </Text>
-            <Text fontWeight="bold" color="gray.700">
-              Following
-            </Text>
-            <Text fontWeight="bold" color="gray.700">
-              Streams
-            </Text>
-            <Text fontWeight="bold" color="gray.700">
-              Revenue
-            </Text>
+            <HStack>
+              <Text fontWeight="bold" color="gray.700">
+                Followers
+              </Text>
+              <Text fontWeight="bold" color="gray.700">
+                99
+              </Text>
+            </HStack>
+            <HStack>
+              <Text fontWeight="bold" color="gray.700">
+                Following
+              </Text>
+              <Text fontWeight="bold" color="gray.700">
+                22
+              </Text>
+            </HStack>
+            <HStack>
+              <Text fontWeight="bold" color="gray.700">
+                Total Plays
+              </Text>
+              <Text fontWeight="bold" color="gray.700">
+                1,257
+              </Text>
+            </HStack>
+            <HStack>
+              <Text fontWeight="bold" color="gray.700">
+                Revenue
+              </Text>
+              <Text fontWeight="bold" color="gray.700">
+                $ 9,020,220 FLUT
+              </Text>
+            </HStack>
           </CardBody>
 
           <CardFooter
@@ -144,9 +191,7 @@ const Profile = () => {
         </Card>
 
         <Card width={{ base: "90vw", md: "42vw", lg: "30vw" }} height="40vh">
-          <CardHeader>
-            <Flex direction="column"></Flex>
-          </CardHeader>
+          <CardHeader></CardHeader>
           <CardBody></CardBody>
 
           <CardFooter
@@ -160,50 +205,55 @@ const Profile = () => {
           ></CardFooter>
         </Card>
       </VStack>
+      <Tooltip label="Display Purposes Only">
+        <Card
+          width={{ base: "90vw", md: "45vw", lg: "60vw" }}
+          height="80vh"
+          margin="5"
+        >
+          <CardBody flexWrap="nowrap" overflowY="auto">
+            <Flex direction="column" alignItems="center">
+              <Text fontSize="3xl" fontWeight="bold" color="gray.600">
+                Jazz{" "}
+              </Text>
 
-      <Card
-        width={{ base: "90vw", md: "45vw", lg: "60vw" }}
-        height="80vh"
-        margin="5"
-      >
-        <CardHeader></CardHeader>
-        <CardBody flexWrap="nowrap" overflowY="auto">
-          <Flex direction="column">
-            <Tooltip label="Display Purposes Only">
-              <Text fontSize="3xl">Artists </Text>
-            </Tooltip>
-            <ImageGallery />
-          </Flex>
-          <Flex direction="column">
-            <Tooltip label="Display Purposes Only">
-              <Text fontSize="3xl">Playlists </Text>
-            </Tooltip>
-            <ImageGallery />
-          </Flex>
-          <Flex direction="column">
-            <Tooltip label="Display Purposes Only">
-              <Text fontSize="3xl">Singles </Text>
-            </Tooltip>
-            <ImageGallery />
-          </Flex>
-          <Flex direction="column">
-            <Tooltip label="Display Purposes Only">
-              <Text fontSize="3xl">Friends Releases </Text>
-            </Tooltip>
-            <ImageGallery />
-          </Flex>
-        </CardBody>
+              <ImageGallery imageURLs={imgURLs} />
+            </Flex>
+            <Flex direction="column" alignItems="center">
+              <Text fontSize="3xl" fontWeight="bold" color="gray.600">
+                Not Jazz{" "}
+              </Text>
 
-        <CardFooter
-          justify="space-between"
-          flexWrap="wrap"
-          sx={{
-            "& > button": {
-              minW: "136px",
-            },
-          }}
-        ></CardFooter>
-      </Card>
+              <ImageGallery imageURLs={imgURLs} />
+            </Flex>
+            <Flex direction="column" alignItems="center">
+              <Text fontSize="3xl" fontWeight="bold" color="gray.600">
+                Post Country Vapor Wave{" "}
+              </Text>
+
+              <ImageGallery imageURLs={imgURLs} />
+            </Flex>
+
+            <Flex direction="column" alignItems="center">
+              <Text fontSize="3xl" fontWeight="bold" color="gray.600">
+                Subliminal Messaging{" "}
+              </Text>
+
+              <ImageGallery imageURLs={imgURLs} />
+            </Flex>
+          </CardBody>
+
+          <CardFooter
+            justify="space-between"
+            flexWrap="wrap"
+            sx={{
+              "& > button": {
+                minW: "136px",
+              },
+            }}
+          ></CardFooter>
+        </Card>
+      </Tooltip>
       <>
         <Drawer
           isOpen={isOpen}
