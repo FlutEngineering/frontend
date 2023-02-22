@@ -9,6 +9,7 @@ const Layout = ({ children }) => {
       alignItems="center"
       justifyContent="center"
       paddingTop="5vh"
+      backgroundColor="gray.100"
     >
       <HeaderNoEther />
 
