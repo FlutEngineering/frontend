@@ -35,10 +35,11 @@ import {
   SimpleGrid,
   HStack,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Layout from "components/Layout";
 import { useBalance, useAccount } from "wagmi";
 import axios from "axios";
+import AudioUploader from "./AudioUploader";
 
 const IMAGES = [
   "/cowboyFlute.jpeg",
@@ -53,7 +54,6 @@ const IMAGES = [
   "/cowboyFlute.jpeg",
   "/cowboyFlute.jpeg",
 ];
-
 const ImageGallery = ({ imageURLs }) => {
   return (
     // <Box maxW="70vw" mx="auto" overflowX="auto">
@@ -94,31 +94,34 @@ const Profile = () => {
   });
   const [imgURLs, setImgURLs] = useState([""]);
 
-  axios
-    .get("https://midjourney.com/showcase/recent/")
-    .then(function (response) {
-      const paragraph = response.data;
-      const regex = `https:\/\/cdn\.midjourney\.com\/[a-z0-9-/_]*\.png`;
-      const allImgUrls = [...paragraph.matchAll(regex)];
-      const oddImgUrls = allImgUrls.map((element, index) => {
-        if (index % 2 === 0) {
-          return element;
-        }
-      });
+  useEffect(() => {
+    console.log("request images");
+    axios
+      .get("https://midjourney.com/showcase/recent/")
+      .then(function (response) {
+        const paragraph = response.data;
+        const regex = `https:\/\/cdn\.midjourney\.com\/[a-z0-9-/_]*\.png`;
+        const allImgUrls = [...paragraph.matchAll(regex)];
+        const oddImgUrls = allImgUrls.map((element, index) => {
+          if (index % 2 === 0) {
+            return element;
+          }
+        });
 
-      setImgURLs(oddImgUrls);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .finally(function () {
-      // always executed
-    });
+        setImgURLs(oddImgUrls);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+  }, []);
 
   return (
     <Layout>
-      <VStack>
+      <VStack marginBottom={2}>
         <Card width={{ base: "90vw", md: "42vw", lg: "30vw" }} height="40vh">
           <CardBody>
             <Flex direction="row" justifyContent="space-evenly">
@@ -190,26 +193,23 @@ const Profile = () => {
           ></CardFooter>
         </Card>
 
-        <Card width={{ base: "90vw", md: "42vw", lg: "30vw" }} height="40vh">
-          <CardHeader></CardHeader>
-          <CardBody></CardBody>
-
-          <CardFooter
-            justify="space-between"
-            flexWrap="wrap"
-            sx={{
-              "& > button": {
-                minW: "136px",
-              },
-            }}
-          ></CardFooter>
+        <Card width={{ base: "90vw", md: "42vw", lg: "30vw" }} minHeight="40vh">
+          <CardHeader pb={2}>
+            <Text fontSize="xl" fontWeight="bold" color="gray.700">
+              AUDIO UPLOAD
+            </Text>
+          </CardHeader>
+          <CardBody pt={0}>
+            <AudioUploader />
+          </CardBody>
         </Card>
       </VStack>
       <Tooltip label="Display Purposes Only">
         <Card
           width={{ base: "90vw", md: "45vw", lg: "60vw" }}
           height="80vh"
-          margin="5"
+          margin={5}
+          marginTop={0}
         >
           <CardBody flexWrap="nowrap" overflowY="auto">
             <Flex direction="column" alignItems="center">
