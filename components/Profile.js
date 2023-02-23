@@ -25,21 +25,17 @@ import {
   DrawerCloseButton,
   useDisclosure,
   Avatar,
-  AvatarBadge,
-  AvatarGroup,
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  SimpleGrid,
   HStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import Layout from "components/Layout";
 import { useBalance, useAccount } from "wagmi";
 import useGetAlbumImages from "hooks/useGetAlbumImages";
-import axios from "axios";
 import AudioUploader from "./AudioUploader";
 
 const ImageGallery = ({ imageURLs }) => {
