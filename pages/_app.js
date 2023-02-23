@@ -19,9 +19,9 @@ const queryClient = new QueryClient();
 const { chains, provider } = configureChains(
   [mainnet],
   [
-    alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY, priority: 0 }),
-    infuraProvider({ apiKey: process.env.INFURA_API_KEY, priority: 1 }),
-    publicProvider({ priority: 2 }),
+    // alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY, priority: 1 }),
+    infuraProvider({ apiKey: process.env.INFURA_API_KEY, priority: 0 }),
+    // publicProvider({ priority: 2 }),
   ]
 );
 
