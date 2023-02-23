@@ -3,9 +3,20 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import { CodeBlock, atomOneDark } from "react-code-blocks";
 
-import { Box, Text, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Heading,
+  List,
+  ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
+  Image,
+} from "@chakra-ui/react";
 
 import Header from "components/Header";
+import Link from "next/link";
 
 const PaymentCode = `pragma solidity ^0.8.0;
 
@@ -79,7 +90,6 @@ export default function Home() {
     <Box>
       <Head>
         <title>The Decentralized Music Platform</title>
-
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/flut.ico" />
       </Head>
@@ -91,108 +101,100 @@ export default function Home() {
         alignItems="center"
         padding="6rem"
         minHeight="100vh"
+        margin="2vw"
       >
         <Header />
-
         <Text
           display="flex"
           justifyContent="center"
           alignItems="center"
           fontSize="5xl"
-          paddingY="15vh"
+          paddingY="10vh"
           textAlign="center"
         >
-          How to Build it
+          {`How We're Building It`}
         </Text>
-
-        <Text
-          fontSize="large"
-          lineHeight="260%"
-          marginX={{ base: "0", medium: "15vw" }}
-          paddingBottom="15vh"
-          textAlign="center"
-        >
-          Disclaimer: No code listed on this page is meant to be compiled or
-          deployed. The following examples are to demonstrate architecture only.
+        <Text fontSize="xl" marginX={{ base: "0", medium: "15vw" }}>
+          {`We're big fans of Music here at FLUT. Most of us are musicians
+          ourselves. We're building the platform that we want to use. Our
+          techstack includes a hybrid of web2 and web3 technologies such as:`}
         </Text>
-        <Text
-          fontSize="large"
-          lineHeight="260%"
-          paddingBottom="15vh"
-          marginX={{ base: "0", medium: "15vw" }}
-        >
-          One approach could be to store the audio files as IPFS (InterPlanetary
-          File System) hashes on the blockchain. IPFS is a decentralized file
-          storage system that allows files to be stored and accessed using
-          content-based addressing, which means that files are retrieved based
-          on their unique content hash, rather than a specific location on a
-          centralized server. This makes IPFS a good fit for a decentralized
-          music sharing platform, as it allows for the storage and retrieval of
-          large audio files in a distributed, fault-tolerant manner. To upload
-          an audio file to the platform, a user would first convert the audio
-          file to a format compatible with IPFS, such as FLAC or WAV. They would
-          then add the file to the IPFS network, which would generate a
-          content-based hash for the file. This hash could then be stored on the
-          blockchain, along with metadata such as the song title, artist name,
-          album name, and so on. The metadata could be stored using a smart
-          contract, which would allow for the creation of a decentralized music
-          database that could be queried by anyone on the network. When a user
-          wants to play a song, they could query the blockchain for the IPFS
-          hash of the corresponding audio file. They could then retrieve the
-          file from the IPFS network and play it using a compatible media
-          player. To ensure that artists are properly compensated for their
-          work, the platform could use a blockchain-based payment system, such
-          as a cryptocurrency or a stablecoin, to facilitate micropayments for
-          each play or download of a song. This would allow for a fair and
-          transparent system of royalty payments that would be tracked and
-          enforced by the blockchain. Overall, by leveraging IPFS and blockchain
-          technology, a decentralized music sharing platform could provide a
-          secure, transparent, and efficient way for artists to share their
-          music and for music lovers to discover new and independent artists,
-          all while ensuring that artists are compensated fairly for their work.
+        <UnorderedList paddingY="2vh" fontSize="xl">
+          <ListItem>
+            <Link href="https://nextjs.org/" isExternal>
+              <Text color="blue.300">NextJs</Text>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link href="https://expressjs.com/" isExternal>
+              <Text color="blue.300">ExpressJs</Text>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link href="https://www.postgresql.org/" isExternal>
+              <Text color="blue.300">Postgres</Text>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link href="https://soliditylang.org/" isExternal>
+              <Text color="blue.300">Solidity</Text>
+            </Link>
+          </ListItem>
+        </UnorderedList>
+        <Text paddingY="2vh" fontSize="xl">
+          {`We plan to use Ethereum mainnet to handle issues such as content
+          ownership and revenue mechanics. We plan to use NodeJS and traditional
+          web2 mechanics to keep track of relationships between user such as who
+          follows who and how many likes you have. This is because only the most
+          important information should be stored on-chain. For example, you
+          don't want to sign a transaction every time you want to play a song.
+          However, you want to get paid for your content, and we need a way to keep
+          track of who is owed what. We can keep track of this information with
+          our web2 back end, and then create key moments when users will be
+          required to settle the balance. For example, if you've been listening
+          to a lot of music, you might need to sign a transaction to pay your total balance which will then be distributed fairly amongst the artists.  If too large of a balance is owed, we can disable listening for that wallet.`}
         </Text>
-        <Text
-          fontSize="large"
-          lineHeight="260%"
-          marginX="15vw"
-          paddingBottom="15vh"
-        >
-          For example..
+        <Image paddingY="2vh" src="/skywhales.png" />
+        <Text paddingY="2vh" fontSize="xl">
+          At the moment, your wallet is your user profile. You are able to
+          upload audio to our decentralized storage. We use (InterPlanetary File
+          System)
         </Text>
-
-        <CodeBlock
-          text={PaymentCode}
-          language={"javascript"}
-          showLineNumbers={false}
-          theme={atomOneDark}
-          borderRadius="15"
-        />
-
-        <Text
-          fontSize="large"
-          lineHeight="260%"
-          paddingY="15vh"
-          marginX={{ base: "0", medium: "15vw" }}
-        >
-          In this contract, we define a struct Song that contains the metadata
-          for each song, including its title, artist, album, and IPFS hash. We
-          also define a mapping songs that maps each song ID to its
-          corresponding Song struct, and a counter songCount that keeps track of
-          the number of songs that have been uploaded to the platform. The
-          uploadSong function allows a user to upload a new song by providing
-          its metadata and IPFS hash as arguments. This function increments the
-          songCount and adds a new entry to the songs mapping with the provided
-          metadata and hash. The function also emits a SongUploaded event with
-          the uploaded song&apos;s metadata and hash. The getSong function
-          allows a user to retrieve the metadata and IPFS hash for a specific
-          song, given its ID. This function returns a tuple with the song&apos;s
-          title, artist, album, and IPFS hash. This contract provides a basic
-          implementation for uploading and retrieving songs on a
-          blockchain-based music sharing platform, but it would need to be
-          extended to include additional functionality such as payment
-          processing, user authentication, and content moderation, among many
-          other features.
+        <UnorderedList paddingY="2vh" fontSize="xl">
+          <ListItem>
+            <Link href="https://ipfs.tech/" isExternal>
+              <Text color="blue.300">IPFS</Text>
+            </Link>
+          </ListItem>
+        </UnorderedList>
+        <Text paddingY="2vh" fontSize="xl">
+          IPFS is a decentralized file storage system that allows files to be
+          stored and accessed using content-based addressing, which means that
+          files are retrieved based on their unique content hash, rather than a
+          specific location on a centralized server. This makes IPFS a good fit
+          for a decentralized music sharing platform, as it allows for the
+          storage and retrieval of large audio files in a distributed,
+          fault-tolerant manner. When you add a file to the IPFS network, we
+          generate a content-based hash for the file. This hash will then be
+          stored on the blockchain, along with metadata such as the song title,
+          artist name, album name, and so on. The metadata will be stored using
+          a smart contract, which will allow for the creation of a decentralized
+          music database that could be queried by anyone on the network. When a
+          user wants to play a song, they will query the blockchain for the IPFS
+          hash of the corresponding audio file. They will then retrieve the file
+          from the IPFS network and play it will start to play on our site. 💪
         </Text>
+        <Text paddingY="2vh" fontSize="xl">
+          To ensure that artists are properly compensated for their work, we
+          will use $FLUT to facilitate balances for each play or download of a
+          song. This will allow for a fair and transparent system of royalty
+          payments that will be tracked and enforced by the blockchain. We want
+          to provide a secure, transparent, and efficient way for artists to
+          share their music and for music lovers to discover new and independent
+          artists, all while ensuring that artists are compensated fairly for
+          their work.
+        </Text>
+        <Image paddingY="2vh" src="/musicMachine.png" />
       </Box>
     </Box>
   );
