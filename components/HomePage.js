@@ -77,7 +77,7 @@ const HomePage = () => {
             <h2 className={inter.className}>
               Jobs <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>(Coming Soon)</p>
+            <p className={inter.className}>(Currently Full)</p>
           </Link>
 
           <Link href="/community" className={styles.card}>
