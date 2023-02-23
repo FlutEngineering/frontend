@@ -1,0 +1,16 @@
+.dropzone-list {
+  /* display: table-cell; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  text-align: center;
+  padding: 10px;
+  border: 1px dashed #d3d3d3;
+  cursor: pointer;
+}
+
+.dropzone-active {
+  border: 1px solid lightgreen;
+  color: lightgreen;
+}
