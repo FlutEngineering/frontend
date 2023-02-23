@@ -35,53 +35,42 @@ import {
   SimpleGrid,
   HStack,
 } from "@chakra-ui/react";
+import ImageWithIcon from "./ImageWithIcon";
 import React, { useState } from "react";
 import Layout from "components/Layout";
 import { useBalance, useAccount } from "wagmi";
+import useGetAlbumImages from "hooks/useGetAlbumImages";
 import axios from "axios";
 
-const IMAGES = [
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-  "/cowboyFlute.jpeg",
-];
-
 const ImageGallery = ({ imageURLs }) => {
-  return (
-    // <Box maxW="70vw" mx="auto" overflowX="auto">
-    <Box
-      display="flex"
-      flexWrap="nowrap"
-      overflowX="auto"
-      alignItems="center"
-      justifyContent="center"
-      mt={8}
-      mb={8}
-    >
-      {/* <SimpleGrid columns={[1, 2, 3, 4]} spacing={4} minW="800px"> */}
-      {imageURLs?.map((image, index) => (
-        <Image
-          key={index}
-          src={image}
-          margin="2"
-          width={{ base: "15vw", lg: "10vw" }}
-          _hover={{
-            transform: "scale(1.05)",
-            transition: "transform 0.2s",
-          }}
-        />
-      ))}
-      {/* </SimpleGrid> */}
-    </Box>
-  );
+  if (imageURLs) {
+    return (
+      // <Box maxW="70vw" mx="auto" overflowX="auto">
+      <Box
+        display="flex"
+        flexWrap="nowrap"
+        overflowX="auto"
+        alignItems="center"
+        justifyContent="center"
+        mt={8}
+        mb={8}
+      >
+        {imageURLs?.map((image, index) => (
+          <Image
+            key={index}
+            src={image}
+            margin="2"
+            width={{ base: "15vw", lg: "10vw" }}
+            _hover={{
+              transform: "scale(1.05)",
+              transition: "transform 0.2s",
+            }}
+          />
+        ))}
+      </Box>
+    );
+  }
+  return <></>;
 };
 
 const Profile = () => {
@@ -92,29 +81,8 @@ const Profile = () => {
     address: address,
     token: "0x4f08705fb8f33affc231ed66e626b40e84a71870",
   });
-  const [imgURLs, setImgURLs] = useState([""]);
 
-  axios
-    .get("https://midjourney.com/showcase/recent/")
-    .then(function (response) {
-      const paragraph = response.data;
-      const regex = `https:\/\/cdn\.midjourney\.com\/[a-z0-9-/_]*\.png`;
-      const allImgUrls = [...paragraph.matchAll(regex)];
-      const oddImgUrls = allImgUrls.map((element, index) => {
-        if (index % 2 === 0) {
-          return element;
-        }
-      });
-
-      setImgURLs(oddImgUrls);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .finally(function () {
-      // always executed
-    });
+  const { data: imgURLs } = useGetAlbumImages();
 
   return (
     <Layout>
@@ -216,22 +184,33 @@ const Profile = () => {
               <Text fontSize="3xl" fontWeight="bold" color="gray.600">
                 Jazz{" "}
               </Text>
-
-              <ImageGallery imageURLs={imgURLs} />
+              {imgURLs ? (
+                <ImageGallery imageURLs={imgURLs.slice(0, 25)} />
+              ) : (
+                <></>
+              )}
             </Flex>
             <Flex direction="column" alignItems="center">
               <Text fontSize="3xl" fontWeight="bold" color="gray.600">
                 Not Jazz{" "}
               </Text>
 
-              <ImageGallery imageURLs={imgURLs} />
+              {imgURLs ? (
+                <ImageGallery imageURLs={imgURLs.slice(25, 51)} />
+              ) : (
+                <></>
+              )}
             </Flex>
             <Flex direction="column" alignItems="center">
               <Text fontSize="3xl" fontWeight="bold" color="gray.600">
                 Post Country Vapor Wave{" "}
               </Text>
 
-              <ImageGallery imageURLs={imgURLs} />
+              {imgURLs ? (
+                <ImageGallery imageURLs={imgURLs.slice(51, 100)} />
+              ) : (
+                <></>
+              )}
             </Flex>
 
             <Flex direction="column" alignItems="center">
@@ -239,7 +218,11 @@ const Profile = () => {
                 Subliminal Messaging{" "}
               </Text>
 
-              <ImageGallery imageURLs={imgURLs} />
+              {imgURLs ? (
+                <ImageGallery imageURLs={imgURLs.slice(101, 150)} />
+              ) : (
+                <></>
+              )}
             </Flex>
           </CardBody>
 
