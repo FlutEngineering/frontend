@@ -1,5 +1,15 @@
 import { useMutation } from "react-query";
-import { Button, VStack, Stack } from "@chakra-ui/react";
+import {
+  Button,
+  VStack,
+  Stack,
+  Input,
+  HStack,
+  InputLeftElement,
+  InputGroup,
+  EditIcon,
+  PhoneIcon,
+} from "@chakra-ui/react";
 import Files from "react-files";
 
 import { useAudioStore } from "store";
@@ -19,14 +29,20 @@ interface AudioListProps {
 
 const AudioList: React.FC<AudioListProps> = ({ files, uploaded }) => {
   return (
-    <VStack maxWidth="100%">
+    <VStack>
       {files.map((file) => {
         const audio = {
           name: file.name,
           url: URL.createObjectURL(file),
         };
         const cid = uploaded[file.name];
-        return <AudioPlayer audio={audio} cid={cid} key={file.name} />;
+        return (
+          <HStack>
+            <AudioPlayer audio={audio} cid={cid} key={file.name} />
+            <Input variant="filled" placeholder="Title" />
+            <Input variant="filled" placeholder="Tags" />
+          </HStack>
+        );
       })}
     </VStack>
   );
@@ -54,17 +70,17 @@ export default function AudioUploader() {
         style={{ height: "100px", width: "100%" }}
         onChange={add}
         multiple
-        maxFiles={5}
+        maxFiles={1}
         maxFileSize={MAX_FILE_SIZE}
         minFileSize={1}
         clickable
       >
-        Drop file here or click to upload
+        Drop Files or Click Here
       </Files>
       {files.length > 0 && <AudioList files={files} uploaded={uploaded} />}
       <Stack pt={1} spacing={2} direction="row" align="center">
         <Button
-          colorScheme="blue"
+          colorScheme="gray"
           onClick={() => handleFilesUpload()}
           isLoading={uploadAudioMutation.isLoading}
           loadingText="Uploading..."
