@@ -11,7 +11,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import useGetAlbumImages from "hooks/useGetAlbumImages";
-import useGetCIDs from "hooks/useGetCIDs";
+// import useGetCIDs from "hooks/useGetCIDs";
 import { useAudioStore } from "store";
 
 const ImageGallery = ({ imageURLs }) => {
