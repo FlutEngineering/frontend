@@ -8,12 +8,14 @@ import {
   InputLeftElement,
   InputGroup,
   Flex,
+  Image,
 } from "@chakra-ui/react";
 import useGetAlbumImages from "hooks/useGetAlbumImages";
 import useGetCIDs from "hooks/useGetCIDs";
 import { useAudioStore } from "store";
 
 const ImageGallery = ({ imageURLs }) => {
+  console.log("imageURLs", imageURLs);
   if (imageURLs) {
     return (
       // <Box maxW="70vw" mx="auto" overflowX="auto">
@@ -52,13 +54,119 @@ export default function Browse() {
 
   return (
     <Box flexWrap="nowrap" overflowY="auto">
-      <Button onClick={getCIDs} />
-      {/* <Flex direction="column" alignItems="center">
+      {/* <Button onClick={getCIDs} /> */}
+      <Flex direction="column" alignItems="center">
         <Text fontSize="3xl" fontWeight="bold" color="gray.600">
-          Jazz{" "}
+          Genres{" "}
         </Text>
-        {imgURLs ? <ImageGallery imageURLs={imgURLs.slice(0, 25)} /> : <></>}
-      </Flex> */}
+        {/* {imgURLs ? <ImageGallery imageURLs={imgURLs.slice(0, 25)} /> : <></>} */}
+        <ImageGallery
+          imageURLs={[
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+          ]}
+        />
+      </Flex>
+      <Flex direction="column" alignItems="center">
+        <Text fontSize="3xl" fontWeight="bold" color="gray.600">
+          Genres{" "}
+        </Text>
+        {/* {imgURLs ? <ImageGallery imageURLs={imgURLs.slice(0, 25)} /> : <></>} */}
+        <ImageGallery
+          imageURLs={[
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+          ]}
+        />
+      </Flex>
+      <Flex direction="column" alignItems="center">
+        <Text fontSize="3xl" fontWeight="bold" color="gray.600">
+          Genres{" "}
+        </Text>
+        {/* {imgURLs ? <ImageGallery imageURLs={imgURLs.slice(0, 25)} /> : <></>} */}
+        <ImageGallery
+          imageURLs={[
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+          ]}
+        />
+      </Flex>
+      <Flex direction="column" alignItems="center">
+        <Text fontSize="3xl" fontWeight="bold" color="gray.600">
+          Genres{" "}
+        </Text>
+        {/* {imgURLs ? <ImageGallery imageURLs={imgURLs.slice(0, 25)} /> : <></>} */}
+        <ImageGallery
+          imageURLs={[
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+            "/spaceMan.png",
+            "/musicMachine.png",
+            "/plagueFlute.png",
+            "/skywhales.png",
+            "/fluteTree.png",
+            "/monaLisa.png",
+            "/orbs.png",
+            "/ryoshiFlute1.png",
+            "/spaceMachine.png",
+          ]}
+        />
+      </Flex>
     </Box>
   );
 }
