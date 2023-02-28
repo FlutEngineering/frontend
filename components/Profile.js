@@ -5,7 +5,6 @@ import {
   Button,
   Divider,
   Flex,
-  Heading,
   Text,
   Card,
   CardHeader,
@@ -15,80 +14,40 @@ import {
   IconButton,
   BsThreeDotsVertical,
   VStack,
-  Tooltip,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
   useDisclosure,
   Avatar,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   HStack,
-  Icon,
   Center,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useBalance, useAccount, useEnsName } from "wagmi";
 
 import SettingsDrawer from "components/SettingsDrawer";
-import useGetAlbumImages from "hooks/useGetAlbumImages";
+
 import AudioUploader from "./AudioUploader";
 import Search from "components/Search";
 import Library from "components/Library";
+import Browse from "components/Browse";
 import HeaderNoEther from "./HeaderNoEther";
-import { AiOutlineSearch, AiOutlineHome } from "react-icons/ai";
+import {
+  AiOutlineSearch,
+  AiOutlineHome,
+  AiOutlineCloudUpload,
+} from "react-icons/ai";
 import { BiLibrary } from "react-icons/bi";
-
-const ImageGallery = ({ imageURLs }) => {
-  if (imageURLs) {
-    return (
-      // <Box maxW="70vw" mx="auto" overflowX="auto">
-      <Box
-        display="flex"
-        flexWrap="nowrap"
-        overflowX="auto"
-        alignItems="center"
-        justifyContent="center"
-        mt={8}
-        mb={8}
-      >
-        {imageURLs?.map((image, index) => (
-          <Image
-            key={index}
-            src={image}
-            margin="2"
-            alt="SongImg"
-            width={{ base: "15vw", lg: "10vw" }}
-            _hover={{
-              transform: "scale(1.05)",
-              transition: "transform 0.2s",
-            }}
-          />
-        ))}
-      </Box>
-    );
-  }
-  return <></>;
-};
+import { AiOutlineSetting } from "react-icons/ai";
 
 const Profile = () => {
-  const [pageContent, setPageContent] = useState("home");
+  const [pageContent, setPageContent] = useState("browse");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const btnRef = React.useRef();
   const { address, isConnecting, isDisconnected } = useAccount();
-  const { data: ENSdata } = useEnsName({
-    address: address,
-  });
-  // const { data: imgURLs } = useGetAlbumImages();
-  console.log("👾", ENSdata, address);
+  // const { data: ENSdata } = useEnsName({
+  //   address: address,
+  // });
+
+  // console.log("👾", ENSdata, address);
   return (
     <Center backgroundColor="gray.100">
       <Card
@@ -105,8 +64,8 @@ const Profile = () => {
             padding="1rem"
           >
             <Flex direction="column" alignItems="start">
-              <HStack gap="5" paddingY="5">
-                <Avatar
+              <HStack gap="5" paddingY="5" padding="1">
+                {/* <Avatar
                   size="md"
                   src="https://i.imgur.com/RKVTD2x.png"
                   onClick={onOpen}
@@ -115,8 +74,12 @@ const Profile = () => {
                     transform: "scale(1.05)",
                     transition: "transform ease 0.2s",
                   }}
+                /> */}
+                <IconButton
+                  icon={<AiOutlineSetting />}
+                  variant="outline"
+                  onClick={onOpen}
                 />
-
                 <ConnectButton showBalance={false} />
               </HStack>
               <VStack gap="1" alignItems="flex-start" padding="1">
@@ -131,7 +94,7 @@ const Profile = () => {
                   icon={<AiOutlineHome />}
                   variant="outline"
                   onClick={() => {
-                    setPageContent("home");
+                    setPageContent("browse");
                   }}
                 />
                 <IconButton
@@ -141,13 +104,21 @@ const Profile = () => {
                     setPageContent("library");
                   }}
                 />
+                <IconButton
+                  icon={<AiOutlineCloudUpload />}
+                  variant="outline"
+                  onClick={() => {
+                    setPageContent("upload");
+                  }}
+                />
               </VStack>
             </Flex>
             <Box width="5vw" />
             <Box paddingY="5" flex={1}>
-              {pageContent === "home" && <AudioUploader />}
+              {pageContent === "browse" && <Browse />}
               {pageContent === "search" && <Search />}
               {pageContent === "library" && <Library />}
+              {pageContent === "upload" && <AudioUploader />}
             </Box>
           </Flex>
         </CardBody>
