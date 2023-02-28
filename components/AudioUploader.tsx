@@ -7,8 +7,6 @@ import {
   HStack,
   InputLeftElement,
   InputGroup,
-  EditIcon,
-  PhoneIcon,
 } from "@chakra-ui/react";
 import Files from "react-files";
 
@@ -30,14 +28,14 @@ interface AudioListProps {
 const AudioList: React.FC<AudioListProps> = ({ files, uploaded }) => {
   return (
     <VStack>
-      {files.map((file) => {
+      {files.map((file, index) => {
         const audio = {
           name: file.name,
           url: URL.createObjectURL(file),
         };
         const cid = uploaded[file.name];
         return (
-          <HStack>
+          <HStack key={index}>
             <AudioPlayer audio={audio} cid={cid} key={file.name} />
             <Input variant="filled" placeholder="Title" />
             <Input variant="filled" placeholder="Tags" />
