@@ -73,7 +73,6 @@ export default function Home() {
           ></Text>
           <Image src="/plagueFlute.png" width="500" height="500" />
         </Box>
-        <Image src="/cowboyFlute.jpeg" width="500" height="500" />
       </Box>
     </Box>
   );
