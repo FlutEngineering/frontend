@@ -9,8 +9,9 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 import { RiArrowUpDownFill } from "react-icons/ri";
-
+import useGetCIDs from "hooks/useGetCIDs";
 export default function Search() {
+  const CIDs = useGetCIDs();
   return (
     <Box>
       <Input variant="filled" placeholder="Search by Name" />

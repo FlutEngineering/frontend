@@ -9,7 +9,7 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 
-export default function Search() {
+export default function Library() {
   return (
     <Box>
       <Text>Your Uploads</Text>
