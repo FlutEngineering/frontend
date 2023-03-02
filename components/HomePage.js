@@ -6,7 +6,7 @@ import Typed from "react-typed";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-import { Box, Image, Text, Link } from "@chakra-ui/react";
+import { Box, Image, Text, Link, HStack } from "@chakra-ui/react";
 
 import Header from "components/Header";
 
@@ -39,6 +39,7 @@ const HomePage = () => {
         >
           FLUT
         </Text>
+
         <ConnectButton
           accountStatus={{
             smallScreen: "avatar",
@@ -75,9 +76,10 @@ const HomePage = () => {
 
           <Link className={styles.card} target="_blank">
             <h2 className={inter.className}>
-              Jobs <span>-&gt;</span>
+              Contact Us <span>-&gt;</span>
             </h2>
-            <p className={inter.className}>(Currently Full)</p>
+
+            <p className={inter.className}>at team@flut.cloud</p>
           </Link>
 
           <Link href="/community" className={styles.card}>

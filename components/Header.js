@@ -9,9 +9,17 @@ import {
   Link,
   Icon,
   Text,
+  Button,
 } from "@chakra-ui/react";
 
-import { FaMediumM, FaTwitter, FaTelegram, FaHome } from "react-icons/fa";
+import {
+  FaMediumM,
+  FaTwitter,
+  FaTelegram,
+  FaHome,
+  FaDiscord,
+  FaGithub,
+} from "react-icons/fa";
 
 const Header = () => {
   return (
@@ -27,6 +35,7 @@ const Header = () => {
         alignItems="center"
         justifyContent="center"
         flexDirection={{ base: "column", md: "row" }}
+        gap="1rem"
       >
         <Box
           // position="relative"
@@ -55,16 +64,13 @@ const Header = () => {
               flexDirection={{ base: "column", md: "row" }}
               // width="100%"
             >
-              <Text textAlign="center">
-                Ethereum Mainnet Contract Address&nbsp;
-              </Text>
+              <Text textAlign="center">Ethereum Mainnet Contract &nbsp;</Text>
               <Text>0x4F08705FB8F33AffC231ed66e626B40E84A71870</Text>
             </Box>
           </Link>
         </Box>
-        <Box width="15vw" height="1vh" />
-        <Text color="grey">team@flut.cloud</Text>
-        <Box width="2vw" height="1vh" />
+
+        <Box width="10vw" height="1vh" />
       </Box>
 
       <HStack>
@@ -88,7 +94,7 @@ const Header = () => {
           />
         </Link>
         <Link
-          href={"https://medium.com/@team_83271"}
+          href={"https://medium.com/@TheMagicFlut"}
           key={"Medium"}
           _notFirst={{ ml: { base: 2, lg: 4 } }}
           isExternal
@@ -110,6 +116,48 @@ const Header = () => {
             color="grey"
             _hover={{ color: "black", transition: "0.4s" }}
           />
+        </Link>
+        <Link
+          href={"https://discord.gg/NXjGj9kHus"}
+          key={"Discord"}
+          _notFirst={{ ml: { base: 2, lg: 4 } }}
+          isExternal
+        >
+          <Icon
+            as={FaDiscord}
+            color="grey"
+            _hover={{ color: "black", transition: "0.4s" }}
+          />
+        </Link>
+        <Link
+          href={"https://github.com/FlutEngineering"}
+          key={"Github"}
+          _notFirst={{ ml: { base: 2, lg: 4 } }}
+          isExternal
+        >
+          <Icon
+            as={FaGithub}
+            color="grey"
+            _hover={{ color: "black", transition: "0.4s" }}
+          />
+        </Link>
+
+        <Box width="1vw" />
+
+        <Link
+          href={
+            "https://app.uniswap.org/#/swap?use=V2&outputCurrency=0x4f08705fb8f33affc231ed66e626b40e84a71870&inputCurrency=0x6b175474e89094c44da98b954eedeac495271d0f"
+          }
+          key={"Uniswap"}
+          isExternal
+          _hover={{}}
+        >
+          <Button variant="outline">
+            <HStack>
+              <Text textAlign="center">Buy on</Text>
+              <Image src="uniswaplogo.png" w="1.5rem" />
+            </HStack>
+          </Button>
         </Link>
       </HStack>
     </Box>
