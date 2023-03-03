@@ -20,6 +20,7 @@ import {
   FaDiscord,
   FaGithub,
 } from "react-icons/fa";
+import { GiSailboat } from "react-icons/gi";
 
 const Header = () => {
   return (
@@ -137,6 +138,19 @@ const Header = () => {
         >
           <Icon
             as={FaGithub}
+            color="grey"
+            _hover={{ color: "black", transition: "0.4s" }}
+          />
+        </Link>
+
+        <Link
+          href={"https://opensea.io/TheMagicFlut"}
+          key={"Opensea"}
+          _notFirst={{ ml: { base: 2, lg: 4 } }}
+          isExternal
+        >
+          <Icon
+            as={GiSailboat}
             color="grey"
             _hover={{ color: "black", transition: "0.4s" }}
           />
