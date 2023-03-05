@@ -1,15 +1,7 @@
 import { useMutation } from "react-query";
-import {
-  Button,
-  VStack,
-  Stack,
-  Input,
-  HStack,
-  InputLeftElement,
-  InputGroup,
-} from "@chakra-ui/react";
+import { Button, VStack, Stack, Input, HStack } from "@chakra-ui/react";
 import Files from "react-files";
-
+import { useState } from "react";
 import { useAudioStore } from "store";
 import AudioPlayer from "./AudioPlayer";
 import styles from "@/styles/AudioUploader.module.css";
@@ -26,6 +18,10 @@ interface AudioListProps {
 }
 
 const AudioList: React.FC<AudioListProps> = ({ files, uploaded }) => {
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState("");
+  const handleTitleChange = (event) => setTitle(event.target.value);
+  const handleTagsChange = (event) => setTags(event.target.value);
   return (
     <VStack>
       {files.map((file, index) => {
@@ -37,8 +33,18 @@ const AudioList: React.FC<AudioListProps> = ({ files, uploaded }) => {
         return (
           <HStack key={index}>
             <AudioPlayer audio={audio} cid={cid} key={file.name} />
-            <Input variant="filled" placeholder="Title" />
-            <Input variant="filled" placeholder="Tags" />
+            <Input
+              variant="filled"
+              placeholder="Title"
+              value={title}
+              onChange={handleTitleChange}
+            />
+            <Input
+              variant="filled"
+              placeholder="Tags"
+              value={tags}
+              onChange={handleTagsChange}
+            />
           </HStack>
         );
       })}
@@ -49,14 +55,11 @@ const AudioList: React.FC<AudioListProps> = ({ files, uploaded }) => {
 export default function AudioUploader() {
   const { files, uploaded, add, upload, clear } = useAudioStore();
 
-  console.log("uploaded =>", uploaded);
-
   const uploadAudioMutation = useMutation(async (file: File) => {
     await upload(file);
   });
 
   const handleFilesUpload = () => {
-    console.log("handleUpload");
     files.forEach((file) => uploadAudioMutation.mutate(file));
   };
 
@@ -94,40 +97,6 @@ export default function AudioUploader() {
           Clear
         </Button>
       </Stack>
-      {/* <FormControl> */}
-      {/*   <FormLabel for="inputTag" cursor="pointer"></FormLabel> */}
-      {/*   <Input */}
-      {/*     id="inputTag" */}
-      {/*     display="none" */}
-      {/*     type="file" */}
-      {/*     accept="audio/*" */}
-      {/*     ref={fileInputRef} */}
-      {/*     onChange={handleFileChange} */}
-      {/*   /> */}
-
-      {/*   {uploadAudioMutation.isLoading && ( */}
-      {/*     <Text mt={2}>Uploading audio file...</Text> */}
-      {/*   )} */}
-      {/*   {uploadAudioMutation.isError && ( */}
-      {/*     <Text color="red.500" mt={2}> */}
-      {/*       Error uploading audio file. */}
-      {/*     </Text> */}
-      {/*   )} */}
-      {/*   {uploadAudioMutation.isSuccess && ( */}
-      {/*     <Text color="green.500" mt={2}> */}
-      {/*       Audio file uploaded successfully! */}
-      {/*     </Text> */}
-      {/*   )} */}
-      {/*   <Button */}
-      {/*     mt={4} */}
-      {/*     colorScheme="blue" */}
-      {/*     isLoading={uploadAudioMutation.isLoading} */}
-      {/*     loadingText="Uploading..." */}
-      {/*     disabled={uploadAudioMutation.isLoading} */}
-      {/*   > */}
-      {/*     Upload */}
-      {/*   </Button> */}
-      {/* </FormControl> */}
     </VStack>
   );
 }
