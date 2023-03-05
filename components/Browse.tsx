@@ -15,7 +15,6 @@ import useGetAlbumImages from "hooks/useGetAlbumImages";
 import { useAudioStore } from "store";
 
 const ImageGallery = ({ imageURLs }) => {
-  console.log("imageURLs", imageURLs);
   if (imageURLs) {
     return (
       // <Box maxW="70vw" mx="auto" overflowX="auto">
