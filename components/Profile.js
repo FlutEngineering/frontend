@@ -49,91 +49,88 @@ const Profile = () => {
 
   // console.log("👾", ENSdata, address);
   return (
-    <Center backgroundColor="gray.100">
-      <Card
-        width={{ base: "90vw", md: "45vw", lg: "90vw" }}
-        height="90vh"
-        margin="10"
-      >
-        <CardBody flexWrap="nowrap" overflowY="auto">
-          <CardHeader pb={2}></CardHeader>
+    <>
+      <Center backgroundColor="gray.100">
+        <Card
+          width={{ base: "90vw", md: "45vw", lg: "90vw" }}
+          height="90vh"
+          margin="10"
+        >
           <Flex
-            flexDirection={{ base: "column", lg: "row" }}
-            alignItems="start"
+            flexDirection={{ base: "column", md: "row" }}
+            width="75vw"
+            alignItems="center"
             justifyContent="flex-start"
-            padding="1rem"
+            margin="5"
           >
-            <Flex direction="column" alignItems="start">
-              <HStack gap="5" paddingY="5" padding="1">
-                {/* <Avatar
-                  size="md"
-                  src="https://i.imgur.com/RKVTD2x.png"
-                  onClick={onOpen}
-                  ref={btnRef}
-                  _hover={{
-                    transform: "scale(1.05)",
-                    transition: "transform ease 0.2s",
-                  }}
-                /> */}
-                <IconButton
-                  icon={<AiOutlineSetting />}
-                  variant="outline"
-                  onClick={onOpen}
-                />
-                <ConnectButton showBalance={false} />
-              </HStack>
-              <VStack gap="1" alignItems="flex-start" padding="1">
-                <IconButton
-                  icon={<AiOutlineSearch />}
-                  variant="outline"
-                  onClick={() => {
-                    setPageContent("search");
-                  }}
-                />
-                <IconButton
-                  icon={<AiOutlineHome />}
-                  variant="outline"
-                  onClick={() => {
-                    setPageContent("browse");
-                  }}
-                />
-                <IconButton
-                  icon={<BiLibrary />}
-                  variant="outline"
-                  onClick={() => {
-                    setPageContent("library");
-                  }}
-                />
-                <IconButton
-                  icon={<AiOutlineCloudUpload />}
-                  variant="outline"
-                  onClick={() => {
-                    setPageContent("upload");
-                  }}
-                />
-              </VStack>
-            </Flex>
-            <Box width="5vw" />
-            <Box paddingY="5" flex={1}>
-              {pageContent === "browse" && <Browse />}
-              {pageContent === "search" && <Search />}
-              {pageContent === "library" && <Library />}
-              {pageContent === "upload" && <AudioUploader />}
-            </Box>
+            <ConnectButton showBalance={false} />
+            <Box width="5vw" height="1vh" />
+            <HeaderNoEther />
           </Flex>
-        </CardBody>
 
-        <CardFooter>
-          <HeaderNoEther />
-        </CardFooter>
-        <SettingsDrawer
-          finalFocusRef={btnRef}
-          isOpen={isOpen}
-          onClose={onClose}
-          onOpen={onOpen}
-        />
-      </Card>
-    </Center>
+          <CardBody flexWrap="nowrap" overflowY="auto">
+            <Flex
+              flexDirection={{ base: "column", lg: "row" }}
+              alignItems="start"
+              justifyContent="flex-start"
+              padding="1rem"
+            >
+              <Flex direction="column" alignItems="start">
+                <VStack gap="1" alignItems="flex-start">
+                  <IconButton
+                    icon={<AiOutlineSetting />}
+                    variant="outline"
+                    onClick={onOpen}
+                  />
+                  <IconButton
+                    icon={<AiOutlineSearch />}
+                    variant="outline"
+                    onClick={() => {
+                      setPageContent("search");
+                    }}
+                  />
+                  <IconButton
+                    icon={<AiOutlineHome />}
+                    variant="outline"
+                    onClick={() => {
+                      setPageContent("browse");
+                    }}
+                  />
+                  <IconButton
+                    icon={<BiLibrary />}
+                    variant="outline"
+                    onClick={() => {
+                      setPageContent("library");
+                    }}
+                  />
+                  <IconButton
+                    icon={<AiOutlineCloudUpload />}
+                    variant="outline"
+                    onClick={() => {
+                      setPageContent("upload");
+                    }}
+                  />
+                </VStack>
+              </Flex>
+              <Box width="5vw" />
+              <Box flex={1}>
+                {pageContent === "browse" && <Browse />}
+                {pageContent === "search" && <Search />}
+                {pageContent === "library" && <Library />}
+                {pageContent === "upload" && <AudioUploader />}
+              </Box>
+            </Flex>
+          </CardBody>
+
+          <SettingsDrawer
+            finalFocusRef={btnRef}
+            isOpen={isOpen}
+            onClose={onClose}
+            onOpen={onOpen}
+          />
+        </Card>
+      </Center>
+    </>
   );
 };
 
