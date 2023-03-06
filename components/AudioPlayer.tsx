@@ -32,7 +32,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audio, cid }) => {
     }
   };
 
-  const url = cid ? `https://ipfs.io/ipfs/${cid}` : audio.url;
+  const url = cid ? `https://flutgate.4everland.link/ipfs/${cid}` : audio.url;
 
   return (
     <Box width="100%">

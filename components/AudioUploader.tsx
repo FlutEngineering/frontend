@@ -33,7 +33,7 @@ const AudioList: React.FC<AudioListProps> = ({ files, uploaded }) => {
         return (
           <HStack key={index}>
             <AudioPlayer audio={audio} cid={cid} key={file.name} />
-            <Input
+            {/* <Input
               variant="filled"
               placeholder="Title"
               value={title}
@@ -44,7 +44,7 @@ const AudioList: React.FC<AudioListProps> = ({ files, uploaded }) => {
               placeholder="Tags"
               value={tags}
               onChange={handleTagsChange}
-            />
+            /> */}
           </HStack>
         );
       })}

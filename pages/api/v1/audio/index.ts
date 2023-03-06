@@ -49,8 +49,8 @@ const handler = nc<
 handler.use(uploadMiddleware);
 
 handler.post(async (req, res) => {
-  console.log("req.file =>", req.file);
   const { file } = req;
+  console.log("file =>", file);
 
   if (!file) {
     res.status(400).json({ error: "Audio is required" });
@@ -62,7 +62,7 @@ handler.post(async (req, res) => {
   try {
     const params = {
       Bucket: bucketName,
-      Key: uuidv4(),
+      Key: file.originalname || "fluff",
       Body: file.buffer,
       ContentType: file.mimetype,
     };
