@@ -38,7 +38,7 @@ const uploadMiddleware = upload.single("audio");
 
 const handler = nc<
   // NextApiRequest & { file: Express.Multer.File },
-  NextApiRequest & { file: File },
+  NextApiRequest & { file },
   NextApiResponse
 >({
   onNoMatch(req, res) {
