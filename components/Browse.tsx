@@ -49,7 +49,6 @@ const ImageGallery = ({ imageURLs }) => {
 export default function Browse() {
   // const { data: imgURLs } = useGetAlbumImages();
   // const { data: CIDs } = useGetCIDs();
-  const { getCIDs } = useAudioStore();
 
   return (
     <Box flexWrap="nowrap" overflowY="auto">
