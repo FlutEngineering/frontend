@@ -9,9 +9,18 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 import { RiArrowUpDownFill } from "react-icons/ri";
-// import useGetCIDs from "hooks/useGetCIDs";
+import { useSongsStore } from "store";
+import { useEffect } from "react";
+import AudioPlayer from "components/AudioPlayer";
+
 export default function Search() {
-  // const CIDs = useGetCIDs();
+  const { songs, add, clear, getSongs } = useSongsStore();
+
+  useEffect(() => {
+    clear();
+    getSongs();
+  }, []);
+
   return (
     <Box>
       <Input variant="filled" placeholder="Search by Name" />
@@ -39,6 +48,16 @@ export default function Search() {
           Unranked
         </Button>
       </Stack>
+      {songs?.length > 1 &&
+        songs?.map((song, index) => {
+          const audio = {
+            name: song.name,
+            url: `https://flutgate.4everland.link/ipfs/${song.cid}`,
+          };
+          return (
+            <AudioPlayer key={index} cid={song?.cid.toString()} audio={audio} />
+          );
+        })}
     </Box>
   );
 }
