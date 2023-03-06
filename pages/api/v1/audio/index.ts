@@ -1,7 +1,23 @@
 import { NextApiResponse, NextApiRequest } from "next";
-import { FilebaseClient, File } from "@filebase/client";
+// import { FilebaseClient, File } from "@filebase/client";
 import nc from "next-connect";
 import multer from "multer";
+import { S3 } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+import { v4 as uuidv4 } from "uuid";
+
+const accessKeyId = process.env.EVER_LAND_API_KEY as string;
+const secretAccessKey = process.env.EVER_LAND_SECRET as string;
+const bucketName = process.env.EVER_LAND_BUCKET_NAME as string;
+const region = "us-west-2";
+const client = new S3({
+  endpoint: "https://endpoint.4everland.co",
+  credentials: {
+    accessKeyId,
+    secretAccessKey,
+  },
+  region,
+});
 
 const mimetypes = [
   "audio/aac",
@@ -20,12 +36,9 @@ const upload = multer({
 
 const uploadMiddleware = upload.single("audio");
 
-const client = new FilebaseClient({
-  token: process.env.FILEBASE_API_KEY,
-});
-
 const handler = nc<
-  NextApiRequest & { file: Express.Multer.File },
+  // NextApiRequest & { file: Express.Multer.File },
+  NextApiRequest & { file: File },
   NextApiResponse
 >({
   onNoMatch(req, res) {
@@ -35,14 +48,9 @@ const handler = nc<
 
 handler.use(uploadMiddleware);
 
-// handler.get((req, res) => {
-//   return res.status(200).json({ get: true });
-// });
-
 handler.post(async (req, res) => {
-  console.log("req =>", req);
-  console.log("req.file =>", req.file);
   const { file } = req;
+  console.log("file =>", file);
 
   if (!file) {
     res.status(400).json({ error: "Audio is required" });
@@ -51,15 +59,34 @@ handler.post(async (req, res) => {
   if (!mimetypes.includes(file.mimetype)) {
     res.status(415).json({ error: `${file.mimetype} is not supported` });
   }
-
-  const cid = await client.storeBlob(
-    new File([file.buffer], file.originalname, { type: file.mimetype })
-  );
-
-  console.log("cid =>", cid);
-
-  console.log("yay");
-  return res.status(200).json({ cid });
+  try {
+    const params = {
+      Bucket: bucketName,
+      Key: file.originalname || "fluff",
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+    const task = new Upload({
+      client,
+      queueSize: 3, // 3 MiB
+      params,
+    });
+    task.on("httpUploadProgress", (e) => {
+      const progress = ((e.loaded! / e.total!) * 100) | 0;
+      console.log("progress", progress);
+      // onProgress?.(progress);
+    });
+    await task.done();
+    const result = await client.headObject(params);
+    const metadata = result.Metadata;
+    console.log({
+      url: `ipfs://${metadata?.["ipfs-hash"]}`,
+      type: file.type || "image/jpeg",
+    });
+    return res.status(200).json({ cid: metadata?.["ipfs-hash"] });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 export const config = {
