@@ -11,6 +11,8 @@ import {
   Link,
   CardFooter,
   Button,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { formatArtistName } from "~/utils";
@@ -99,13 +101,34 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
 
       <Stack width="100%">
         <CardBody paddingY="0" paddingRight="0">
-          <Stack paddingTop="10px">
-            <Text color="gray.600">
+          <Stack paddingTop="1" spacing="0">
+            <Text color="gray.600" fontSize="sm" margin="0">
               {formatArtistName({ address: track.artistAddress, ens })}
             </Text>
-            <Heading margin="0" size="sm" fontSize="lg">
+            <Text
+              size="sm"
+              fontSize="lg"
+              fontWeight="bold"
+              paddingBottom="2"
+              lineHeight="1"
+            >
               {track.title}
-            </Heading>
+            </Text>
+            <HStack>
+              {track.tags.map((tag) => (
+                <Badge
+                  variant="subtle"
+                  colorScheme="blue"
+                  cursor="pointer"
+                  opacity={0.7}
+                  _notFirst={{ marginLeft: "1" }}
+                  _hover={{ opacity: 0.9 }}
+                  key={`${tag}`}
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </HStack>
           </Stack>
         </CardBody>
       </Stack>
