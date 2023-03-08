@@ -20,6 +20,7 @@ import { css } from "@emotion/react";
 import { usePlayerStore } from "~/store";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import HTML5AudioPlayer from "./HTML5AudioPlayer";
+import { useEnsName } from "wagmi";
 
 type AudioPlayerProps = {
   track: Track;
@@ -28,6 +29,7 @@ type AudioPlayerProps = {
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
   const [_canPlay, setCanPlay] = useState(false);
   const { playing, setPlaying } = usePlayerStore();
+  const { data: ens } = useEnsName({ address: track.artistAddress });
   const ref = useRef<HTMLAudioElement>(null);
 
   const isPlaying = playing?.audio === track.audio;
@@ -99,7 +101,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
         <CardBody paddingY="0" paddingRight="0">
           <Stack paddingTop="10px">
             <Text color="gray.600">
-              {formatArtistName({ address: track.artistAddress, ens: null })}
+              {formatArtistName({ address: track.artistAddress, ens })}
             </Text>
             <Heading margin="0" size="sm" fontSize="lg">
               {track.title}
