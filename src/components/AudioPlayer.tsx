@@ -102,14 +102,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
       <Stack width="100%">
         <CardBody paddingY="0" paddingRight="0">
           <Stack paddingTop="1" spacing="0">
-            <Text color="gray.600" fontSize="sm" margin="0">
+            <Text color="gray.500" fontSize="sm" margin="0">
               {formatArtistName({ address: track.artistAddress, ens })}
             </Text>
             <Text
               size="sm"
               fontSize="lg"
               fontWeight="bold"
-              paddingBottom="2"
+              paddingBottom="6px"
+              paddingTop="2px"
               lineHeight="1"
             >
               {track.title}
@@ -140,7 +141,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
         src={audioUrl}
         audioRef={ref}
       />
-      <CardFooter>
+      <CardFooter alignItems="center">
         <Button
           size="sm"
           as={Link}
