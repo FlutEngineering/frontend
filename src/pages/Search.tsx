@@ -1,4 +1,4 @@
-import { Button, Box, Stack, Input } from "@chakra-ui/react";
+import { Button, Box, Stack, Input, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import AudioPlayer from "~/components/AudioPlayer";
@@ -13,10 +13,18 @@ function Search(): JSX.Element {
 
   return (
     <Box flexGrow="1">
-      <Input variant="filled" placeholder="Search by Name" disabled />
+      <Text fontSize="3xl" fontWeight="bold" color="gray.600" marginY="1rem">
+        Browse All Uploads
+      </Text>
+      <Input
+        variant="filled"
+        placeholder="Search by Name (Coming Soon)"
+        disabled
+        marginY="1rem"
+      />
 
-      <Stack direction="row" spacing={4} paddingY="1" paddingBottom="4">
-        <Button
+      {/*<Stack direction="row" spacing={4} paddingY="1" paddingBottom="4">
+         <Button
           leftIcon={<RiArrowUpDownFill />}
           colorScheme="gray"
           variant="outline"
@@ -39,8 +47,8 @@ function Search(): JSX.Element {
           disabled
         >
           Unranked
-        </Button>
-      </Stack>
+        </Button> 
+      </Stack>*/}
       <Stack overflowY="scroll" spacing={2}>
         {tracks.map((track) => (
           <AudioPlayer track={track} key={track.title} />

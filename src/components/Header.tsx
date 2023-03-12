@@ -8,6 +8,7 @@ import {
   Text,
   Button,
   Flex,
+  Tooltip,
 } from "@chakra-ui/react";
 import {
   FaMediumM,
@@ -170,12 +171,14 @@ const Header = () => {
           isExternal
           _hover={{}}
         >
-          <Button variant="outline" width="120px">
-            <HStack>
-              <Text textAlign="center">Buy on</Text>
-              <Image src={uniswapLogoUrl} w="2rem" />
-            </HStack>
-          </Button>
+          <Tooltip label="🌈 No Tax - Set a Low Slippage" placement="top">
+            <Button variant="outline" width="120px">
+              <HStack>
+                <Text textAlign="center">Buy on</Text>
+                <Image src={uniswapLogoUrl} w="2rem" />
+              </HStack>
+            </Button>
+          </Tooltip>
         </Link>
       </HStack>
     </Flex>
