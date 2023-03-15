@@ -85,8 +85,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   return !!track ? (
     <HStack
       flexGrow="1"
-      paddingX="3"
-      paddingY="2"
+      padding="2"
+      paddingLeft="3"
       background="gray.100"
       borderRadius="4"
     >
@@ -101,6 +101,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
 
       <TrackInfo
         track={track}
+        marginLeft="4 !important"
         // TODO: open track page
         // onClick={() => {}}
       />
