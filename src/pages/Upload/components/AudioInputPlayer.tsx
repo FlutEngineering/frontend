@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -8,7 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FaPause, FaPlay } from "react-icons/fa";
-import HTML5AudioPlayer from "~/components/HTML5AudioPlayer";
+import { usePlayerStore } from "~/store";
 
 type AudioInputPlayerProps = {
   label: React.ReactNode;
@@ -16,21 +16,25 @@ type AudioInputPlayerProps = {
 };
 
 const AudioInputPlayer: React.FC<AudioInputPlayerProps> = ({ label, file }) => {
-  const [isPlaying, setPlaying] = useState(false);
-  const [canPlay, setCanPlay] = useState(false);
-  const ref = useRef<HTMLAudioElement>(null);
-
+  const { pause } = usePlayerStore();
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioObjectURL = useMemo(
     () => (file ? URL.createObjectURL(file) : ""),
     [file]
   );
+  const audioRef = useRef(new Audio(audioObjectURL));
 
-  const handlePlay = () => {
-    const element = ref?.current;
-    if (element) {
-      element.paused ? element.play() : element.pause();
+  useEffect(() => {
+    if (isPlaying) {
+      pause(); // Pause global player
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
     }
-  };
+  }, [isPlaying]);
+
+  // Pause on unmount
+  useEffect(() => () => audioRef.current.pause(), []);
 
   return (
     <FormControl>
@@ -44,9 +48,8 @@ const AudioInputPlayer: React.FC<AudioInputPlayerProps> = ({ label, file }) => {
             width="8"
             height="8"
             borderRadius="sm"
-            onClick={() => handlePlay()}
+            onClick={() => setIsPlaying(!isPlaying)}
             aria-label="play/pause"
-            isDisabled={!canPlay}
           />
         </InputLeftElement>
         <FormLabel
@@ -66,16 +69,6 @@ const AudioInputPlayer: React.FC<AudioInputPlayerProps> = ({ label, file }) => {
           </Text>
         </FormLabel>
       </InputGroup>
-      {audioObjectURL && (
-        <HTML5AudioPlayer
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          onEnded={() => setPlaying(false)}
-          onCanPlay={() => setCanPlay(true)}
-          src={audioObjectURL}
-          audioRef={ref}
-        />
-      )}
     </FormControl>
   );
 };
