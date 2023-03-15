@@ -1,7 +1,7 @@
 import { Button, Box, Stack, Input, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { RiArrowUpDownFill } from "react-icons/ri";
-import AudioPlayer from "~/components/AudioPlayer";
+import AudioItem from "~/components/AudioItem";
 import { useTrackStore } from "~/store";
 
 function Search(): JSX.Element {
@@ -47,11 +47,11 @@ function Search(): JSX.Element {
           disabled
         >
           Unranked
-        </Button> 
+        </Button>
       </Stack>*/}
       <Stack overflowY="scroll" spacing={2}>
         {tracks.map((track) => (
-          <AudioPlayer track={track} key={track.title} />
+          <AudioItem track={track} key={track.title} />
         ))}
       </Stack>
     </Box>

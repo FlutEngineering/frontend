@@ -8,6 +8,8 @@ import {
   VStack,
   Center,
   useDisclosure,
+  CardFooter,
+  Box,
 } from "@chakra-ui/react";
 import {
   AiOutlineSearch,
@@ -16,10 +18,11 @@ import {
 } from "react-icons/ai";
 import { BiLibrary } from "react-icons/bi";
 import { AiOutlineSetting } from "react-icons/ai";
+import { useAccount } from "wagmi";
 
 import SettingsDrawer from "./components/SettingsDrawer";
 import Header from "./components/Header";
-import { useAccount } from "wagmi";
+import AudioPlayer from "~/components/AudioPlayer";
 
 function MusicApp(): JSX.Element {
   const {
@@ -47,7 +50,7 @@ function MusicApp(): JSX.Element {
             padding="1rem"
           >
             <Flex direction="column" alignItems="start">
-              <VStack gap="1" alignItems="flex-start" paddingRight="36px">
+              <VStack gap="1" alignItems="flex-start" paddingRight="10">
                 <IconButton
                   icon={<AiOutlineSetting />}
                   variant="outline"
@@ -68,21 +71,23 @@ function MusicApp(): JSX.Element {
                   variant="outline"
                   aria-label="browse"
                 />
-                <IconButton
-                  as={RouterLink}
-                  to="/app/library"
-                  icon={<BiLibrary />}
-                  variant="outline"
-                  aria-label="library"
-                />
                 {isConnected && (
-                  <IconButton
-                    as={RouterLink}
-                    to="/app/upload"
-                    icon={<AiOutlineCloudUpload />}
-                    variant="outline"
-                    aria-label="upload"
-                  />
+                  <>
+                    <IconButton
+                      as={RouterLink}
+                      to="/app/library"
+                      icon={<BiLibrary />}
+                      variant="outline"
+                      aria-label="library"
+                    />
+                    <IconButton
+                      as={RouterLink}
+                      to="/app/upload"
+                      icon={<AiOutlineCloudUpload />}
+                      variant="outline"
+                      aria-label="upload"
+                    />
+                  </>
                 )}
               </VStack>
             </Flex>
@@ -100,6 +105,11 @@ function MusicApp(): JSX.Element {
           </Flex>
         </CardBody>
 
+        <CardFooter>
+          <Flex grow="1" paddingX={{ sm: 4, lg: 24 }} paddingRight={{ lg: 4 }}>
+            <AudioPlayer />
+          </Flex>
+        </CardFooter>
         <SettingsDrawer isOpen={isSettingsOpen} onClose={closeSettings} />
       </Card>
     </Center>

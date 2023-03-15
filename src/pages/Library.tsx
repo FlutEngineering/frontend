@@ -2,7 +2,7 @@ import { VStack, Text, Icon, Flex, Stack, Box } from "@chakra-ui/react";
 import { HiOutlineWrenchScrewdriver } from "react-icons/hi2";
 import { useTrackStore } from "~/store";
 import { useEffect } from "react";
-import AudioPlayer from "~/components/AudioPlayer";
+import AudioItem from "~/components/AudioItem";
 import { useAccount } from "wagmi";
 
 function Library(): JSX.Element {
@@ -21,7 +21,7 @@ function Library(): JSX.Element {
       <Stack overflowY="scroll" spacing={2}>
         {tracks.map((track) => {
           if (track?.artistAddress === address) {
-            return <AudioPlayer track={track} key={track.title} />;
+            return <AudioItem track={track} key={track.title} />;
           }
         })}
       </Stack>
