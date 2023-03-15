@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import {
   Stack,
   Text,
   Image,
   CardBody,
-  Heading,
   Card,
   Box,
   Icon,
@@ -15,50 +14,26 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import { FaPause, FaPlay } from "react-icons/fa";
-import { formatArtistName } from "~/utils";
+import { formatArtistName, ipfsCidToUrl } from "~/utils";
 import { Track } from "~/types";
-import { IPFS_GATEWAY_URL } from "~/config";
 import { css } from "@emotion/react";
 import { usePlayerStore } from "~/store";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import HTML5AudioPlayer from "./HTML5AudioPlayer";
 import { useEnsName } from "wagmi";
 
-type AudioPlayerProps = {
+type AudioItemProps = {
   track: Track;
 };
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
-  const [_canPlay, setCanPlay] = useState(false);
-  const { playing, setPlaying } = usePlayerStore();
+const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
+  const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   const { data: ens } = useEnsName({ address: track.artistAddress });
-  const ref = useRef<HTMLAudioElement>(null);
 
-  const isPlaying = playing?.audio === track.audio;
-
-  const audioUrl = `${IPFS_GATEWAY_URL}/${track.audio}`;
-  const imageUrl = `${IPFS_GATEWAY_URL}/${track.image}`;
-
-  useEffect(() => {
-    if (playing && playing.audio !== track.audio) {
-      ref.current?.pause();
-    }
-  });
-
-  const handlePlay = () => {
-    const element = ref?.current;
-    if (element) {
-      if (element.paused) {
-        element.play();
-      } else {
-        element.pause();
-        setPlaying(null);
-      }
-    }
-  };
+  const isCurrentTrack = current && current?.audio === track.audio;
 
   return (
     <Card
+      flex="1 0 auto"
       direction="row"
       overflow="hidden"
       height="80px"
@@ -66,6 +41,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
       variant="outline"
       transition="all 200ms linear"
       cursor="default"
+      borderColor={isCurrentTrack ? "blue.300" : undefined}
       css={css`
         &:hover .play-icon {
           opacity: 1;
@@ -76,7 +52,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
       <Box
         width="80px"
         height="80px"
-        onClick={() => handlePlay()}
+        onClick={() => (!isCurrentTrack ? playTrack(track) : togglePlay())}
         cursor="pointer"
       >
         <Icon
@@ -86,15 +62,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
           width="40px"
           height="40px"
           color="white"
-          opacity={isPlaying ? 1 : 0}
-          as={isPlaying ? FaPause : FaPlay}
+          opacity={isCurrentTrack ? 1 : 0}
+          as={isCurrentTrack && isPlaying ? FaPause : FaPlay}
+          // as={FaPlay}
           className="play-icon"
         />
         <Image
           objectFit="cover"
           maxWidth="80px"
           maxHeight="80px"
-          src={imageUrl}
+          src={ipfsCidToUrl(track.image)}
           alt="Cover"
         />
       </Box>
@@ -133,19 +110,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
           </Stack>
         </CardBody>
       </Stack>
-      <HTML5AudioPlayer
-        onPlay={() => setPlaying(track)}
-        // onPause={() => setPlaying(null)}
-        // onEnded={() => setPlaying(null)}
-        onCanPlay={() => setCanPlay(true)}
-        src={audioUrl}
-        audioRef={ref}
-      />
       <CardFooter alignItems="center">
         <Button
           size="sm"
           as={Link}
-          href={audioUrl}
+          href={ipfsCidToUrl(track.audio)}
           isExternal
           ml={1}
           color="gray.700"
@@ -161,4 +130,4 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
   );
 };
 
-export default AudioPlayer;
+export default AudioItem;

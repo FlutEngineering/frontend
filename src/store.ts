@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { subscribeWithSelector } from "zustand/middleware";
 import { BACKEND_API_URL } from "./config";
 import { Track } from "./types";
 
@@ -8,9 +9,12 @@ interface TrackStore {
 }
 
 interface PlayerStore {
-  playing: Track | null;
-  setPlaying: (track: Track | null) => void;
-  clearPlaying: () => void;
+  track: Track | null;
+  isPlaying: boolean;
+  playTrack: (track: Track) => void;
+  play: () => void;
+  pause: () => void;
+  togglePlay: () => void;
 }
 
 export const useTrackStore = create<TrackStore>((set, _get) => ({
@@ -30,8 +34,13 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
       .then((tracks) => set({ tracks })),
 }));
 
-export const usePlayerStore = create<PlayerStore>((set, _get) => ({
-  playing: null,
-  setPlaying: (track) => set({ playing: track }),
-  clearPlaying: () => set({ playing: null }),
-}));
+export const usePlayerStore = create<PlayerStore>()(
+  subscribeWithSelector((set, get) => ({
+    track: null,
+    isPlaying: false,
+    playTrack: (track) => set({ track, isPlaying: true }),
+    play: () => set({ isPlaying: true }),
+    pause: () => set({ isPlaying: false }),
+    togglePlay: () => set({ isPlaying: !get().isPlaying }),
+  }))
+);
