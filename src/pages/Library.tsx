@@ -1,4 +1,4 @@
-import { Text, Stack, Grid } from "@chakra-ui/react";
+import { Text, Stack, Grid, Box } from "@chakra-ui/react";
 import { useTrackStore } from "~/store";
 import { useEffect } from "react";
 import AudioItem from "~/components/AudioItem";
@@ -28,13 +28,15 @@ function Library(): JSX.Element {
       >
         Your Uploads
       </Text>
-      <Stack gridArea="track-list" overflowY="scroll" spacing={2}>
-        {tracks.map((track) => {
-          if (track?.artistAddress === address) {
-            return <AudioItem track={track} key={track.title} />;
-          }
-        })}
-      </Stack>
+      <Box gridArea="track-list" alignSelf="stretch" overflowY="auto">
+        <Stack spacing={2}>
+          {tracks.map((track) => {
+            if (track?.artistAddress === address) {
+              return <AudioItem track={track} key={track.title} />;
+            }
+          })}
+        </Stack>
+      </Box>
     </Grid>
   );
 }
