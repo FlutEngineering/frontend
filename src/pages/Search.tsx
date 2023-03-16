@@ -1,6 +1,5 @@
-import { Button, Box, Stack, Input, Text } from "@chakra-ui/react";
+import { Box, Stack, Input, Text, Grid } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { RiArrowUpDownFill } from "react-icons/ri";
 import AudioItem from "~/components/AudioItem";
 import { useTrackStore } from "~/store";
 
@@ -12,15 +11,27 @@ function Search(): JSX.Element {
   }, []);
 
   return (
-    <Box flexGrow="1">
-      <Text fontSize="3xl" fontWeight="bold" color="gray.600" marginY="1rem">
+    <Grid
+      gridTemplateRows="auto auto minmax(0, 1fr)"
+      gridTemplateColumns="1fr"
+      gridTemplateAreas={`"header" "searchbar" "track-list"`}
+      width="100%"
+    >
+      <Text
+        gridArea="header"
+        fontSize="3xl"
+        fontWeight="bold"
+        color="gray.600"
+        marginY="1rem"
+      >
         Browse All Uploads
       </Text>
       <Input
+        gridArea="searchbar"
         variant="filled"
         placeholder="Search by Name (Coming Soon)"
         disabled
-        marginY="1rem"
+        marginBottom="4"
       />
 
       {/*<Stack direction="row" spacing={4} paddingY="1" paddingBottom="4">
@@ -49,12 +60,14 @@ function Search(): JSX.Element {
           Unranked
         </Button>
       </Stack>*/}
-      <Stack overflowY="scroll" spacing={2}>
-        {tracks.map((track) => (
-          <AudioItem track={track} key={track.title} />
-        ))}
-      </Stack>
-    </Box>
+      <Box gridArea="track-list" alignSelf="stretch" overflowY="auto">
+        <Stack spacing={2}>
+          {tracks.map((track) => (
+            <AudioItem track={track} key={track.title} />
+          ))}
+        </Stack>
+      </Box>
+    </Grid>
   );
 }
 

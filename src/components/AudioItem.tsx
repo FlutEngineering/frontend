@@ -64,7 +64,6 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           color="white"
           opacity={isCurrentTrack ? 1 : 0}
           as={isCurrentTrack && isPlaying ? FaPause : FaPlay}
-          // as={FaPlay}
           className="play-icon"
         />
         <Image
