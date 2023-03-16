@@ -5,11 +5,11 @@ import {
   CardHeader,
   CardBody,
   IconButton,
-  VStack,
   Center,
-  useDisclosure,
   CardFooter,
-  Box,
+  Stack,
+  Grid,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   AiOutlineSearch,
@@ -33,80 +33,89 @@ function MusicApp(): JSX.Element {
   const { isConnected } = useAccount();
 
   return (
-    <Center backgroundColor="gray.100">
-      <Card
-        width={{ base: "90vw", md: "45vw", lg: "90vw" }}
-        height="90vh"
-        margin="10"
-      >
-        <CardBody flexWrap="nowrap" overflowY="auto">
-          <CardHeader pb={2}>
-            <Header />
-          </CardHeader>
-          <Flex
-            flexDirection={{ base: "column", lg: "row" }}
-            alignItems="start"
-            justifyContent="flex-start"
-            padding="1rem"
+    <Center
+      alignItems="stretch"
+      justifyContent="center"
+      height="100vh"
+      overflow="hidden"
+      backgroundColor="gray.100"
+    >
+      <Card maxWidth="80rem" flexGrow="1" margin={{ base: 0, md: 10 }}>
+        <CardHeader>
+          <Header />
+        </CardHeader>
+        <CardBody
+          as={Grid}
+          padding="5"
+          columnGap={{ base: 0, lg: 10 }}
+          gridTemplateRows={{ base: "auto minmax(0, 1fr)", lg: "1fr" }}
+          gridTemplateColumns={{ base: "1fr", lg: "auto minmax(0, 1fr)" }}
+          gridTemplateAreas={{
+            base: `"navbar" "page-content"`,
+            lg: `"navbar page-content"`,
+          }}
+          overflow="hidden"
+        >
+          <Stack
+            gridArea="navbar"
+            gap="1"
+            alignItems="flex-start"
+            direction={{ base: "row", lg: "column" }}
+            justifyContent={{ base: "center", lg: "flex-start" }}
           >
-            <Flex direction="column" alignItems="start">
-              <VStack gap="1" alignItems="flex-start" paddingRight="10">
+            <IconButton
+              icon={<AiOutlineSetting />}
+              variant="outline"
+              onClick={openSettings}
+              aria-label="settings"
+            />
+            <IconButton
+              as={RouterLink}
+              to="/app/search"
+              icon={<AiOutlineSearch />}
+              variant="outline"
+              aria-label="search"
+            />
+            <IconButton
+              as={RouterLink}
+              to="/app"
+              icon={<AiOutlineHome />}
+              variant="outline"
+              aria-label="browse"
+            />
+            {isConnected && (
+              <>
                 <IconButton
-                  icon={<AiOutlineSetting />}
+                  as={RouterLink}
+                  to="/app/library"
+                  icon={<BiLibrary />}
                   variant="outline"
-                  onClick={openSettings}
-                  aria-label="settings"
+                  aria-label="library"
                 />
                 <IconButton
                   as={RouterLink}
-                  to="/app/search"
-                  icon={<AiOutlineSearch />}
+                  to="/app/upload"
+                  icon={<AiOutlineCloudUpload />}
                   variant="outline"
-                  aria-label="search"
+                  aria-label="upload"
                 />
-                <IconButton
-                  as={RouterLink}
-                  to="/app"
-                  icon={<AiOutlineHome />}
-                  variant="outline"
-                  aria-label="browse"
-                />
-                {isConnected && (
-                  <>
-                    <IconButton
-                      as={RouterLink}
-                      to="/app/library"
-                      icon={<BiLibrary />}
-                      variant="outline"
-                      aria-label="library"
-                    />
-                    <IconButton
-                      as={RouterLink}
-                      to="/app/upload"
-                      icon={<AiOutlineCloudUpload />}
-                      variant="outline"
-                      aria-label="upload"
-                    />
-                  </>
-                )}
-              </VStack>
-            </Flex>
-            <Flex direction="row" grow="1">
-              <Outlet />
-              {/* <Flex alignItems="center" justifyContent="center" width="100%"> */}
-              {/*   <VStack padding="10"> */}
-              {/*     <Text fontSize="xx-large"> */}
-              {/*       We're currently updating the upload service */}
-              {/*     </Text> */}
-              {/*     <Icon as={HiOutlineWrenchScrewdriver} w="10vw" h="10vh" /> */}
-              {/*   </VStack> */}
-              {/* </Flex> */}
-            </Flex>
+              </>
+            )}
+          </Stack>
+          <Flex
+            direction="row"
+            gridArea="page-content"
+            alignSelf="stretch"
+            alignItems="stretch"
+            width="100%"
+            overflow="hidden"
+          >
+            <Outlet />
           </Flex>
         </CardBody>
 
         <CardFooter>
-          <Flex grow="1" paddingX={{ sm: 4, lg: 24 }} paddingRight={{ lg: 4 }}>
+          <Flex grow="1" paddingX={{ sm: 0, lg: 20 }} paddingRight={{ lg: 4 }}>
             <AudioPlayer />
           </Flex>
         </CardFooter>
