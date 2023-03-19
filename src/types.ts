@@ -10,3 +10,8 @@ export interface Artist {
   address: `0x${string}`;
   ens: string | null | undefined;
 }
+
+export interface Tag {
+  name: string;
+  tracks: Object[];
+}
