@@ -76,7 +76,14 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
       </Box>
 
       <Stack width="100%">
-        <CardBody paddingY="0" paddingRight="0">
+        <CardBody
+          as={Stack}
+          width="100%"
+          paddingY="0"
+          paddingRight="0"
+          whiteSpace="nowrap"
+          overflow="hidden"
+        >
           <Stack paddingTop="1" spacing="0">
             <Text color="gray.500" fontSize="sm" margin="0">
               {formatArtistName({ address: track.artistAddress, ens })}
@@ -88,6 +95,8 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
               paddingBottom="6px"
               paddingTop="2px"
               lineHeight="1"
+              overflow="hidden"
+              textOverflow="ellipsis"
             >
               {track.title}
             </Text>
