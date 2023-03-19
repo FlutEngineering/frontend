@@ -26,7 +26,7 @@ interface PlayerStore {
 export const useTrackStore = create<TrackStore>((set, _get) => ({
   tracks: [],
   fetchTracks: async () =>
-    fetch(`${BACKEND_API_URL}/v1/tracks`)
+    await fetch(`${BACKEND_API_URL}/v1/tracks`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -34,12 +34,13 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
         } else if (data.tracks) {
           return data.tracks;
         }
-
         return [];
       })
       .then((tracks) => set({ tracks })),
   fetchTracksByTag: async (tagName) =>
-    fetch(`${BACKEND_API_URL}/v1/tracks/?` + new URLSearchParams({ tagName }))
+    await fetch(
+      `${BACKEND_API_URL}/v1/tracks/?` + new URLSearchParams({ tagName })
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {

@@ -1,7 +1,7 @@
 import { Text, Box, Flex, Image, Button, Stack } from "@chakra-ui/react";
 import { ASSETS_URL } from "~/config";
 import { useTagStore, useTrackStore } from "~/store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import AudioItem from "~/components/AudioItem";
 
 const IMAGE_URLS = [
@@ -61,18 +61,11 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ urls }) => {
 function Browse(): JSX.Element {
   const { tags, fetchTags } = useTagStore();
   const { tracks, fetchTracksByTag } = useTrackStore();
-  const [tagName, setTagName] = useState("");
-
-  console.log(tags);
-  console.log("tagName", tagName);
+  // console.log(tags);
   console.log("tracks", tracks);
-
   useEffect(() => {
     fetchTags();
   }, []);
-  useEffect(() => {
-    fetchTracksByTag(tagName);
-  }, [tagName]);
 
   return (
     <Box flexWrap="nowrap" overflowY="auto">
@@ -81,26 +74,25 @@ function Browse(): JSX.Element {
           Tags
         </Text>
         {/* <ImageGallery urls={IMAGE_URLS} /> */}
-        <Flex>
+        <Box>
           {tags.map((tag) => {
             return (
               <Button
                 variant="outline"
                 margin="2"
-                onClick={() => {
-                  setTagName(tag?.name);
+                onClick={async () => {
+                  await fetchTracksByTag(tag?.name);
                 }}
               >
                 <Text>{tag?.name}</Text>
               </Button>
             );
           })}
-        </Flex>
+        </Box>
         <Stack gridArea="track-list" overflowY="scroll" spacing={2}>
-          {tracks &&
-            tracks.map((track) => (
-              <AudioItem track={track} key={track?.title} />
-            ))}
+          {tracks.map((track) => (
+            <AudioItem track={track} key={track?.title} />
+          ))}
         </Stack>
       </Flex>
     </Box>
