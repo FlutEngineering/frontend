@@ -28,7 +28,7 @@ const FILETYPES = {
   "image/webp": [".webp"],
 };
 
-const MAX_FILE_SIZE = 512 * 1024; // 512Kb
+const MAX_FILE_SIZE = 3 * 1024 * 1024; // 5Mb
 
 const ImageDropzone: React.FC<DropzoneProps> = ({
   image,

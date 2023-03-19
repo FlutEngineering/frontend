@@ -1,5 +1,8 @@
-import { Text, Box, Flex, Image } from "@chakra-ui/react";
+import { Text, Box, Flex, Image, Button, Stack } from "@chakra-ui/react";
 import { ASSETS_URL } from "~/config";
+import { useTagStore, useTrackStore } from "~/store";
+import { useEffect } from "react";
+import AudioItem from "~/components/AudioItem";
 
 const IMAGE_URLS = [
   "spaceMan.png",
@@ -56,31 +59,41 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ urls }) => {
 };
 
 function Browse(): JSX.Element {
+  const { tags, fetchTags } = useTagStore();
+  const { tracks, fetchTracksByTag } = useTrackStore();
+  // console.log(tags);
+  console.log("tracks", tracks);
+  useEffect(() => {
+    fetchTags();
+  }, []);
+
   return (
     <Box flexWrap="nowrap" overflowY="auto">
       <Flex direction="column" alignItems="center">
         <Text fontSize="3xl" fontWeight="bold" color="gray.600">
-          Genres
+          Tags
         </Text>
-        <ImageGallery urls={IMAGE_URLS} />
-      </Flex>
-      <Flex direction="column" alignItems="center">
-        <Text fontSize="3xl" fontWeight="bold" color="gray.600">
-          Genres
-        </Text>
-        <ImageGallery urls={IMAGE_URLS} />
-      </Flex>
-      <Flex direction="column" alignItems="center">
-        <Text fontSize="3xl" fontWeight="bold" color="gray.600">
-          Genres
-        </Text>
-        <ImageGallery urls={IMAGE_URLS} />
-      </Flex>
-      <Flex direction="column" alignItems="center">
-        <Text fontSize="3xl" fontWeight="bold" color="gray.600">
-          Genres
-        </Text>
-        <ImageGallery urls={IMAGE_URLS} />
+        {/* <ImageGallery urls={IMAGE_URLS} /> */}
+        <Box>
+          {tags.map((tag) => {
+            return (
+              <Button
+                variant="outline"
+                margin="2"
+                onClick={async () => {
+                  await fetchTracksByTag(tag?.name);
+                }}
+              >
+                <Text>{tag?.name}</Text>
+              </Button>
+            );
+          })}
+        </Box>
+        <Stack gridArea="track-list" overflowY="scroll" spacing={2}>
+          {tracks.map((track) => (
+            <AudioItem track={track} key={track?.title} />
+          ))}
+        </Stack>
       </Flex>
     </Box>
   );
