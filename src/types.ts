@@ -13,5 +13,5 @@ export interface Artist {
 
 export interface Tag {
   name: string;
-  tracks: Object[];
+  trackCount: number;
 }

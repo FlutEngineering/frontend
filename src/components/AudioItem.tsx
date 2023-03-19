@@ -92,7 +92,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
               {track.title}
             </Text>
             <HStack>
-              {track?.tags?.map((tag) => (
+              {track.tags.map((tag) => (
                 <Badge
                   variant="subtle"
                   colorScheme="blue"
