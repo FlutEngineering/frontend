@@ -91,9 +91,10 @@ function Browse(): JSX.Element {
         Tags
       </Text>
       <Box gridArea="tag-list">
-        {tags.map((tag) => {
+        {tags.map((tag, key) => {
           return (
             <Button
+              key={key}
               variant={selectedTag === tag.name ? "solid" : "outline"}
               borderWidth="1px"
               marginY="1"
