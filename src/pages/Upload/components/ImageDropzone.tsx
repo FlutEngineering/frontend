@@ -3,6 +3,7 @@ import {
   Box,
   Flex,
   Text,
+  useToast,
   // Slider,
   // SliderTrack,
   // SliderFilledTrack,
@@ -37,19 +38,42 @@ const ImageDropzone: React.FC<DropzoneProps> = ({
   onImageReady,
   editorRef,
 }) => {
-  const { getRootProps, getInputProps, isDragAccept, isDragReject, open } =
-    useDropzone({
-      accept: FILETYPES,
-      onDropAccepted: (files) => onSelect(files[0]),
-      // onFileDialogOpen: () => onSelect([]),
-      multiple: false,
-      maxFiles: 1,
-      maxSize: MAX_FILE_SIZE,
-      noKeyboard: true,
-      noClick: true,
-    });
+  const {
+    getRootProps,
+    getInputProps,
+    isDragAccept,
+    isDragReject,
+    open,
+    fileRejections,
+  } = useDropzone({
+    accept: FILETYPES,
+    onDropAccepted: (files) => onSelect(files[0]),
+    // onFileDialogOpen: () => onSelect([]),
+    multiple: false,
+    maxFiles: 1,
+    maxSize: MAX_FILE_SIZE,
+    noKeyboard: true,
+    noClick: true,
+  });
 
-  // const [scale, setScale] = useState(1);
+  const toast = useToast();
+
+  useEffect(() => {
+    console.log(fileRejections);
+    if (fileRejections?.length > 0) {
+      fileRejections.slice(0, 2).map(({ file, errors }) => {
+        errors.slice(0, 1).map((error) => {
+          toast({
+            title: error.code,
+            description: error.message,
+            status: "warning",
+            duration: 4000,
+            isClosable: true,
+          });
+        });
+      });
+    }
+  }, [fileRejections]);
 
   const borderColor = useMemo(() => {
     if (isDragAccept) {
