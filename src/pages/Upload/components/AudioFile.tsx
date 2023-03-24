@@ -251,6 +251,14 @@ const AudioFile: React.FC<AudioFileProps> = ({
             >
               Upload
             </Button>
+            {uploadState === "uploading" && (
+              <Button
+                isLoading
+                loadingText="Uploading"
+                colorScheme="teal"
+                variant="outline"
+              />
+            )}
             <Text paddingLeft="2" fontSize="sm" color="red.500">
               {errorMessage}
             </Text>
