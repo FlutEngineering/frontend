@@ -1,13 +1,15 @@
+import { Address } from "wagmi";
+
 export interface Track {
   audio: string;
   image: string;
   title: string;
-  artistAddress: `0x${string}`;
+  artistAddress: Address;
   tags: string[];
 }
 
 export interface Artist {
-  address: `0x${string}`;
+  address: Address;
   ens: string | null | undefined;
 }
 
