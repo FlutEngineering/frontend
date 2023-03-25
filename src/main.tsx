@@ -6,6 +6,7 @@ import {
   getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
+  RainbowKitAuthenticationProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -16,7 +17,9 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 import App from "./App";
 import "./index.css";
+import { authenticationAdapter } from "./services/auth";
 
+const AUTHENTICATION_STATUS = "unauthenticated";
 const queryClient = new QueryClient();
 
 const { chains, provider } = configureChains(
@@ -44,9 +47,14 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ChakraProvider>
       <QueryClientProvider client={queryClient}>
         <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider chains={chains} theme={darkTheme()}>
-            <App />
-          </RainbowKitProvider>
+          <RainbowKitAuthenticationProvider
+            adapter={authenticationAdapter}
+            status={AUTHENTICATION_STATUS}
+          >
+            <RainbowKitProvider chains={chains} theme={darkTheme()}>
+              <App />
+            </RainbowKitProvider>
+          </RainbowKitAuthenticationProvider>
         </WagmiConfig>
       </QueryClientProvider>
     </ChakraProvider>
