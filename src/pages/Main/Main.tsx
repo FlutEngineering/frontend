@@ -1,14 +1,5 @@
 import { Link as RouterLink } from "react-router-dom";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-  Box,
-  Image,
-  Text,
-  Link,
-  HStack,
-  Stack,
-  Button,
-} from "@chakra-ui/react";
+import { Box, Text, Link, Stack, Button } from "@chakra-ui/react";
 import Typed from "react-typed";
 
 import "./Main.css";
@@ -33,12 +24,6 @@ const Main: React.FC = () => {
       <Button as={RouterLink} to="/app" colorScheme="blue">
         Launch App
       </Button>
-      {/* <ConnectButton */}
-      {/*   accountStatus={{ */}
-      {/*     smallScreen: "avatar", */}
-      {/*     largeScreen: "full", */}
-      {/*   }} */}
-      {/* /> */}
       <Box
         display="flex"
         justifyContent="center"
