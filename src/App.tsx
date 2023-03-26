@@ -4,6 +4,20 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  darkTheme,
+  RainbowKitAuthenticationProvider,
+} from "@rainbow-me/rainbowkit";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { mainnet } from "wagmi/chains";
+import { infuraProvider } from "wagmi/providers/infura";
+// import { alchemyProvider } from "wagmi/providers/alchemy";
+// import { publicProvider } from "wagmi/providers/public";
+import { authenticationAdapter } from "./services/auth";
+import { INFURA_API_KEY } from "./config";
+
 import Layout from "./components/Layout";
 import Meaning from "./pages/Meaning";
 import Community from "./pages/Community";
@@ -13,6 +27,28 @@ import Browse from "./pages/Browse";
 import Library from "./pages/Library";
 import Search from "./pages/Search";
 import Upload from "./pages/Upload";
+import { useAuthStore } from "./store";
+import { useEffect } from "react";
+
+const { chains, provider } = configureChains(
+  [mainnet],
+  [
+    infuraProvider({ apiKey: INFURA_API_KEY, priority: 0 }),
+    // alchemyProvider({ apiKey: import.meta.env.ALCHEMY_API_KEY, priority: 1 }),
+    // publicProvider({ priority: 2 }),
+  ]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: "FLUT",
+  chains,
+});
+
+const wagmiClient = createClient({
+  autoConnect: false,
+  connectors,
+  provider,
+});
 
 const router = createBrowserRouter([
   {
@@ -39,7 +75,24 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  const { status, fetchStatus } = useAuthStore();
+
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  return (
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitAuthenticationProvider
+        adapter={authenticationAdapter}
+        status={status}
+      >
+        <RainbowKitProvider chains={chains} theme={darkTheme()}>
+          <RouterProvider router={router} />
+        </RainbowKitProvider>
+      </RainbowKitAuthenticationProvider>
+    </WagmiConfig>
+  );
 }
 
 export default App;

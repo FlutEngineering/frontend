@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { BACKEND_API_URL } from "./config";
-import { Track, Tag } from "./types";
+import type { AuthenticationStatus } from "@rainbow-me/rainbowkit";
+import type { Address } from "wagmi";
+import type { SiweMessage } from "siwe";
+import type { Track, Tag } from "./types";
 
 interface TrackStore {
   tracks: Track[];
@@ -21,6 +24,20 @@ interface PlayerStore {
   play: () => void;
   pause: () => void;
   togglePlay: () => void;
+}
+
+interface AuthVerificationArgs {
+  message: SiweMessage;
+  signature: string;
+}
+
+interface AuthStore {
+  address?: Address;
+  status: AuthenticationStatus;
+  fetchStatus: () => Promise<void>;
+  getNonce: () => Promise<string>;
+  verify: ({ message, signature }: AuthVerificationArgs) => Promise<boolean>;
+  signOut: () => Promise<void>;
 }
 
 export const useTrackStore = create<TrackStore>((set, _get) => ({
@@ -79,3 +96,50 @@ export const usePlayerStore = create<PlayerStore>()(
     togglePlay: () => set({ isPlaying: !get().isPlaying }),
   }))
 );
+
+export const useAuthStore = create<AuthStore>((set) => ({
+  address: undefined,
+  status: "unauthenticated",
+  fetchStatus: async () => {
+    const res = await fetch(`${BACKEND_API_URL}/v1/auth/status`, {
+      credentials: "include",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      set({ address: json.address, status: "authenticated" });
+    } else {
+      set({ address: undefined, status: "unauthenticated" });
+    }
+  },
+  getNonce: async () => {
+    const response = await fetch(`${BACKEND_API_URL}/v1/auth/nonce`, {
+      credentials: "include",
+    });
+    return await response.text();
+  },
+  verify: async ({ message, signature }) => {
+    const res = await fetch(`${BACKEND_API_URL}/v1/auth/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ message, signature }),
+    });
+
+    const status = res.ok;
+
+    if (status) {
+      const json = await res.json();
+      set({ address: json.address, status: "authenticated" });
+    } else {
+      console.log("Auth error");
+      set({ address: undefined, status: "unauthenticated" });
+    }
+    return status;
+  },
+  signOut: async () => {
+    await fetch(`${BACKEND_API_URL}/v1/auth/logout`, {
+      credentials: "include",
+    });
+    set({ address: undefined, status: "unauthenticated" });
+  },
+}));
