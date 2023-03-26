@@ -15,7 +15,6 @@ import {
   AccordionPanel,
   AccordionIcon,
   HStack,
-  useDisclosure,
   Stat,
   StatLabel,
   StatNumber,
