@@ -94,13 +94,13 @@ const AudioFile: React.FC<AudioFileProps> = ({
     const formData = new FormData();
     formData.append("audio", audio);
     formData.append("image", image);
-    formData.append("address", artist.address);
     formData.append("title", title);
     tags.forEach((tag) => formData.append("tags", tag));
 
     setUploadState("uploading");
     const response = await fetch(`${BACKEND_API_URL}/v1/tracks`, {
       method: "POST",
+      credentials: "include",
       body: formData,
     });
 
