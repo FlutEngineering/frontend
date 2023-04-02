@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Badge,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -10,6 +9,7 @@ import {
   InputProps,
 } from "@chakra-ui/react";
 import { css } from "@emotion/react";
+import TagBadge from "~/components/TagBadge";
 
 type TagInputProps = {
   label: React.ReactNode;
@@ -66,17 +66,8 @@ const TagInput: React.FC<TagInputProps> = ({
       >
         {!!tags.length && (
           <HStack paddingLeft="4">
-            {tags.map((tag, i) => (
-              <Badge
-                variant="subtle"
-                colorScheme="blue"
-                cursor="pointer"
-                _notFirst={{ marginLeft: "1" }}
-                onClick={() => removeTag(tag)}
-                key={`${tag}`}
-              >
-                {tag}
-              </Badge>
+            {tags.map((tag) => (
+              <TagBadge tag={tag} onClick={() => removeTag(tag)} key={tag} />
             ))}
           </HStack>
         )}

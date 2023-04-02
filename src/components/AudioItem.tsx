@@ -11,7 +11,6 @@ import {
   CardFooter,
   Button,
   HStack,
-  Badge,
 } from "@chakra-ui/react";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { formatArtistName, ipfsCidToUrl } from "~/utils";
@@ -20,6 +19,7 @@ import { css } from "@emotion/react";
 import { usePlayerStore } from "~/store";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useEnsName } from "wagmi";
+import TagBadge from "./TagBadge";
 
 type AudioItemProps = {
   track: Track;
@@ -102,17 +102,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
             </Text>
             <HStack>
               {track.tags.map((tag) => (
-                <Badge
-                  variant="subtle"
-                  colorScheme="blue"
-                  cursor="pointer"
-                  opacity={0.7}
-                  _notFirst={{ marginLeft: "1" }}
-                  _hover={{ opacity: 0.9 }}
-                  key={`${tag}`}
-                >
-                  {tag}
-                </Badge>
+                <TagBadge tag={tag} key={tag} />
               ))}
             </HStack>
           </Stack>

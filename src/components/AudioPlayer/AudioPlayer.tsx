@@ -99,12 +99,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
         onPlayPauseClick={() => togglePlay()}
       />
 
-      <TrackInfo
-        track={track}
-        marginLeft="4 !important"
-        // TODO: open track page
-        // onClick={() => {}}
-      />
+      <TrackInfo track={track} marginLeft="4 !important" />
     </HStack>
   ) : null;
 };
