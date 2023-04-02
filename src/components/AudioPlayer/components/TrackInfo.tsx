@@ -3,6 +3,7 @@ import { useEnsName } from "wagmi";
 import { Box, HStack, Image, StackProps, Text } from "@chakra-ui/react";
 import { Track } from "~/types";
 import { formatArtistName, ipfsCidToUrl } from "~/utils";
+import { Link as RouterLink } from "react-router-dom";
 
 interface TrackInfoProps {
   track: Track;
@@ -19,6 +20,8 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
   );
   return (
     <HStack
+      as={RouterLink}
+      to={`/app/${track.artistAddress}/${track.slug}`}
       maxWidth="200px"
       paddingRight="2"
       cursor="pointer"

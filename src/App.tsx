@@ -1,4 +1,4 @@
-import Main from "./pages/Main";
+import { useEffect } from "react";
 import {
   createBrowserRouter,
   Navigate,
@@ -18,6 +18,7 @@ import { infuraProvider } from "wagmi/providers/infura";
 import { authenticationAdapter } from "./services/auth";
 import { INFURA_API_KEY } from "./config";
 
+import Main from "./pages/Main";
 import Layout from "./components/Layout";
 import Meaning from "./pages/Meaning";
 import Community from "./pages/Community";
@@ -27,8 +28,8 @@ import Browse from "./pages/Browse";
 import Library from "./pages/Library";
 import Search from "./pages/Search";
 import Upload from "./pages/Upload";
+import TrackPage, { loader as trackLoader } from "./pages/TrackPage";
 import { useAuthStore } from "./store";
-import { useEffect } from "react";
 
 const { chains, provider } = configureChains(
   [mainnet],
@@ -65,11 +66,17 @@ const router = createBrowserRouter([
   {
     path: "/app",
     element: <MusicApp />,
+    errorElement: <Navigate to="/app" />,
     children: [
       { path: "/app", element: <Browse /> },
       { path: "/app/search", element: <Search /> },
       { path: "/app/library", element: <Library /> },
       { path: "/app/upload", element: <Upload /> },
+      {
+        path: "/app/:address/:slug",
+        element: <TrackPage />,
+        loader: trackLoader,
+      },
     ],
   },
 ]);

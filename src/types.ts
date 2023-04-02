@@ -4,6 +4,7 @@ export interface Track {
   audio: string;
   image: string;
   title: string;
+  slug: string;
   artistAddress: Address;
   tags: string[];
 }
