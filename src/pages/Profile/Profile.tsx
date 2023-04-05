@@ -1,25 +1,10 @@
-import { useEffect, useState } from "react";
-import {
-  Text,
-  Box,
-  Button,
-  Stack,
-  Grid,
-  Flex,
-  Card,
-  CardBody,
-  CardHeader,
-  Heading,
-  StackDivider,
-  useToast,
-} from "@chakra-ui/react";
-import { useTagStore, useTrackStore, useArtistStore } from "~/store";
-// import { ASSETS_URL } from "~/config";
+import { useEffect } from "react";
+import { Text, Box, Stack, Flex, Heading, useToast } from "@chakra-ui/react";
+import { useTrackStore, useArtistStore } from "~/store";
+
 import AudioItem from "~/components/AudioItem";
 import { useParams } from "react-router-dom";
 import { useEnsName, useAccount } from "wagmi";
-import YourAccount from "./components/YourAccount";
-import OtherAccount from "./components/OtherAccount";
 
 import ProfileLinkButton from "~/components/ProfileLinkButton";
 import FollowButton from "./components/FollowButton";
@@ -56,12 +41,14 @@ function Profile(): JSX.Element {
       </Text>
 
       <Stack spacing="4">
-        <FollowButton
-          toFollow={toFollow}
-          followedBy={followedBy}
-          artist={artist}
-        />
-        {toFollow === followedBy && <YourAccount />}
+        {toFollow && followedBy && (
+          <FollowButton
+            toFollow={toFollow}
+            followedBy={followedBy}
+            artist={artist}
+          />
+        )}
+
         <Heading size="md">Followed By</Heading>
         {artist?.followedBy?.map((follow) => (
           <ProfileLinkButton address={follow?.followerId} />

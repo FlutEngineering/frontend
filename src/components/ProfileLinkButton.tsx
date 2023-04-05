@@ -4,12 +4,12 @@ import { formatArtistName, ipfsCidToUrl } from "~/utils";
 import { useNavigate } from "react-router-dom";
 import { useEnsName } from "wagmi";
 
-type ProfileLinkButtonProps = {
+interface ProfileLinkButtonProps {
   address: string;
-};
+}
 const ProfileLinkButton: React.FC<ProfileLinkButtonProps> = ({ address }) => {
   const navigate = useNavigate();
-  const { data: ens } = useEnsName({ address });
+  const { data: ens } = useEnsName({ address: `0x${address}` });
   return (
     <>
       <Text color="gray.500" fontSize="sm" margin="0">
@@ -23,7 +23,7 @@ const ProfileLinkButton: React.FC<ProfileLinkButtonProps> = ({ address }) => {
             });
           }}
         >
-          {formatArtistName({ address, ens })}
+          {formatArtistName({ address: `0x${address}`, ens })}
         </Button>
       </Text>
     </>
