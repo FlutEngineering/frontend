@@ -20,8 +20,9 @@ import { useParams } from "react-router-dom";
 import { useEnsName, useAccount } from "wagmi";
 import YourAccount from "./components/YourAccount";
 import OtherAccount from "./components/OtherAccount";
-import { BACKEND_API_URL } from "~/config";
+
 import ProfileLinkButton from "~/components/ProfileLinkButton";
+import FollowButton from "./components/FollowButton";
 
 function Profile(): JSX.Element {
   const { tracks, fetchTracksByAddress } = useTrackStore();
@@ -37,7 +38,7 @@ function Profile(): JSX.Element {
       fetchArtist(toFollow);
     }
   }, [toFollow, fetchTracksByAddress, fetchArtist]);
-  console.log("artist", artist);
+
   return (
     <Flex direction="column" width="100%">
       <Text
@@ -50,56 +51,27 @@ function Profile(): JSX.Element {
       >
         {ensName && <Text>{ensName}</Text>}
       </Text>
+      <Text gridArea="header" textAlign="center" fontSize="sm" color="gray.600">
+        {toFollow}
+      </Text>
+
       <Stack spacing="4">
-        <Heading size="md">Profile Address</Heading>
-        <Text>{toFollow}</Text>
-        {toFollow !== followedBy && (
-          <Button
-            colorScheme="blue"
-            width="5rem"
-            variant="outline"
-            onClick={async () => {
-              if (!followedBy) {
-                toast({
-                  title: "Login",
-                  description: "to follow this artist",
-                  status: "warning",
-                  duration: 4000,
-                  isClosable: true,
-                });
-                return;
-              }
-              await fetch(
-                `${BACKEND_API_URL}/v1/artist/${toFollow}/${followedBy}`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  credentials: "include",
-                  // body: JSON.stringify({ message: "hello" }),
-                }
-              ).then((response) => {
-                console.log("🐞", response.json());
-              });
-            }}
-          >
-            Follow
-          </Button>
-        )}
+        <FollowButton
+          toFollow={toFollow}
+          followedBy={followedBy}
+          artist={artist}
+        />
         {toFollow === followedBy && <YourAccount />}
         <Heading size="md">Followed By</Heading>
         {artist?.followedBy?.map((follow) => (
-          // <Text>{follow.followerId}</Text>
-          <ProfileLinkButton address={follow.followerId} />
+          <ProfileLinkButton address={follow?.followerId} />
         ))}
         <Heading size="md">Following</Heading>
         {artist?.following?.map((follow) => (
-          // <Text>{follow.followingId}</Text>
-          <ProfileLinkButton address={follow.followingId} />
+          <ProfileLinkButton address={follow?.followingId} />
         ))}
         <Box>
-          <Heading size="xs" textTransform="uppercase">
-            Uploads
-          </Heading>
+          <Heading size="md">Uploads</Heading>
           <Box
             gridArea="track-list"
             alignSelf="stretch"
