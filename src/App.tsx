@@ -28,6 +28,7 @@ import Browse from "./pages/Browse";
 import Library from "./pages/Library";
 import Search from "./pages/Search";
 import Upload from "./pages/Upload";
+import Profile from "./pages/Profile";
 import TrackPage, { loader as trackLoader } from "./pages/TrackPage";
 import { useAuthStore } from "./store";
 
@@ -72,6 +73,7 @@ const router = createBrowserRouter([
       { path: "/app/search", element: <Search /> },
       { path: "/app/library", element: <Library /> },
       { path: "/app/upload", element: <Upload /> },
+      { path: "/app/profile/:address", element: <Profile /> },
       {
         path: "/app/:address/:slug",
         element: <TrackPage />,
@@ -90,14 +92,14 @@ function App() {
 
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitAuthenticationProvider
+      {/* <RainbowKitAuthenticationProvider
         adapter={authenticationAdapter}
         status={status}
-      >
-        <RainbowKitProvider chains={chains} theme={darkTheme()}>
-          <RouterProvider router={router} />
-        </RainbowKitProvider>
-      </RainbowKitAuthenticationProvider>
+      > */}
+      <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        <RouterProvider router={router} />
+      </RainbowKitProvider>
+      {/* </RainbowKitAuthenticationProvider> */}
     </WagmiConfig>
   );
 }

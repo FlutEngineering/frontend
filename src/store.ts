@@ -4,11 +4,12 @@ import { BACKEND_API_URL } from "./config";
 import type { AuthenticationStatus } from "@rainbow-me/rainbowkit";
 import type { Address } from "wagmi";
 import type { SiweMessage } from "siwe";
-import type { Track, Tag } from "./types";
+import type { Track, Tag, Artist } from "./types";
 
 interface TrackStore {
   tracks: Track[];
   fetchTracks: () => Promise<void>;
+  fetchTracksByAddress: (address: string) => Promise<void>;
   fetchTracksByTag: (tagID: string) => Promise<void>;
 }
 
@@ -24,6 +25,11 @@ interface PlayerStore {
   play: () => void;
   pause: () => void;
   togglePlay: () => void;
+}
+
+interface ArtistStore {
+  artist: Artist | null;
+  fetchArtist: (address: string) => Promise<void>;
 }
 
 interface AuthVerificationArgs {
@@ -44,6 +50,21 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
   tracks: [],
   fetchTracks: () =>
     fetch(`${BACKEND_API_URL}/v1/tracks`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log("Tracks fetch error:", data.error);
+        } else if (data.tracks) {
+          return data.tracks;
+        }
+        return [];
+      })
+      .then((tracks) => set({ tracks })),
+  fetchTracksByAddress: (address) =>
+    fetch(
+      `${BACKEND_API_URL}/v1/tracks/?` +
+        new URLSearchParams({ artist: address })
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -96,6 +117,23 @@ export const usePlayerStore = create<PlayerStore>()(
     togglePlay: () => set({ isPlaying: !get().isPlaying }),
   }))
 );
+
+export const useArtistStore = create<ArtistStore>((set, _get) => ({
+  artist: null,
+  fetchArtist: (address: string) =>
+    fetch(`${BACKEND_API_URL}/v1/artist/${address}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log("Artist fetch error:", data.error);
+        } else if (data.artist) {
+          console.log("data.artist", data.artist);
+          return data.artist;
+        }
+        return [];
+      })
+      .then((artist) => set({ artist })),
+}));
 
 export const useAuthStore = create<AuthStore>((set) => ({
   address: undefined,

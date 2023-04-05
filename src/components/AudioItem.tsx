@@ -20,6 +20,7 @@ import { usePlayerStore } from "~/store";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useEnsName } from "wagmi";
 import TagBadge from "./TagBadge";
+import { useNavigate } from "react-router-dom";
 
 type AudioItemProps = {
   track: Track;
@@ -30,7 +31,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
   const { data: ens } = useEnsName({ address: track.artistAddress });
 
   const isCurrentTrack = current && current?.audio === track.audio;
-
+  const navigate = useNavigate();
   return (
     <Card
       flex="1 0 auto"
@@ -86,7 +87,17 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
         >
           <Stack paddingTop="1" spacing="0">
             <Text color="gray.500" fontSize="sm" margin="0">
-              {formatArtistName({ address: track.artistAddress, ens })}
+              <Button
+                height={5}
+                onClick={() => {
+                  const address = track.artistAddress;
+                  navigate({
+                    pathname: `/app/profile/${address}`,
+                  });
+                }}
+              >
+                {formatArtistName({ address: track.artistAddress, ens })}
+              </Button>
             </Text>
             <Text
               size="sm"
