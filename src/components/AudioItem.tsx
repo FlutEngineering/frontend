@@ -21,6 +21,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useEnsName } from "wagmi";
 import TagBadge from "./TagBadge";
 import { useNavigate } from "react-router-dom";
+import ProfileLinkButton from "~/components/ProfileLinkButton";
 
 type AudioItemProps = {
   track: Track;
@@ -86,9 +87,12 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           overflow="hidden"
         >
           <Stack paddingTop="1" spacing="0">
-            <Text color="gray.500" fontSize="sm" margin="0">
+            <ProfileLinkButton address={track.artistAddress} />
+            {/* <Text color="gray.500" fontSize="sm" margin="0">
               <Button
                 height={5}
+                variant="outline"
+                colorScheme="blue"
                 onClick={() => {
                   const address = track.artistAddress;
                   navigate({
@@ -98,7 +102,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
               >
                 {formatArtistName({ address: track.artistAddress, ens })}
               </Button>
-            </Text>
+            </Text> */}
             <Text
               size="sm"
               fontSize="lg"
