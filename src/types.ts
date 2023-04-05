@@ -12,6 +12,8 @@ export interface Track {
 export interface Artist {
   address: Address;
   ens: string | null | undefined;
+  followedBy: Object[];
+  following: Object[];
 }
 
 export interface Tag {
