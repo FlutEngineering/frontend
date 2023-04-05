@@ -1,12 +1,22 @@
 import { Button, useToast, Text } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { BACKEND_API_URL } from "~/config";
+import type { Artist, Follows } from "~/types";
 
-const FollowButton = ({ toFollow, followedBy, artist }) => {
+interface FollowButtonProps {
+  toFollow: string;
+  followedBy: string;
+  artist: any;
+}
+const FollowButton: React.FC<FollowButtonProps> = ({
+  toFollow,
+  followedBy,
+  artist,
+}) => {
   const toast = useToast();
   const { address } = useAccount();
   if (
-    artist?.followedBy.find((obj) => {
+    artist?.followedBy.find((obj: Follows) => {
       return obj.followerId === address;
     })
   ) {
