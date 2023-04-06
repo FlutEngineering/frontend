@@ -30,8 +30,9 @@ const FollowButton: React.FC<FollowButtonProps> = ({
             `${BACKEND_API_URL}/v1/artist/unfollow/${toFollow}/${followedBy}`,
             {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              // headers: { "Content-Type": "application/json" },
               credentials: "include",
+              body: JSON.stringify({ message: "goodbye" }),
             }
           ).then((response) => {
             toast({
@@ -70,9 +71,9 @@ const FollowButton: React.FC<FollowButtonProps> = ({
               `${BACKEND_API_URL}/v1/artist/${toFollow}/${followedBy}`,
               {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                // headers: { "Content-Type": "application/json" },
                 credentials: "include",
-                // body: JSON.stringify({ message: "hello" }),
+                body: JSON.stringify({ message: "hello" }),
               }
             ).then((response) => {
               toast({
