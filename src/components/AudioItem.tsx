@@ -54,6 +54,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
       <Box
         width="80px"
         height="80px"
+        minWidth="80px"
         onClick={() => (!isCurrentTrack ? playTrack(track) : togglePlay())}
         cursor="pointer"
       >
