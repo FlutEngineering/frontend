@@ -80,7 +80,7 @@ jobs:
           echo "::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY#*/})"
 
       - name: Deploy to the staging server
-        uses: easingthemes/ssh-deploy@4.1.8
+        uses: easingthemes/ssh-deploy@v4.1.8
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
           ARGS: "-rlgoDzvc -i"
@@ -116,7 +116,7 @@ jobs:
           echo "::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY#*/})"
 
       - name: Deploy to the production server
-        uses: easingthemes/ssh-deploy@4.1.8
+        uses: easingthemes/ssh-deploy@v4.1.8
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
           ARGS: "-rlgoDzvc -i"
