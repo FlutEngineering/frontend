@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
 function Upload(): JSX.Element {
   const [files, setFiles] = useState<File[]>([]);
   const { address, isConnecting, isDisconnected } = useAccount();
-  const { data: ens } = useEnsName({
+  const { data: ensName } = useEnsName({
     address: address,
   });
 
@@ -37,7 +37,7 @@ function Upload(): JSX.Element {
               Clear
             </Button>
           </HStack>
-          <AudioFileList files={files} artist={{ address, ens }} />
+          <AudioFileList files={files} address={address} ensName={ensName} />
         </Stack>
       )}
     </VStack>
