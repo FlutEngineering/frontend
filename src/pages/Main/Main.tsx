@@ -21,7 +21,7 @@ const Main: React.FC = () => {
         FLUT
       </Text>
 
-      <Button as={RouterLink} to="/app" colorScheme="blue">
+      <Button as={RouterLink} to="/browse" colorScheme="blue">
         Launch App
       </Button>
       <Box

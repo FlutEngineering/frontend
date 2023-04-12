@@ -42,7 +42,7 @@ function Upload(): JSX.Element {
       )}
     </VStack>
   ) : (
-    <Navigate to="/app/" />
+    <Navigate to="/browse" />
   );
 }
 

@@ -13,14 +13,12 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { FaPause, FaPlay } from "react-icons/fa";
-import { formatArtistName, ipfsCidToUrl } from "~/utils";
+import { ipfsCidToUrl } from "~/utils";
 import { Track } from "~/types";
 import { css } from "@emotion/react";
 import { usePlayerStore } from "~/store";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { useEnsName } from "wagmi";
 import TagBadge from "./TagBadge";
-import { useNavigate } from "react-router-dom";
 import ProfileLinkButton from "~/components/ProfileLinkButton";
 
 type AudioItemProps = {
@@ -29,10 +27,9 @@ type AudioItemProps = {
 
 const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
-  const { data: ens } = useEnsName({ address: track.artistAddress });
+  // const { data: ensName } = useEnsName({ address: track.artistAddress });
 
   const isCurrentTrack = current && current?.audio === track.audio;
-  const navigate = useNavigate();
   return (
     <Card
       flex="1 0 auto"
@@ -90,19 +87,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           <Stack paddingTop="1" spacing="0">
             <ProfileLinkButton address={track.artistAddress} />
             {/* <Text color="gray.500" fontSize="sm" margin="0">
-              <Button
-                height={5}
-                variant="outline"
-                colorScheme="blue"
-                onClick={() => {
-                  const address = track.artistAddress;
-                  navigate({
-                    pathname: `/app/profile/${address}`,
-                  });
-                }}
-              >
-                {formatArtistName({ address: track.artistAddress, ens })}
-              </Button>
+                {formatArtistName({ address: track.artistAddress, ensName })}
             </Text> */}
             <Text
               size="sm"

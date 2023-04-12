@@ -9,17 +9,11 @@ export interface Track {
   tags: string[];
 }
 
-export interface Follows {
-  createdAt: string;
-  followerId: string;
-  followingId: string;
-}
-
 export interface Artist {
   address: Address;
-  ens: string | null | undefined;
-  followedBy?: Follows[] | undefined;
-  following?: Follows[] | undefined;
+  ensName: string | null | undefined;
+  followedBy: Address[];
+  following: Address[];
 }
 
 export interface Tag {

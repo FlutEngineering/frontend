@@ -13,15 +13,15 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
   track,
   ...props
 }) => {
-  const { data: ens } = useEnsName({ address: track.artistAddress });
+  const { data: ensName } = useEnsName({ address: track.artistAddress });
   const artist = useMemo(
-    () => formatArtistName({ address: track.artistAddress, ens }),
-    [track, ens]
+    () => formatArtistName({ address: track.artistAddress, ensName }),
+    [track, ensName]
   );
   return (
     <HStack
       as={RouterLink}
-      to={`/app/${track.artistAddress}/${track.slug}`}
+      to={`/${track.artistAddress}/${track.slug}`}
       maxWidth="200px"
       paddingRight="2"
       cursor="pointer"

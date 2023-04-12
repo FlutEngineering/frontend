@@ -27,11 +27,6 @@ interface PlayerStore {
   togglePlay: () => void;
 }
 
-interface ArtistStore {
-  artist: Artist | null;
-  fetchArtist: (address: string) => Promise<void>;
-}
-
 interface AuthVerificationArgs {
   message: SiweMessage;
   signature: string;
@@ -117,23 +112,6 @@ export const usePlayerStore = create<PlayerStore>()(
     togglePlay: () => set({ isPlaying: !get().isPlaying }),
   }))
 );
-
-export const useArtistStore = create<ArtistStore>((set, _get) => ({
-  artist: null,
-  fetchArtist: (address: string) =>
-    fetch(`${BACKEND_API_URL}/v1/artist/${address}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          console.log("Artist fetch error:", data.error);
-        } else if (data.artist) {
-          console.log("data.artist", data.artist);
-          return data.artist;
-        }
-        return [];
-      })
-      .then((artist) => set({ artist })),
-}));
 
 export const useAuthStore = create<AuthStore>((set) => ({
   address: undefined,

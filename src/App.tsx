@@ -28,7 +28,7 @@ import Browse from "./pages/Browse";
 import Library from "./pages/Library";
 import Search from "./pages/Search";
 import Upload from "./pages/Upload";
-import Profile from "./pages/Profile";
+import Profile, { loader as profileLoader } from "./pages/Profile";
 import TrackPage, { loader as trackLoader } from "./pages/TrackPage";
 import { useAuthStore } from "./store";
 
@@ -65,19 +65,25 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/app",
+    path: "/",
     element: <MusicApp />,
-    errorElement: <Navigate to="/app" />,
+    errorElement: <Navigate to="/browse" />,
     children: [
-      { path: "/app", element: <Browse /> },
-      { path: "/app/search", element: <Search /> },
-      { path: "/app/library", element: <Library /> },
-      { path: "/app/upload", element: <Upload /> },
-      { path: "/app/profile/:address", element: <Profile /> },
+      { path: "/browse", element: <Browse /> },
+      { path: "/search", element: <Search /> },
+      { path: "/library", element: <Library /> },
+      { path: "/upload", element: <Upload /> },
       {
-        path: "/app/:address/:slug",
+        path: "/:address",
+        element: <Profile />,
+        loader: profileLoader,
+        errorElement: <Navigate to="/" />,
+      },
+      {
+        path: "/:address/:slug",
         element: <TrackPage />,
         loader: trackLoader,
+        errorElement: <Navigate to="/" />,
       },
     ],
   },
@@ -92,14 +98,14 @@ function App() {
 
   return (
     <WagmiConfig client={wagmiClient}>
-      {/* <RainbowKitAuthenticationProvider
+      <RainbowKitAuthenticationProvider
         adapter={authenticationAdapter}
         status={status}
-      > */}
-      <RainbowKitProvider chains={chains} theme={darkTheme()}>
-        <RouterProvider router={router} />
-      </RainbowKitProvider>
-      {/* </RainbowKitAuthenticationProvider> */}
+      >
+        <RainbowKitProvider chains={chains} theme={darkTheme()}>
+          <RouterProvider router={router} />
+        </RainbowKitProvider>
+      </RainbowKitAuthenticationProvider>
     </WagmiConfig>
   );
 }

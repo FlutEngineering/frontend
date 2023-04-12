@@ -1,32 +1,27 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { Text, Button } from "@chakra-ui/react";
-import { formatArtistName, ipfsCidToUrl } from "~/utils";
-import { useNavigate } from "react-router-dom";
-import { useEnsName } from "wagmi";
+import { formatArtistName } from "~/utils";
+import { Address, useEnsName } from "wagmi";
 
 interface ProfileLinkButtonProps {
-  address: string;
+  address: Address;
 }
 const ProfileLinkButton: React.FC<ProfileLinkButtonProps> = ({ address }) => {
-  const navigate = useNavigate();
-  const { data: ens } = useEnsName({ address: `0x${address}` });
+  const { data: ensName } = useEnsName({ address });
+
   return (
-    <>
-      <Text color="gray.500" fontSize="sm" margin="0">
-        <Button
-          height={5}
-          variant="outline"
-          colorScheme="blue"
-          onClick={() => {
-            navigate({
-              pathname: `/app/profile/${address}`,
-            });
-          }}
-        >
-          {formatArtistName({ address: `0x${address}`, ens })}
-        </Button>
-      </Text>
-    </>
+    <Text color="gray.500" fontSize="sm" margin="0">
+      <Button
+        as={RouterLink}
+        to={`/${address}`}
+        height={5}
+        variant="outline"
+        colorScheme="blue"
+      >
+        {formatArtistName({ address, ensName })}
+      </Button>
+    </Text>
   );
 };
 export default ProfileLinkButton;
