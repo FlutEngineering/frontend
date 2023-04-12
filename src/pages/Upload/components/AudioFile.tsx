@@ -174,7 +174,12 @@ const AudioFile: React.FC<AudioFileProps> = ({
       <Stack width="100%">
         <CardBody paddingY="0" paddingRight="0">
           <Stack paddingTop="20px" hidden={isExpanded}>
-            <Text color="gray.600">{formatArtistName(artist)}</Text>
+            <Text color="gray.600">
+              {formatArtistName({
+                address: artist.address,
+                ensName: artist.ensName,
+              })}
+            </Text>
             <Heading margin="0" size="sm" fontSize="lg">
               {title}
             </Heading>

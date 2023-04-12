@@ -4,7 +4,7 @@ import { BACKEND_API_URL } from "./config";
 import type { AuthenticationStatus } from "@rainbow-me/rainbowkit";
 import type { Address } from "wagmi";
 import type { SiweMessage } from "siwe";
-import type { Track, Tag, Artist } from "./types";
+import type { Track, Tag } from "./types";
 
 interface TrackStore {
   tracks: Track[];
