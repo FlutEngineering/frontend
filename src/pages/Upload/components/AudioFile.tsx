@@ -25,7 +25,8 @@ import { formatArtistName } from "~/utils";
 
 interface AudioFileProps {
   audio: File;
-  artist: Artist;
+  address: Artist["address"];
+  ensName: Artist["ensName"];
   isEditing: boolean;
   onClick: () => void;
 }
@@ -43,7 +44,8 @@ type UploadStates = "idle" | "initiated" | "uploading" | "success" | "error";
 
 const AudioFile: React.FC<AudioFileProps> = ({
   audio,
-  artist,
+  address,
+  ensName,
   isEditing,
   onClick,
 }) => {
@@ -116,7 +118,7 @@ const AudioFile: React.FC<AudioFileProps> = ({
     }
 
     setUploadState("success");
-  }, [audio, title, artist, tags, imageEditor]);
+  }, [audio, title, address, tags, imageEditor]);
 
   const isUploadInitiated = uploadState === "initiated";
   const isUploading = uploadState === "uploading";
@@ -176,8 +178,8 @@ const AudioFile: React.FC<AudioFileProps> = ({
           <Stack paddingTop="20px" hidden={isExpanded}>
             <Text color="gray.600">
               {formatArtistName({
-                address: artist.address,
-                ensName: artist.ensName,
+                address,
+                ensName,
               })}
             </Text>
             <Heading margin="0" size="sm" fontSize="lg">

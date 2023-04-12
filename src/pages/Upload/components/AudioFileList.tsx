@@ -4,10 +4,11 @@ import AudioFile from "./AudioFile";
 
 interface AudioFileListProps {
   files: File[];
-  artist: Artist;
+  address: Artist["address"];
+  ensName: Artist["ensName"];
 }
 
-const AudioFileList: React.FC<AudioFileListProps> = ({ files, artist }) => {
+const AudioFileList: React.FC<AudioFileListProps> = ({ files, address, ensName }) => {
   const [editedItem, setEditedItem] = useState<string>(`${files[0].name}${0}`);
   return (
     <div style={{ width: "100%" }}>
@@ -16,7 +17,8 @@ const AudioFileList: React.FC<AudioFileListProps> = ({ files, artist }) => {
         return (
           <AudioFile
             audio={file}
-            artist={artist}
+            address={address}
+            ensName={ensName}
             isEditing={editedItem === key}
             onClick={() => setEditedItem(key)}
             key={key}
