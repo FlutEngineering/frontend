@@ -1,17 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-  Box,
-  Image,
-  HStack,
-  Link,
-  Icon,
-  Text,
-  Button,
-  Spacer,
-  Flex,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, HStack, Link, Icon, Spacer, Flex } from "@chakra-ui/react";
 import {
   FaMediumM,
   FaTwitter,
@@ -21,7 +10,7 @@ import {
   FaGithub,
 } from "react-icons/fa";
 import { GiSailboat } from "react-icons/gi";
-import uniswapLogoUrl from "~/assets/uniswap.svg";
+import UniswapButton from "~/components/UniswapButton";
 
 const Header: React.FC = () => {
   return (
@@ -129,21 +118,7 @@ const Header: React.FC = () => {
 
       <Box width="1vw" />
 
-      <Link
-        href="https://app.uniswap.org/#/swap?use=V2&outputCurrency=0x4f08705fb8f33affc231ed66e626b40e84a71870&inputCurrency=0x6b175474e89094c44da98b954eedeac495271d0f"
-        key="Uniswap"
-        isExternal
-        _hover={{}}
-      >
-        <Tooltip label="🌈 No Tax - Set a Low Slippage" placement="top">
-          <Button variant="outline" width="120px">
-            <HStack>
-              <Text textAlign="center">Buy on</Text>
-              <Image src={uniswapLogoUrl} w="2rem" />
-            </HStack>
-          </Button>
-        </Tooltip>
-      </Link>
+      <UniswapButton />
     </Flex>
   );
 };
