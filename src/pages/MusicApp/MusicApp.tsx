@@ -71,14 +71,14 @@ function MusicApp(): JSX.Element {
             />
             <IconButton
               as={RouterLink}
-              to="/app/search"
+              to="/search"
               icon={<AiOutlineSearch />}
               variant="outline"
               aria-label="search"
             />
             <IconButton
               as={RouterLink}
-              to="/app"
+              to="/browse"
               icon={<AiOutlineHome />}
               variant="outline"
               aria-label="browse"
@@ -87,14 +87,14 @@ function MusicApp(): JSX.Element {
               <>
                 <IconButton
                   as={RouterLink}
-                  to="/app/library"
+                  to="/library"
                   icon={<BiLibrary />}
                   variant="outline"
                   aria-label="library"
                 />
                 <IconButton
                   as={RouterLink}
-                  to="/app/upload"
+                  to="/upload"
                   icon={<AiOutlineCloudUpload />}
                   variant="outline"
                   aria-label="upload"

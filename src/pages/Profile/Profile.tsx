@@ -1,61 +1,86 @@
 import { useEffect } from "react";
-import { Text, Box, Stack, Flex, Heading, useToast } from "@chakra-ui/react";
-import { useTrackStore, useArtistStore } from "~/store";
-
-import AudioItem from "~/components/AudioItem";
-import { useParams } from "react-router-dom";
-import { useEnsName, useAccount } from "wagmi";
-
+import { Text, Box, Stack, Flex, Heading } from "@chakra-ui/react";
+import { isAddress } from "ethers/lib/utils.js";
+import { useTrackStore } from "~/store";
+import { useLoaderData } from "react-router-dom";
+import { useAccount } from "wagmi";
+import { fetchEnsName } from "@wagmi/core";
 import ProfileLinkButton from "~/components/ProfileLinkButton";
 import FollowButton from "./components/FollowButton";
+import AudioItem from "~/components/AudioItem";
+import { BACKEND_API_URL } from "~/config";
+import { Artist } from "~/types";
+
+interface ProfileParams {
+  artist: Artist;
+}
+
+export async function loader({ params }: any) {
+  const { address } = params;
+  if (!isAddress(address)) {
+    throw new Response("", {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+  const response = await fetch(`${BACKEND_API_URL}/v1/artist/${address}`);
+
+  if (!response.ok) {
+    throw new Response("", {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+
+  const json = await response.json();
+  const artist: Artist = json.artist;
+  const ensName = await fetchEnsName({ address: artist.address });
+
+  return { artist: { ...artist, ens: ensName } };
+}
 
 function Profile(): JSX.Element {
   const { tracks, fetchTracksByAddress } = useTrackStore();
-  const { address: toFollow } = useParams();
-  const { data: ensName } = useEnsName({ address: toFollow as `0x${string}` });
-  const { address: followedBy } = useAccount();
-  const { artist, fetchArtist } = useArtistStore();
-  const toast = useToast();
+  const { artist } = useLoaderData() as ProfileParams;
+  const { address } = useAccount();
 
   useEffect(() => {
-    if (toFollow) {
-      fetchTracksByAddress(toFollow);
-      fetchArtist(toFollow);
-    }
-  }, [toFollow, fetchTracksByAddress, fetchArtist]);
+    fetchTracksByAddress(artist.address);
+  }, [artist]);
 
   return (
     <Flex direction="column" width="100%">
-      <Text
-        gridArea="header"
-        marginY="1rem"
-        textAlign="center"
-        fontSize="3xl"
-        fontWeight="bold"
-        color="gray.600"
-      >
-        {ensName && <Text>{ensName}</Text>}
-      </Text>
+      {artist.ensName && (
+        <Text
+          gridArea="header"
+          marginY="1rem"
+          textAlign="center"
+          fontSize="3xl"
+          fontWeight="bold"
+          color="gray.600"
+        >
+          <Text>{artist.ensName}</Text>
+        </Text>
+      )}
       <Text gridArea="header" textAlign="center" fontSize="sm" color="gray.600">
-        {toFollow}
+        {artist.address}
       </Text>
 
       <Stack spacing="4">
-        {toFollow && followedBy && (
+        {true || artist.address !== address ? (
           <FollowButton
-            toFollow={toFollow}
-            followedBy={followedBy}
             artist={artist}
+            isFollowing={!!address && artist.followedBy.includes(address)}
           />
-        )}
+        ) : null}
 
         <Heading size="md">Followed By</Heading>
-        {artist?.followedBy?.map((follow) => (
-          <ProfileLinkButton address={follow?.followerId} />
+        {artist.followedBy.map((follow) => (
+          <ProfileLinkButton address={follow} />
         ))}
         <Heading size="md">Following</Heading>
-        {artist?.following?.map((follow) => (
-          <ProfileLinkButton address={follow?.followingId} />
+        {artist.following.map((follow) => (
+          <ProfileLinkButton address={follow} />
         ))}
         <Box>
           <Heading size="md">Uploads</Heading>
