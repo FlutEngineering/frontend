@@ -67,7 +67,7 @@ function Profile(): JSX.Element {
       </Text>
 
       <Stack spacing="4">
-        {true || artist.address !== address ? (
+        {artist.address !== address ? (
           <FollowButton
             artist={artist}
             isFollowing={!!address && artist.followedBy.includes(address)}
