@@ -19,7 +19,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ artist, isFollowing }) => {
         width="5rem"
         variant="outline"
         onClick={() =>
-          fetch(`${BACKEND_API_URL}/v1/artist/unfollow/${artist.address}`, {
+          fetch(`${BACKEND_API_URL}/v1/me/unfollow/${artist.address}`, {
             credentials: "include",
           }).then(() => {
             toast({
@@ -51,7 +51,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ artist, isFollowing }) => {
             isClosable: true,
           });
         } else {
-          fetch(`${BACKEND_API_URL}/v1/artist/follow/${artist.address}`, {
+          fetch(`${BACKEND_API_URL}/v1/me/follow/${artist.address}`, {
             credentials: "include",
           }).then(() => {
             toast({

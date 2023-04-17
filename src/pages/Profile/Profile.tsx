@@ -23,7 +23,7 @@ export async function loader({ params }: any) {
       statusText: "Not Found",
     });
   }
-  const response = await fetch(`${BACKEND_API_URL}/v1/artist/${address}`);
+  const response = await fetch(`${BACKEND_API_URL}/v1/artists/${address}`);
 
   if (!response.ok) {
     throw new Response("", {
