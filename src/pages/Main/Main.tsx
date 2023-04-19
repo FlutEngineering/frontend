@@ -21,7 +21,7 @@ const Main: React.FC = () => {
         FLUT
       </Text>
 
-      <Button as={RouterLink} to="/browse" colorScheme="blue">
+      <Button as={RouterLink} to="/search" colorScheme="blue">
         Launch App
       </Button>
       <Box
@@ -43,7 +43,11 @@ const Main: React.FC = () => {
       </Box>
 
       <div className="grid">
-        <Link as={RouterLink} to="/meaning" className="card">
+        <Link
+          href="https://medium.com/@TheMagicFlut/why-flut-is-needed-now-45d3fd181cc6"
+          isExternal
+          className="card"
+        >
           <h2>
             Ethos <span>-&gt;</span>
           </h2>
@@ -58,11 +62,15 @@ const Main: React.FC = () => {
           <p>at team@flut.cloud</p>
         </Link>
 
-        <Link as={RouterLink} to="/community" className="card">
+        <Link
+          href="https://medium.com/@TheMagicFlut/manifesto-9de8fa7439d0"
+          isExternal
+          className="card"
+        >
           <h2>
-            Community <span>-&gt;</span>
+            White Paper <span>-&gt;</span>
           </h2>
-          <p>Our museum of community Art</p>
+          <p>The Original Manifesto</p>
         </Link>
 
         <Link as={RouterLink} to="/engineering" className="card">
