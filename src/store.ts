@@ -47,6 +47,7 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
     fetch(`${BACKEND_API_URL}/v1/tracks`)
       .then((response) => response.json())
       .then((data) => {
+        set({ tracks: [] }); //clear before updating
         if (data.error) {
           console.log("Tracks fetch error:", data.error);
         } else if (data.tracks) {
@@ -62,6 +63,7 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
     )
       .then((response) => response.json())
       .then((data) => {
+        set({ tracks: [] }); //clear before updating
         if (data.error) {
           console.log("Tracks fetch error:", data.error);
         } else if (data.tracks) {
@@ -74,12 +76,12 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
     fetch(`${BACKEND_API_URL}/v1/tracks/?` + new URLSearchParams({ tag }))
       .then((response) => response.json())
       .then((data) => {
+        set({ tracks: [] }); //clear before updating
         if (data.error) {
           console.log("Tracks fetch error:", data.error);
         } else if (data.tracks) {
           return data.tracks;
         }
-
         return [];
       })
       .then((tracks) => set({ tracks })),
@@ -88,7 +90,9 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
 export const useTagStore = create<TagStore>((set, _get) => ({
   tags: [],
   fetchTags: () =>
-    fetch(`${BACKEND_API_URL}/v1/tags`)
+    fetch(`${BACKEND_API_URL}/v1/tags`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {

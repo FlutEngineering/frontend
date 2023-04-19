@@ -67,9 +67,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MusicApp />,
-    errorElement: <Navigate to="/browse" />,
+    errorElement: <Navigate to="/search" />,
     children: [
-      { path: "/browse", element: <Browse /> },
+      // { path: "/browse", element: <Browse /> },
       { path: "/search", element: <Search /> },
       { path: "/library", element: <Library /> },
       { path: "/upload", element: <Upload /> },

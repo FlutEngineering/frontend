@@ -76,19 +76,19 @@ function MusicApp(): JSX.Element {
               variant="outline"
               aria-label="search"
             />
-            <IconButton
+            {/* <IconButton
               as={RouterLink}
               to="/browse"
-              icon={<AiOutlineHome />}
+              icon={<BiLibrary />}
               variant="outline"
               aria-label="browse"
-            />
+            /> */}
             {isConnected && (
               <>
                 <IconButton
                   as={RouterLink}
                   to="/library"
-                  icon={<BiLibrary />}
+                  icon={<AiOutlineHome />}
                   variant="outline"
                   aria-label="library"
                 />
