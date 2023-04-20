@@ -21,50 +21,30 @@ function Browse(): JSX.Element {
   }, [selectedTag, fetchTracksByTag]);
 
   return (
-    <Grid
-      gridTemplateRows="auto auto minmax(0, 1fr)"
-      gridTemplateColumns="1fr"
-      gridTemplateAreas={`"header" "tag-list" "track-list"`}
-      width="100%"
-    >
-      <Text
-        gridArea="header"
-        marginY="1rem"
-        textAlign="center"
-        fontSize="3xl"
-        fontWeight="bold"
-        color="gray.600"
-      >
-        Tags
-      </Text>
-      <Box gridArea="tag-list">
-        <Box width="100%" height="15vh" overflowX="auto" margin="5">
-          {tags.map((tag, key) => {
-            return (
-              <Button
-                key={key}
-                variant={selectedTag === tag.name ? "solid" : "outline"}
-                borderWidth="1px"
-                marginY="1"
-                marginBottom="3"
-                _notLast={{ marginRight: 1 }}
-                onClick={() => setSelectedTag(tag.name)}
-              >
-                <Text>{tag.name}</Text>
-              </Button>
-            );
-          })}
-        </Box>
-      </Box>
+    <>
+      <Box width="100%">
+        <Text
+          marginY="1rem"
+          textAlign="center"
+          fontSize="3xl"
+          fontWeight="bold"
+          color="gray.600"
+        >
+          Recently Played
+        </Text>
 
-      <Box gridArea="track-list" alignSelf="stretch" overflowY="auto">
-        <Stack spacing={2}>
-          {tracks.map((track) => (
-            <AudioItem track={track} key={track.title} />
-          ))}
-        </Stack>
+        <Box alignSelf="stretch" overflowX="auto"></Box>
+        <Text
+          marginY="1rem"
+          textAlign="center"
+          fontSize="3xl"
+          fontWeight="bold"
+          color="gray.600"
+        >
+          Most Played
+        </Text>
       </Box>
-    </Grid>
+    </>
   );
 }
 

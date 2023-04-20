@@ -90,9 +90,7 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
 export const useTagStore = create<TagStore>((set, _get) => ({
   tags: [],
   fetchTags: () =>
-    fetch(`${BACKEND_API_URL}/v1/tags`, {
-      credentials: "include",
-    })
+    fetch(`${BACKEND_API_URL}/v1/tags`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
