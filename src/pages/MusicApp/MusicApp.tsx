@@ -30,7 +30,7 @@ function MusicApp(): JSX.Element {
     onOpen: openSettings,
     onClose: closeSettings,
   } = useDisclosure();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
 
   return (
     <Center
@@ -76,21 +76,21 @@ function MusicApp(): JSX.Element {
               variant="outline"
               aria-label="search"
             />
-            {/* <IconButton
+            <IconButton
               as={RouterLink}
               to="/browse"
               icon={<BiLibrary />}
               variant="outline"
               aria-label="browse"
-            /> */}
+            />
             {isConnected && (
               <>
                 <IconButton
                   as={RouterLink}
-                  to="/library"
+                  to={`/${address}`}
                   icon={<AiOutlineHome />}
                   variant="outline"
-                  aria-label="library"
+                  aria-label="profile"
                 />
                 <IconButton
                   as={RouterLink}

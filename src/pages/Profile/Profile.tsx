@@ -75,12 +75,12 @@ function Profile(): JSX.Element {
         ) : null}
 
         <Heading size="md">Followed By</Heading>
-        {artist.followedBy.map((follow) => (
-          <ProfileLinkButton address={follow} />
+        {artist.followedBy.map((follow, index) => (
+          <ProfileLinkButton address={follow} key={index} />
         ))}
         <Heading size="md">Following</Heading>
-        {artist.following.map((follow) => (
-          <ProfileLinkButton address={follow} />
+        {artist.following.map((follow, index) => (
+          <ProfileLinkButton address={follow} key={index} />
         ))}
         <Box>
           <Heading size="md">Uploads</Heading>

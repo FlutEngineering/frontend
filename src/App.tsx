@@ -13,10 +13,10 @@ import {
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { infuraProvider } from "wagmi/providers/infura";
-// import { alchemyProvider } from "wagmi/providers/alchemy";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 // import { publicProvider } from "wagmi/providers/public";
 import { authenticationAdapter } from "./services/auth";
-import { INFURA_API_KEY } from "./config";
+import { INFURA_API_KEY, ALCHEMY_API_KEY } from "./config";
 
 import Main from "./pages/Main";
 import Layout from "./components/Layout";
@@ -36,7 +36,7 @@ const { chains, provider } = configureChains(
   [mainnet],
   [
     infuraProvider({ apiKey: INFURA_API_KEY, priority: 0 }),
-    // alchemyProvider({ apiKey: import.meta.env.ALCHEMY_API_KEY, priority: 1 }),
+    alchemyProvider({ apiKey: ALCHEMY_API_KEY, priority: 1 }),
     // publicProvider({ priority: 2 }),
   ]
 );
@@ -69,9 +69,9 @@ const router = createBrowserRouter([
     element: <MusicApp />,
     errorElement: <Navigate to="/search" />,
     children: [
-      // { path: "/browse", element: <Browse /> },
+      { path: "/browse", element: <Browse /> },
       { path: "/search", element: <Search /> },
-      { path: "/library", element: <Library /> },
+      // { path: "/profile", element: <Profile /> },
       { path: "/upload", element: <Upload /> },
       {
         path: "/:address",
