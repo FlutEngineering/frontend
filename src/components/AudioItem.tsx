@@ -23,9 +23,10 @@ import ProfileLinkButton from "~/components/ProfileLinkButton";
 
 type AudioItemProps = {
   track: Track;
+  thumbnail: Boolean | undefined;
 };
 
-const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
+const AudioItem: React.FC<AudioItemProps> = ({ track, thumbnail }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   // const { data: ensName } = useEnsName({ address: track.artistAddress });
 
@@ -109,22 +110,24 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           </Stack>
         </CardBody>
       </Stack>
-      <CardFooter alignItems="center">
-        <Button
-          size="sm"
-          as={Link}
-          href={ipfsCidToUrl(track.audio)}
-          isExternal
-          ml={1}
-          color="gray.700"
-          fontSize="xs"
-          fontWeight="bold"
-          whiteSpace="nowrap"
-        >
-          IPFS
-          <ExternalLinkIcon mx="2px" />
-        </Button>
-      </CardFooter>
+      {thumbnail !== true && (
+        <CardFooter alignItems="center">
+          <Button
+            size="sm"
+            as={Link}
+            href={ipfsCidToUrl(track.audio)}
+            isExternal
+            ml={1}
+            color="gray.700"
+            fontSize="xs"
+            fontWeight="bold"
+            whiteSpace="nowrap"
+          >
+            IPFS
+            <ExternalLinkIcon mx="2px" />
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };
