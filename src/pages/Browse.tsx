@@ -29,10 +29,10 @@ function Browse(): JSX.Element {
         <HStack alignSelf="stretch" overflowX="auto">
           {tracks
             .sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
+              return Date.parse(b.createdAt) - Date.parse(a.createdAt);
             })
             .map((track) => (
-              <AudioItem track={track} key={track.title} thumbnail={true} />
+              <AudioItem track={track} key={track.title} />
             ))}
         </HStack>
       </Box>
