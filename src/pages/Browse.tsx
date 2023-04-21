@@ -6,20 +6,13 @@ import AudioItem from "~/components/AudioItem";
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 
 function Browse(): JSX.Element {
-  const [selectedTag, setSelectedTag] = useState<string>();
-  const { tags, fetchTags } = useTagStore();
-  const { tracks, fetchTracksByTag } = useTrackStore();
+  const { tracks, fetchTracks } = useTrackStore();
 
   useEffect(() => {
-    fetchTags();
+    fetchTracks();
   }, []);
 
-  useEffect(() => {
-    if (selectedTag) {
-      fetchTracksByTag(selectedTag);
-    }
-  }, [selectedTag, fetchTracksByTag]);
-
+  console.log(tracks);
   return (
     <>
       <Box width="100%">
@@ -30,19 +23,18 @@ function Browse(): JSX.Element {
           fontWeight="bold"
           color="gray.600"
         >
-          Recently Played
+          Recently Added
         </Text>
 
-        <Box alignSelf="stretch" overflowX="auto"></Box>
-        <Text
-          marginY="1rem"
-          textAlign="center"
-          fontSize="3xl"
-          fontWeight="bold"
-          color="gray.600"
-        >
-          Most Played
-        </Text>
+        <HStack alignSelf="stretch" overflowX="auto">
+          {tracks
+            .sort((a, b) => {
+              return new Date(b.createdAt) - new Date(a.createdAt);
+            })
+            .map((track) => (
+              <AudioItem track={track} key={track.title} thumbnail={true} />
+            ))}
+        </HStack>
       </Box>
     </>
   );
