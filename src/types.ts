@@ -7,6 +7,7 @@ export interface Track {
   slug: string;
   artistAddress: Address;
   tags: string[];
+  createdAt: string;
 }
 
 export interface Artist {
