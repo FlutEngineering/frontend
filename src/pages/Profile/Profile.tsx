@@ -90,7 +90,7 @@ function Profile(): JSX.Element {
             overflowY="auto"
             marginTop="6"
           >
-            <Stack spacing={2}>
+            <Stack spacing={2} overflowY="auto">
               {tracks.map((track) => (
                 <AudioItem track={track} key={track.title} />
               ))}
