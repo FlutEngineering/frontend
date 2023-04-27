@@ -35,6 +35,26 @@ function Browse(): JSX.Element {
               <AudioItem track={track} key={track.title} />
             ))}
         </HStack>
+
+        <Text
+          marginY="1rem"
+          textAlign="center"
+          fontSize="3xl"
+          fontWeight="bold"
+          color="gray.600"
+        >
+          Popular
+        </Text>
+
+        <HStack alignSelf="stretch" overflowX="auto">
+          {tracks
+            .sort((a, b) => {
+              return b.playCount - a.playCount;
+            })
+            .map((track) => (
+              <AudioItem track={track} key={track.title} />
+            ))}
+        </HStack>
       </Box>
     </>
   );

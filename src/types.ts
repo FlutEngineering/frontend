@@ -9,6 +9,7 @@ export interface Track {
   tags: string[];
   createdAt: string;
   id: string;
+  playCount: number;
 }
 
 export interface Artist {
