@@ -21,11 +21,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
 
   useEffect(() => {
     if (totalPlayTime / duration >= 0.85 && !isPlaycountUpdated) {
-      const { id } = track;
+      const id = track?.id;
 
       fetch(
         `${BACKEND_API_URL}/v1/tracks/playcount/?` +
-          new URLSearchParams({ id }),
+          new URLSearchParams({ id: id || "" }),
         {
           credentials: "include",
         }
