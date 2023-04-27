@@ -43,7 +43,7 @@ function Profile(): JSX.Element {
   const { tracks, fetchTracksByAddress } = useTrackStore();
   const { artist } = useLoaderData() as ProfileParams;
   const { address } = useAccount();
-
+  console.log("🐾", tracks);
   useEffect(() => {
     fetchTracksByAddress(artist.address);
   }, [artist]);
