@@ -19,8 +19,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   const audioRef = useRef(new Audio());
   const { duration } = audioRef.current;
 
+  console.log("totalPlayTime", totalPlayTime);
   useEffect(() => {
-    if (totalPlayTime / duration >= 0.85 && !isPlaycountUpdated) {
+    if (totalPlayTime / duration >= 0.01 && !isPlaycountUpdated) {
       const id = track?.id;
 
       fetch(
@@ -72,6 +73,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
             audioRef.current.play();
             setTrackProgress(0);
             setTotalPlayTime(0);
+            setIsPlaycountUpdated(false);
             startTimer();
           } else {
             audioRef.current.pause();
