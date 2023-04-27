@@ -1,7 +1,6 @@
 import { Address } from "wagmi";
 
 export interface Track {
-  id: string;
   audio: string;
   image: string;
   title: string;
@@ -9,6 +8,7 @@ export interface Track {
   artistAddress: Address;
   tags: string[];
   createdAt: string;
+  id: string;
 }
 
 export interface Artist {
