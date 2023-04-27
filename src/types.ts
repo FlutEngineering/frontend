@@ -1,6 +1,7 @@
 import { Address } from "wagmi";
 
 export interface Track {
+  id: string;
   audio: string;
   image: string;
   title: string;

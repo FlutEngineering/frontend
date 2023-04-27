@@ -25,9 +25,6 @@ function Search(): JSX.Element {
 
   useEffect(() => {
     fetchTracks();
-  }, []);
-
-  useEffect(() => {
     fetchTags();
   }, []);
 

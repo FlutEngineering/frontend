@@ -48,6 +48,7 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
       .then((response) => response.json())
       .then((data) => {
         set({ tracks: [] }); //clear before updating
+        console.log("👣", data.tracks);
         if (data.error) {
           console.log("Tracks fetch error:", data.error);
         } else if (data.tracks) {
