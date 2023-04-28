@@ -33,7 +33,7 @@ export async function loader({ params }: any) {
   }
 
   const json = await response.json();
-  console.log("🛤", json.track);
+
   return { track: json.track };
 }
 
