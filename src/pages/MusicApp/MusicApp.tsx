@@ -63,12 +63,12 @@ function MusicApp(): JSX.Element {
             direction={{ base: "row", lg: "column" }}
             justifyContent={{ base: "center", lg: "flex-start" }}
           >
-            <IconButton
+            {/* <IconButton
               icon={<AiOutlineSetting />}
               variant="outline"
               onClick={openSettings}
               aria-label="settings"
-            />
+            /> */}
             <IconButton
               as={RouterLink}
               to="/search"
