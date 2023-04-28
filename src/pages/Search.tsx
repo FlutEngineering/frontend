@@ -55,7 +55,6 @@ function Search(): JSX.Element {
         <Flex
           width="100%"
           height="12vh"
-          marginY="5"
           direction="row"
           justifyContent="space-between"
           borderRadius="25px"
@@ -79,8 +78,6 @@ function Search(): JSX.Element {
                     key={key}
                     variant={selectedTag === tag.name ? "solid" : "outline"}
                     borderWidth="1px"
-                    marginY="1"
-                    marginBottom="3"
                     _notLast={{ marginRight: 1 }}
                     onClick={() => setSelectedTag(tag.name)}
                   >
