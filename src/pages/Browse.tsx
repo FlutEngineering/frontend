@@ -3,6 +3,7 @@ import { Text, Box, Button, Stack, Grid, Icon, HStack } from "@chakra-ui/react";
 import { useTagStore, useTrackStore } from "~/store";
 // import { ASSETS_URL } from "~/config";
 import AudioItem from "~/components/AudioItem";
+import AudioThumbnail from "~/components/AudioThumbnail";
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 
 function Browse(): JSX.Element {
@@ -32,7 +33,7 @@ function Browse(): JSX.Element {
               return Date.parse(b.createdAt) - Date.parse(a.createdAt);
             })
             .map((track) => (
-              <AudioItem track={track} key={track.title} />
+              <AudioThumbnail track={track} key={track.title} />
             ))}
         </HStack>
 
@@ -52,7 +53,7 @@ function Browse(): JSX.Element {
               return b.playCount - a.playCount;
             })
             .map((track) => (
-              <AudioItem track={track} key={track.title} />
+              <AudioThumbnail track={track} key={track.title} />
             ))}
         </HStack>
       </Box>
