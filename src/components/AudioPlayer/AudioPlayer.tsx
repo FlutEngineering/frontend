@@ -21,7 +21,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
 
   console.log("totalPlayTime", totalPlayTime);
   useEffect(() => {
-    if (totalPlayTime / duration >= 0.01 && !isPlaycountUpdated) {
+    if (totalPlayTime / duration >= 0.85 && !isPlaycountUpdated) {
       const id = track?.id;
 
       fetch(
