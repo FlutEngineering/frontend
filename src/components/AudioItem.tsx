@@ -2,7 +2,6 @@ import React from "react";
 import {
   Stack,
   Text,
-  Image,
   CardBody,
   Card,
   Box,
@@ -12,14 +11,15 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react";
-import { FaPause, FaPlay } from "react-icons/fa";
-import { ipfsCidToUrl } from "~/utils";
-import { Track } from "~/types";
-import { css } from "@emotion/react";
-import { usePlayerStore } from "~/store";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { FaPause, FaPlay } from "react-icons/fa";
+import { css } from "@emotion/react";
+import { ipfsCidToUrl } from "~/utils";
+import { usePlayerStore } from "~/store";
+import { Track } from "~/types";
 import TagBadge from "./TagBadge";
-import ProfileLinkButton from "~/components/ProfileLinkButton";
+import ProfileLinkButton from "./ProfileLinkButton";
+import IPFSImage from "./IPFSImage";
 
 type AudioItemProps = {
   track: Track;
@@ -66,11 +66,11 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           as={isCurrentTrack && isPlaying ? FaPause : FaPlay}
           className="play-icon"
         />
-        <Image
+        <IPFSImage
           objectFit="cover"
           maxWidth="80px"
           maxHeight="80px"
-          src={ipfsCidToUrl(track.image)}
+          cid={track.image}
           alt="Cover"
         />
       </Box>
