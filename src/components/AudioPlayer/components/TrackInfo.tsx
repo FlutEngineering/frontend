@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { useEnsName } from "wagmi";
-import { Box, HStack, Image, StackProps, Text } from "@chakra-ui/react";
-import { Track } from "~/types";
-import { formatArtistName, ipfsCidToUrl } from "~/utils";
+import { Box, HStack, StackProps, Text } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
+import { formatArtistName } from "~/utils";
+import { Track } from "~/types";
+import IPFSImage from "~/components/IPFSImage";
 
 interface TrackInfoProps {
   track: Track;
@@ -30,14 +31,14 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
       _hover={{ background: "gray.50" }}
       {...props}
     >
-      <Image
+      <IPFSImage
         width="9"
         height="9"
         minWidth="9"
         minHeight="9"
         borderRadius="sm"
         overflow="hidden"
-        src={ipfsCidToUrl(track.image)}
+        cid={track.image}
       />
       <Box paddingBottom="0" overflow="hidden">
         <Text color="gray.500" fontSize="xs" lineHeight="1">
