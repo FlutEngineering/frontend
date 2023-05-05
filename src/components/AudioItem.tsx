@@ -11,6 +11,8 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react";
+import { useAccount } from "wagmi";
+import { Link as RouterLink } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { css } from "@emotion/react";
@@ -28,7 +30,7 @@ type AudioItemProps = {
 const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   // const { data: ensName } = useEnsName({ address: track.artistAddress });
-
+  const { address } = useAccount();
   const isCurrentTrack = current && current?.audio === track.audio;
   return (
     <Card
@@ -89,6 +91,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
             {/* <Text color="gray.500" fontSize="sm" margin="0">
                 {formatArtistName({ address: track.artistAddress, ensName })}
             </Text> */}
+
             <Text
               size="sm"
               fontSize="lg"
@@ -99,8 +102,17 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
               overflow="hidden"
               textOverflow="ellipsis"
             >
-              {track.title}
+              <Button
+                as={RouterLink}
+                to={`/${address}/${current?.slug}`}
+                height={5}
+                variant="ghost"
+                colorScheme="blue"
+              >
+                {track.title}
+              </Button>
             </Text>
+
             <HStack>
               {track.tags.map((tag) => (
                 <TagBadge tag={tag} key={tag} />
