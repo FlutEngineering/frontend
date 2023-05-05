@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Text, Box, Stack, Flex, Heading } from "@chakra-ui/react";
+import { Text, Box, Stack, Flex, Heading, Link } from "@chakra-ui/react";
 import { isAddress } from "ethers/lib/utils.js";
 import { useTrackStore } from "~/store";
 import { useLoaderData } from "react-router-dom";
@@ -43,27 +43,43 @@ function Profile(): JSX.Element {
   const { tracks, fetchTracksByAddress } = useTrackStore();
   const { artist } = useLoaderData() as ProfileParams;
   const { address } = useAccount();
-  console.log("🐾", tracks);
+
   useEffect(() => {
     fetchTracksByAddress(artist.address);
   }, [artist]);
 
   return (
     <Flex direction="column" width="100%">
-      {artist.ensName && (
-        <Text
-          gridArea="header"
-          marginY="1rem"
-          textAlign="center"
-          fontSize="3xl"
-          fontWeight="bold"
-          color="gray.600"
-        >
-          <Text>{artist.ensName}</Text>
-        </Text>
-      )}
+      <Text
+        gridArea="header"
+        marginY="1rem"
+        textAlign="center"
+        fontSize="3xl"
+        fontWeight="bold"
+        color="gray.600"
+      >
+        {artist?.ens ? (
+          <Text>{artist?.ens}</Text>
+        ) : (
+          <>
+            <Text>This Artist has no ENS Name.</Text>
+            <Text fontSize="lg">
+              Get it here 👉{" "}
+              <Link href="https://ens.domains" isExternal>
+                https://ens.domains
+              </Link>
+            </Text>
+          </>
+        )}
+      </Text>
+
       <Text gridArea="header" textAlign="center" fontSize="sm" color="gray.600">
-        {artist.address}
+        <Link
+          href={`https://etherscan.io/address/${artist.address}`}
+          isExternal
+        >
+          {artist.address}
+        </Link>
       </Text>
 
       <Stack spacing="4">
