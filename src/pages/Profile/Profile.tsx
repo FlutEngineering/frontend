@@ -36,14 +36,14 @@ export async function loader({ params }: any) {
   const artist: Artist = json.artist;
   const ensName = await fetchEnsName({ address: artist.address });
 
-  return { artist: { ...artist, ens: ensName } };
+  return { artist: { ...artist, ensName } };
 }
 
 function Profile(): JSX.Element {
   const { tracks, fetchTracksByAddress } = useTrackStore();
   const { artist } = useLoaderData() as ProfileParams;
   const { address } = useAccount();
-
+  console.log("artist", artist);
   useEffect(() => {
     fetchTracksByAddress(artist.address);
   }, [artist]);
@@ -58,8 +58,8 @@ function Profile(): JSX.Element {
         fontWeight="bold"
         color="gray.600"
       >
-        {artist?.ens ? (
-          <Text>{artist?.ens}</Text>
+        {artist?.ensName ? (
+          <Text>{artist?.ensName}</Text>
         ) : (
           <>
             <Text>This Artist has no ENS Name.</Text>
