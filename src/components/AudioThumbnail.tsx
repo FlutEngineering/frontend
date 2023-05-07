@@ -37,7 +37,7 @@ const trimTitle = (title: string) => {
 const AudioThumbnail: React.FC<AudioItemProps> = ({ track }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   // const { data: ensName } = useEnsName({ address: track.artistAddress });
-  console.log("track", track);
+
   const isCurrentTrack = current && current?.audio === track.audio;
   return (
     <VStack
