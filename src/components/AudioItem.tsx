@@ -32,6 +32,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
   // const { data: ensName } = useEnsName({ address: track.artistAddress });
   const { address } = useAccount();
   const isCurrentTrack = current && current?.audio === track.audio;
+
   return (
     <Card
       flex="1 0 auto"
@@ -104,7 +105,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
             >
               <Button
                 as={RouterLink}
-                to={`/${address}/${current?.slug}`}
+                to={`/${track?.artistAddress}/${track?.slug}`}
                 height={5}
                 variant="ghost"
                 colorScheme="blue"

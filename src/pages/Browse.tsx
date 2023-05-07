@@ -13,7 +13,6 @@ function Browse(): JSX.Element {
     fetchTracks();
   }, []);
 
-  console.log(tracks);
   return (
     <>
       <Box width="100%">
