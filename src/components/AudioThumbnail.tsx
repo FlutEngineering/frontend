@@ -21,6 +21,7 @@ import { usePlayerStore } from "~/store";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import TagBadge from "./TagBadge";
 import ProfileLinkButton from "~/components/ProfileLinkButton";
+import { Link as RouterLink } from "react-router-dom";
 
 type AudioItemProps = {
   track: Track;
@@ -36,7 +37,7 @@ const trimTitle = (title: string) => {
 const AudioThumbnail: React.FC<AudioItemProps> = ({ track }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   // const { data: ensName } = useEnsName({ address: track.artistAddress });
-
+  console.log("track", track);
   const isCurrentTrack = current && current?.audio === track.audio;
   return (
     <VStack
@@ -80,6 +81,7 @@ const AudioThumbnail: React.FC<AudioItemProps> = ({ track }) => {
       <Stack paddingTop="1" spacing="0">
         <ProfileLinkButton address={track.artistAddress} />
       </Stack>
+
       <Text
         size="sm"
         fontSize="lg"
@@ -88,7 +90,15 @@ const AudioThumbnail: React.FC<AudioItemProps> = ({ track }) => {
         paddingTop="2px"
         lineHeight="1"
       >
-        {trimTitle(track.title)}
+        <Button
+          as={RouterLink}
+          to={`/${track?.artistAddress}/${track?.slug}`}
+          height={5}
+          variant="ghost"
+          colorScheme="blue"
+        >
+          {trimTitle(track.title)}
+        </Button>
       </Text>
     </VStack>
   );
