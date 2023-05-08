@@ -19,29 +19,29 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   const audioRef = useRef(new Audio());
   const { duration } = audioRef.current;
 
-  // console.log("totalPlayTime", totalPlayTime);
   useEffect(() => {
-    if (totalPlayTime / duration >= 0.85 && !isPlaycountUpdated) {
-      const id = track?.id;
+    if (track && !isPlaycountUpdated && totalPlayTime / duration >= 0.85) {
+      const id = track.id;
 
-      fetch(
-        `${BACKEND_API_URL}/v1/tracks/playcount/?` +
-          new URLSearchParams({ id: id || "" }),
-        {
-          credentials: "include",
-        }
-      ).then(() => {
-        setIsPlaycountUpdated(true);
-        toast({
-          title: "Playcount",
-          description: `increased!`,
-          status: "success",
-          duration: 4000,
-          isClosable: true,
+      fetch(`${BACKEND_API_URL}/v1/tracks/playcount/${id}`, {
+        method: "POST",
+        credentials: "include",
+      })
+        .then(() => {
+          setIsPlaycountUpdated(true);
+          toast({
+            title: "Playcount",
+            description: `increased!`,
+            status: "success",
+            duration: 4000,
+            isClosable: true,
+          });
+        })
+        .catch(() => {
+          console.log("👾", "Playcount was not increased");
         });
-      });
     }
-  });
+  }, [track, totalPlayTime, duration, isPlaycountUpdated]);
 
   useEffect(() => {
     if (isPlaying) {
