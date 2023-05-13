@@ -38,7 +38,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
           });
         })
         .catch(() => {
-          console.log("👾", "Playcount was not increased");
+          // console.log("👾", "Playcount was not increased");
         });
     }
   }, [track, totalPlayTime, duration, isPlaycountUpdated]);
