@@ -147,6 +147,7 @@ function TrackPage(): JSX.Element {
               await fetch(`${BACKEND_API_URL}/v1/tracks/${address}/${slug}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({ tags }),
               }).catch((e) => {
                 console.log("error", e);
