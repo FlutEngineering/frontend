@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { useLoaderData } from "react-router-dom";
 import {
   HStack,
@@ -10,6 +10,12 @@ import {
   Image,
   Link,
   FormLabel,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Input,
 } from "@chakra-ui/react";
 import { isAddress } from "ethers/lib/utils.js";
 import { useEnsName, useAccount } from "wagmi";
@@ -33,6 +39,8 @@ interface TrackParams {
   track: Track;
   slug: string;
 }
+
+type UploadStates = "idle" | "initiated" | "uploading" | "success" | "error";
 
 export async function loader({ params }: any) {
   const { address, slug } = params;
@@ -82,6 +90,49 @@ function TrackPage(): JSX.Element {
     }))
   );
   const { tags, addTag, removeTag } = useTagStore();
+  const [newTitle, setNewTitle] = useState(track.title || "");
+  const [uploadState, setUploadState] = useState<UploadStates>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleTrackUpdate = useCallback(async () => {
+    setUploadState("initiated");
+    if (!tags.length) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("title", newTitle);
+    tags.forEach((tag) => formData.append("tags", tag));
+    console.log("formData", formData);
+    setUploadState("uploading");
+
+    const response = await fetch(
+      `${BACKEND_API_URL}/v1/tracks/${address}/${slug}`,
+      {
+        method: "PUT",
+        // headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: formData,
+      }
+    );
+    console.log("response", response);
+    if (!response.ok) {
+      setErrorMessage("Update error");
+    }
+
+    const json = await response.json();
+
+    if (json.error) {
+      setUploadState("error");
+      setErrorMessage(json.error);
+      return;
+    }
+
+    setUploadState("success");
+  }, [address, tags]);
+  const isUploadInitiated = uploadState === "initiated";
+  const isUploading = uploadState === "uploading";
+  const isUploaded = uploadState === "success";
+  const isUploadError = uploadState === "error";
 
   return (
     <VStack
@@ -119,11 +170,24 @@ function TrackPage(): JSX.Element {
           ))}
         </Box>
       </HStack>
+
       {address === track.artistAddress ? (
-        <>
-          <TagInput
-            size="sm"
-            label={
+        <Accordion width="100%" allowMultiple>
+          <AccordionItem>
+            <AccordionButton>
+              <Box
+                as="span"
+                flex="1"
+                textAlign="left"
+                fontWeight="bold"
+                color="gray.600"
+              >
+                Edit Track Details
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+
+            <AccordionPanel>
               <FormLabel
                 display="inline-block"
                 verticalAlign="top"
@@ -131,32 +195,60 @@ function TrackPage(): JSX.Element {
                 fontWeight="bold"
                 color="gray.600"
               >
-                Edit Tags
+                Update Title
               </FormLabel>
-            }
-            maxTags={MAX_TAGS}
-            tags={tags}
-            addTag={addTag}
-            removeTag={removeTag}
-            isInvalid={!tags.length}
-            // isDisabled={isUploading || isUploaded}
-          />
-          <Button
-            isDisabled={!tags.length || tags.length < 3}
-            onClick={async () => {
-              await fetch(`${BACKEND_API_URL}/v1/tracks/${address}/${slug}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ tags }),
-              }).catch((e) => {
-                console.log("error", e);
-              });
-            }}
-          >
-            Update
-          </Button>
-        </>
+              <Input
+                placeholder="Track title"
+                value={newTitle}
+                onChange={(event) => setNewTitle(event.target.value)}
+                maxLength={100}
+                minLength={1}
+                marginY={3}
+                isDisabled={isUploading || isUploaded}
+              />
+              <TagInput
+                size="sm"
+                label={
+                  <FormLabel
+                    display="inline-block"
+                    verticalAlign="top"
+                    fontSize="sm"
+                    fontWeight="bold"
+                    color="gray.600"
+                  >
+                    Change Tags
+                  </FormLabel>
+                }
+                maxTags={MAX_TAGS}
+                tags={tags}
+                addTag={addTag}
+                removeTag={removeTag}
+                isInvalid={!tags.length}
+                isDisabled={isUploading || isUploaded}
+              />
+              <Button
+                marginY={3}
+                isDisabled={
+                  !tags.length || tags.length < 3 || isUploading || isUploaded
+                }
+                onClick={() => handleTrackUpdate()}
+              >
+                Update
+              </Button>
+              {uploadState === "uploading" && (
+                <Button
+                  isLoading
+                  loadingText="Updating"
+                  colorScheme="teal"
+                  variant="outline"
+                />
+              )}
+              <Text paddingLeft="2" fontSize="sm" color="red.500">
+                {errorMessage}
+              </Text>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       ) : (
         <></>
       )}
