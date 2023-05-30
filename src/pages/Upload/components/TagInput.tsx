@@ -35,7 +35,7 @@ const TagInput: React.FC<TagInputProps> = ({
   const isInputError = isInvalid || (inputBlurred && tags.length < 3);
 
   return (
-    <FormControl isRequired isInvalid={isInputError}>
+    <FormControl isInvalid={isInputError}>
       {label}
       {isInputError && (
         <FormErrorMessage
@@ -44,7 +44,7 @@ const TagInput: React.FC<TagInputProps> = ({
           marginInlineStart="-2"
           verticalAlign="top"
         >
-          Please add at least 3 tags
+          Add at least 3 tags
         </FormErrorMessage>
       )}
       <InputGroup
