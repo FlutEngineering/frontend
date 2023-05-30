@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Form, useLoaderData } from "react-router-dom";
 import {
   HStack,
   VStack,
@@ -10,12 +10,10 @@ import {
   Image,
   Link,
   FormLabel,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
+  FormControl,
+  FormErrorMessage,
   Input,
+  useToast
 } from "@chakra-ui/react";
 import { isAddress } from "ethers/lib/utils.js";
 import { useEnsName, useAccount } from "wagmi";
@@ -73,10 +71,10 @@ function TrackPage(): JSX.Element {
   const artist = useMemo(() => ens || track.artistAddress, [track, ens]);
   const image = ipfsCidToUrl(track.image);
   const { address } = useAccount();
-
+console.log('track',track)
   const [useTagStore] = useState<() => TagStore>(() =>
     create<TagStore>((set, get) => ({
-      tags: [],
+      tags: [...new Set(track.tags)],
       getTags: () => get().tags,
       // add tag validation
       addTag: (tag) => {
@@ -128,6 +126,15 @@ function TrackPage(): JSX.Element {
     }
 
     setUploadState("success");
+    const toast = useToast()
+    toast({
+      title: 'Update Successful',
+      description: "Your track has been updated",
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+
   }, [address, tags]);
   const isUploadInitiated = uploadState === "initiated";
   const isUploading = uploadState === "uploading";
@@ -172,22 +179,38 @@ function TrackPage(): JSX.Element {
       </HStack>
 
       {address === track.artistAddress ? (
-        <Accordion width="100%" allowMultiple>
-          <AccordionItem>
-            <AccordionButton>
-              <Box
-                as="span"
-                flex="1"
-                textAlign="left"
-                fontWeight="bold"
-                color="gray.600"
-              >
-                Edit Track Details
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-
-            <AccordionPanel>
+        <FormControl isInvalid={!newTitle.length}>
+          <Box
+            flex="1"
+            textAlign="left"
+            fontWeight="bold"
+            color="gray.600"
+            marginBottom='1.5rem'
+          >
+            Edit Track Details
+          </Box>
+          <FormLabel
+            fontSize="sm"
+            fontWeight="bold"
+            color="gray.600"
+          >
+            Update Title
+          </FormLabel>
+          
+          <Input
+            placeholder="Track title"
+            value={newTitle}
+            onChange={(event) => setNewTitle(event.target.value)}
+            maxLength={100}
+            minLength={1}
+            marginY={3}
+            isDisabled={isUploading}
+            
+          />
+          <FormErrorMessage>Title is required.</FormErrorMessage>
+          <TagInput
+            size="sm"
+            label={
               <FormLabel
                 display="inline-block"
                 verticalAlign="top"
@@ -195,60 +218,31 @@ function TrackPage(): JSX.Element {
                 fontWeight="bold"
                 color="gray.600"
               >
-                Update Title
+                Update Tags
               </FormLabel>
-              <Input
-                placeholder="Track title"
-                value={newTitle}
-                onChange={(event) => setNewTitle(event.target.value)}
-                maxLength={100}
-                minLength={1}
-                marginY={3}
-                isDisabled={isUploading || isUploaded}
-              />
-              <TagInput
-                size="sm"
-                label={
-                  <FormLabel
-                    display="inline-block"
-                    verticalAlign="top"
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color="gray.600"
-                  >
-                    Change Tags
-                  </FormLabel>
-                }
-                maxTags={MAX_TAGS}
-                tags={tags}
-                addTag={addTag}
-                removeTag={removeTag}
-                isInvalid={!tags.length}
-                isDisabled={isUploading || isUploaded}
-              />
-              <Button
-                marginY={3}
-                isDisabled={
-                  !tags.length || tags.length < 3 || isUploading || isUploaded
-                }
-                onClick={() => handleTrackUpdate()}
-              >
-                Update
-              </Button>
-              {uploadState === "uploading" && (
-                <Button
-                  isLoading
-                  loadingText="Updating"
-                  colorScheme="teal"
-                  variant="outline"
-                />
-              )}
-              <Text paddingLeft="2" fontSize="sm" color="red.500">
-                {errorMessage}
-              </Text>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+            }
+            maxTags={MAX_TAGS}
+            tags={tags}
+            addTag={addTag}
+            removeTag={removeTag}
+            isInvalid={!tags.length}
+            isDisabled={isUploading}
+          />
+          <Button
+            marginY={3}
+            isLoading={uploadState === 'uploading'}
+            loadingText="Updating"
+            isDisabled={
+              !newTitle.length || !tags.length || tags.length < 3 || isUploading
+            }
+            onClick={() => handleTrackUpdate()}
+          >
+            Update
+          </Button>
+          <Text paddingLeft="2" fontSize="sm" color="red.500">
+            {errorMessage}
+          </Text>
+        </FormControl>
       ) : (
         <></>
       )}
