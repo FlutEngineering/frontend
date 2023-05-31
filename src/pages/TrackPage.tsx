@@ -107,7 +107,7 @@ console.log('track',track)
       `${BACKEND_API_URL}/v1/tracks/${address}/${slug}`,
       {
         method: "PUT",
-        // headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: formData,
       }
@@ -179,70 +179,72 @@ console.log('track',track)
       </HStack>
 
       {address === track.artistAddress ? (
-        <FormControl isInvalid={!newTitle.length}>
-          <Box
-            flex="1"
-            textAlign="left"
-            fontWeight="bold"
-            color="gray.600"
-            marginBottom='1.5rem'
-          >
-            Edit Track Details
-          </Box>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="bold"
-            color="gray.600"
-          >
-            Update Title
-          </FormLabel>
-          
-          <Input
-            placeholder="Track title"
-            value={newTitle}
-            onChange={(event) => setNewTitle(event.target.value)}
-            maxLength={100}
-            minLength={1}
-            marginY={3}
-            isDisabled={isUploading}
+        <>
+          <FormControl isInvalid={!newTitle.length}>
+            <Box
+              flex="1"
+              textAlign="left"
+              fontWeight="bold"
+              color="gray.600"
+              marginBottom='1.5rem'
+            >
+              Edit Track Details
+            </Box>
+            <FormLabel
+              fontSize="sm"
+              fontWeight="bold"
+              color="gray.600"
+            >
+              Update Title
+            </FormLabel>
             
-          />
-          <FormErrorMessage>Title is required.</FormErrorMessage>
-          <TagInput
-            size="sm"
-            label={
-              <FormLabel
-                display="inline-block"
-                verticalAlign="top"
-                fontSize="sm"
-                fontWeight="bold"
-                color="gray.600"
-              >
-                Update Tags
-              </FormLabel>
-            }
-            maxTags={MAX_TAGS}
-            tags={tags}
-            addTag={addTag}
-            removeTag={removeTag}
-            isInvalid={!tags.length}
-            isDisabled={isUploading}
-          />
-          <Button
-            marginY={3}
-            isLoading={uploadState === 'uploading'}
-            loadingText="Updating"
-            isDisabled={
-              !newTitle.length || !tags.length || tags.length < 3 || isUploading
-            }
-            onClick={() => handleTrackUpdate()}
-          >
-            Update
-          </Button>
-          <Text paddingLeft="2" fontSize="sm" color="red.500">
-            {errorMessage}
-          </Text>
-        </FormControl>
+            <Input
+              placeholder="Track title"
+              value={newTitle}
+              onChange={(event) => setNewTitle(event.target.value)}
+              maxLength={100}
+              minLength={1}
+              marginY={3}
+              isDisabled={isUploading}
+              
+            />
+            <FormErrorMessage>Title is required.</FormErrorMessage>
+            </FormControl>
+            <TagInput
+              size="sm"
+              label={
+                <FormLabel
+                  display="inline-block"
+                  verticalAlign="top"
+                  fontSize="sm"
+                  fontWeight="bold"
+                  color="gray.600"
+                >
+                  Update Tags
+                </FormLabel>
+              }
+              maxTags={MAX_TAGS}
+              tags={tags}
+              addTag={addTag}
+              removeTag={removeTag}
+              isInvalid={!tags.length}
+              isDisabled={isUploading}
+            />
+            <Button
+              marginY={3}
+              isLoading={uploadState === 'uploading'}
+              loadingText="Updating"
+              isDisabled={
+                !newTitle.length || !tags.length || tags.length < 3 || isUploading
+              }
+              onClick={() => handleTrackUpdate()}
+            >
+              Update
+            </Button>
+            <Text paddingLeft="2" fontSize="sm" color="red.500">
+              {errorMessage}
+            </Text>
+          </>
       ) : (
         <></>
       )}
