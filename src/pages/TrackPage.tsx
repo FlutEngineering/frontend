@@ -109,7 +109,8 @@ console.log('track',track)
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: formData,
+        // body: formData,
+        body: JSON.stringify({ title: newTitle, tags })
       }
     );
     console.log("response", response);
