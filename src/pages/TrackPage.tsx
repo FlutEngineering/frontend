@@ -180,7 +180,7 @@ console.log('track',track)
 
       {address === track.artistAddress ? (
         <>
-          <FormControl isInvalid={!newTitle.length}>
+          
             <Box
               flex="1"
               textAlign="left"
@@ -208,8 +208,8 @@ console.log('track',track)
               isDisabled={isUploading}
               
             />
-            <FormErrorMessage>Title is required.</FormErrorMessage>
-            </FormControl>
+            
+            
             <TagInput
               size="sm"
               label={
