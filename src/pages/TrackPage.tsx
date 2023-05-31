@@ -110,7 +110,6 @@ function TrackPage(): JSX.Element {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        // body: formData,
         body: JSON.stringify({ title: newTitle, tags })
       }
     );
