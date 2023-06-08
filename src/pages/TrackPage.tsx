@@ -91,7 +91,7 @@ console.log('track',track)
   const [newTitle, setNewTitle] = useState(track.title || "");
   const [uploadState, setUploadState] = useState<UploadStates>("idle");
   const [errorMessage, setErrorMessage] = useState("");
-
+  const toast = useToast()
   const handleTrackUpdate = useCallback(async () => {
     setUploadState("initiated");
     if (!tags.length) {
@@ -127,7 +127,7 @@ console.log('track',track)
     }
 
     setUploadState("success");
-    const toast = useToast()
+    
     toast({
       title: 'Update Successful',
       description: "Your track has been updated",
