@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from "react";
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, useLoaderData, useNavigate } from "react-router-dom";
 import {
   HStack,
   VStack,
@@ -71,7 +71,8 @@ function TrackPage(): JSX.Element {
   const artist = useMemo(() => ens || track.artistAddress, [track, ens]);
   const image = ipfsCidToUrl(track.image);
   const { address } = useAccount();
-console.log('track',track)
+  const navigate = useNavigate();
+
   const [useTagStore] = useState<() => TagStore>(() =>
     create<TagStore>((set, get) => ({
       tags: [...new Set(track.tags)],
@@ -92,6 +93,7 @@ console.log('track',track)
   const [uploadState, setUploadState] = useState<UploadStates>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const toast = useToast()
+
   const handleTrackUpdate = useCallback(async () => {
     setUploadState("initiated");
     if (!tags.length) {
@@ -100,7 +102,6 @@ console.log('track',track)
     const formData = new FormData();
     formData.append("title", newTitle);
     tags.forEach((tag) => formData.append("tags", tag));
-    console.log("formData", formData);
     setUploadState("uploading");
 
     const response = await fetch(
@@ -109,17 +110,15 @@ console.log('track',track)
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        // body: formData,
         body: JSON.stringify({ title: newTitle, tags })
       }
     );
-    console.log("response", response);
+    
     if (!response.ok) {
       setErrorMessage("Update error");
     }
 
     const json = await response.json();
-
     if (json.error) {
       setUploadState("error");
       setErrorMessage(json.error);
@@ -127,7 +126,7 @@ console.log('track',track)
     }
 
     setUploadState("success");
-    
+    navigate(`/${track?.artistAddress}/${json.track?.slug}`)
     toast({
       title: 'Update Successful',
       description: "Your track has been updated",
@@ -180,8 +179,7 @@ console.log('track',track)
       </HStack>
 
       {address === track.artistAddress ? (
-        <>
-          
+        <Box>
             <Box
               flex="1"
               textAlign="left"
@@ -245,7 +243,7 @@ console.log('track',track)
             <Text paddingLeft="2" fontSize="sm" color="red.500">
               {errorMessage}
             </Text>
-          </>
+          </Box>
       ) : (
         <></>
       )}
