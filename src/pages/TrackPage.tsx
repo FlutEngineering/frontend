@@ -108,7 +108,7 @@ function TrackPage(): JSX.Element {
       `${BACKEND_API_URL}/v1/tracks/${address}/${slug}`,
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        // headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ title: newTitle, tags })
       }
