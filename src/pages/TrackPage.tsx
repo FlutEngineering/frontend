@@ -111,6 +111,8 @@ function TrackPage(): JSX.Element {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ title: newTitle, tags })
+        // body: formData,
+        body: JSON.stringify({ title: newTitle, tags })
       }
     );
     
