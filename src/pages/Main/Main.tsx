@@ -3,6 +3,7 @@ import { Box, Text, Link, Stack, Button } from "@chakra-ui/react";
 import Typed from "react-typed";
 
 import "./Main.css";
+import BigLogo from "./components/BigLogo";
 
 const Main: React.FC = () => {
   return (
@@ -12,15 +13,8 @@ const Main: React.FC = () => {
       justifyContent="space-between"
       paddingTop="1rem"
     >
-      <Text
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        fontSize="9xl"
-      >
-        FLUT
-      </Text>
 
+      <BigLogo />
       <Button as={RouterLink} to="/search" colorScheme="blue">
         Launch App
       </Button>
