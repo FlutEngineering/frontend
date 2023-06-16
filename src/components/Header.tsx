@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { GiSailboat } from "react-icons/gi";
 import UniswapButton from "./UniswapButton";
+import Logo from "./Logo";
 
 const Header = () => {
   return (
@@ -24,13 +25,14 @@ const Header = () => {
         justifyContent="center"
         gap="1rem"
       >
+        {/* <Logo /> */}
         <Box
           // position="relative"
           margin="0"
           padding="1rem"
           backgroundColor="#f6f7f8"
           border="1px solid #e0e2e3"
-          borderRadius="var(--border-radius)"
+          borderRadius="12px"
         >
           <Link
             href={
