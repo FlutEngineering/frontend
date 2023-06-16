@@ -112,7 +112,7 @@ const BigLogo: React.FC = () => {
               --random: ${0.5 + 0.5 * Math.random()};
               margin: 0 !important;
             `}
-            bgGradient="linear(to-b, red.500 0%, red.500 40%, orange.500 40%, orange.500 60%, cyan.500 60%, cyan.500 100%)"
+            bgGradient="linear(to-b, red.500 0%, red.500 40%, orange.500 40%, orange.500 68%, cyan.500 68%, cyan.500 100%)"
           />
         ))}
       </LineContainer>
