@@ -23,12 +23,11 @@ const range = (n: number) => [...Array(n).keys()];
 const Line = styled(Box)`
   width: 100%;
   --y: calc(
-    0.8 * sin(1 * pi / var(--max-x) * var(--x) + var(--pos)) - 0.2 *
+    0.8 * sin(pi / var(--max-x) * var(--x) + var(--pos)) - 0.2 *
       cos(pi / var(--max-x) * 5 * var(--x)) + 0.7
   );
   height: calc(
-    100% * (var(--y) * (var(--random) * (1 * var(--y)))) * var(--top) *
-      var(--speed)
+    100% * (var(--y) * (var(--random) * var(--y))) * var(--top) * var(--speed)
   );
   background-color: var(--chakra-colors-orange-500);
   transition: height var(--time) ease-out;
