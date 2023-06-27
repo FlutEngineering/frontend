@@ -9,9 +9,10 @@ const Layout = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      padding="6rem"
-      paddingY="6rem"
+      paddingX="6rem"
+      paddingY="3rem"
       minHeight="100vh"
+      height="100vh"
     >
       <Header />
       <Outlet />
