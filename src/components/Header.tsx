@@ -59,7 +59,7 @@ const ContractAddress: React.FC = () => {
   const { colorMode } = useColorMode();
 
   return (
-    <LinkBox padding={2} _hover={{ code: { bg: "gray.600" } }}>
+    <LinkBox padding={2} marginX={2} _hover={{ code: { bg: "gray.600" } }}>
       <Text as="sub" color="gray">
         Ethereum Mainnet Contract &nbsp;
       </Text>
@@ -90,7 +90,7 @@ const Header = () => {
   return (
     <Flex
       direction={{ base: "column", lg: "row" }}
-      alignItems="flex-end"
+      alignItems={{ base: "center", lg: "flex-end" }}
       justifyContent="center"
       width="100%"
     >

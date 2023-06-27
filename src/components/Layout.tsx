@@ -9,8 +9,8 @@ const Layout = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      paddingX="6rem"
-      paddingY="3rem"
+      paddingX={{ base: 3, lg: "6rem" }}
+      paddingY={{ base: 3, lg: "3rem" }}
       minHeight="100vh"
       height="100vh"
     >
