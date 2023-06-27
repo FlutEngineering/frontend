@@ -75,10 +75,11 @@ const BigLogo: React.FC = () => {
     };
     document.addEventListener("mousemove", listener);
     return () => {
-      clearTimeout(timeout);
       document.removeEventListener("mousemove", listener);
+      clearTimeout(timeout);
     };
   }, [ref]);
+
   return (
     <div>
       <svg width="0" height="0">
@@ -97,7 +98,7 @@ const BigLogo: React.FC = () => {
         </defs>
       </svg>
       <LineContainer
-        margin="80px 0"
+        margin="10px 0"
         width="432px"
         height="140px"
         alignItems="flex-end"
