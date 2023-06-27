@@ -38,7 +38,7 @@ const Line = styled(Box)`
     top: 0;
     bottom: 0;
     width: 2px;
-    background: var(--chakra-colors-gray-800);
+    background: var(--chakra-colors-chakra-body-bg);
   }
 `;
 
