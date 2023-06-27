@@ -59,9 +59,9 @@ const ContractAddress: React.FC = () => {
   const { colorMode } = useColorMode();
 
   return (
-    <LinkBox padding={2} marginX={2} _hover={{ code: { bg: "gray.600" } }}>
+    <LinkBox padding={2} marginX={2} _hover={{ code: { bg: "whiteAlpha.300" } }}>
       <Text as="sub" color="gray">
-        Ethereum Mainnet Contract &nbsp;
+        Ethereum Mainnet Contract
       </Text>
       <LinkOverlay
         display="block"
@@ -75,6 +75,7 @@ const ContractAddress: React.FC = () => {
           paddingX="6px"
           transition="background-color 200ms"
           whiteSpace="nowrap"
+          bg="whiteAlpha.200"
         >
           0x4F08705FB8F33AffC231ed66e626B40E84A71870
           <ExternalLinkIcon marginLeft="1" marginTop="-4px" />
