@@ -21,7 +21,7 @@ function Engineering(): JSX.Element {
       >
         {`How We're Building It`}
       </Text>
-      <Text fontSize="xl" marginX={{ base: "0", medium: "15vw" }}>
+      <Text fontSize="xl" marginX={{ base: "0", medium: "15vw" }} textIndent="2rem">
         {`We're big fans of Music here at FLUT. Most of us are musicians
           ourselves. We're building the platform that we want to use. Our
           techstack includes a hybrid of web2 and web3 technologies such as:`}
