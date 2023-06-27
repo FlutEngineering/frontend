@@ -1,5 +1,17 @@
-import { Link as RouterLink } from "react-router-dom";
-import { Box, HStack, Link, Icon, Text, Flex } from "@chakra-ui/react";
+import {
+  useColorMode,
+  HStack,
+  Link,
+  Icon,
+  Text,
+  Flex,
+  LinkProps,
+  LinkBox,
+  LinkOverlay,
+  Code,
+  Spacer,
+} from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   FaMediumM,
   FaTwitter,
@@ -9,153 +21,120 @@ import {
   FaGithub,
 } from "react-icons/fa";
 import { GiSailboat } from "react-icons/gi";
+import type { IconType } from "react-icons";
+
 import UniswapButton from "./UniswapButton";
 import Logo from "./Logo";
+import { useMatch } from "react-router-dom";
+
+type HeaderLinkProps = {
+  icon: IconType;
+} & LinkProps;
+
+const HeaderLink: React.FC<HeaderLinkProps> = ({ icon, ...props }) => {
+  const { colorMode } = useColorMode();
+
+  return (
+    <Link
+      display="flex"
+      width="28px"
+      height="28px"
+      justifyContent="center"
+      alignItems="center"
+      _hover={{
+        svg: {
+          color: colorMode === "dark" ? "white" : "black",
+          transition: "250ms",
+        },
+      }}
+      isExternal
+      {...props}
+    >
+      <Icon width="18px" height="18px" as={icon} color="gray" />
+    </Link>
+  );
+};
+
+const ContractAddress: React.FC = () => {
+  const { colorMode } = useColorMode();
+
+  return (
+    <LinkBox padding={2} _hover={{ code: { bg: "gray.600" } }}>
+      <Text as="sub" color="gray">
+        Ethereum Mainnet Contract &nbsp;
+      </Text>
+      <LinkOverlay
+        display="block"
+        href="https://etherscan.io/token/0x4F08705FB8F33AffC231ed66e626B40E84A71870"
+        key="Etherscan"
+        isExternal
+      >
+        {/* TODO: add External link icon, change colorScheme of `Code`, add linebreak */}
+        <Code
+          paddingTop="3px"
+          paddingX="6px"
+          transition="background-color 200ms"
+          whiteSpace="nowrap"
+        >
+          0x4F08705FB8F33AffC231ed66e626B40E84A71870
+          <ExternalLinkIcon marginLeft="1" marginTop="-4px" />
+        </Code>
+      </LinkOverlay>
+    </LinkBox>
+  );
+};
 
 const Header = () => {
+  const match = useMatch("/");
+
   return (
     <Flex
       direction={{ base: "column", lg: "row" }}
-      alignItems="center"
+      alignItems="flex-end"
       justifyContent="center"
+      width="100%"
     >
-      <Flex
-        direction={{ base: "column", lg: "row" }}
-        alignItems="center"
-        justifyContent="center"
-        gap="1rem"
-      >
-        {/* <Logo /> */}
-        <Box
-          // position="relative"
-          margin="0"
-          padding="1rem"
-          backgroundColor="#f6f7f8"
-          border="1px solid #e0e2e3"
-          borderRadius="12px"
-        >
-          <Link
-            href={
-              "https://etherscan.io/token/0x4F08705FB8F33AffC231ed66e626B40E84A71870"
-            }
-            key="Etherscan"
-            isExternal
-            _hover={{ dropShadow: "5", transition: "0.4s" }}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            gap="0.5rem"
-          >
-            <Box
-              display="flex"
-              justifyContent="center"
-              flexDirection={{ base: "column", lg: "row" }}
-              // width="100%"
-            >
-              <Text textAlign="center">Ethereum Mainnet Contract &nbsp;</Text>
-              <Text>0x4F08705FB8F33AffC231ed66e626B40E84A71870</Text>
-            </Box>
-          </Link>
-        </Box>
-
-        <Box width="10vw" height="1vh" />
-      </Flex>
-
+      {!match && (
+        <>
+          <Logo />
+          <Spacer />
+        </>
+      )}
+      <ContractAddress />
+      <Spacer />
       <HStack>
-        <Link
-          as={RouterLink}
-          to="/"
-          key="Home"
-          _notFirst={{ ml: { base: 0, lg: 1 } }}
-          padding="5px"
-        >
-          <Icon
-            as={FaHome}
-            color="grey"
-            _hover={{ color: "black", transition: "0.4s" }}
+        <HStack marginRight="2" spacing={{ base: 0.5, lg: 1 }}>
+          <HeaderLink
+            href="https://t.me/+BhXkKrFweoAzODcx"
+            key="Telegram"
+            icon={FaTelegram}
           />
-        </Link>
-        <Link
-          href="https://t.me/+BhXkKrFweoAzODcx"
-          key="Telegram"
-          _notFirst={{ ml: { base: 0, lg: 1 } }}
-          isExternal
-          padding="5px"
-        >
-          <Icon
-            as={FaTelegram}
-            color="grey"
-            _hover={{ color: "black", transition: "0.4s" }}
+          <HeaderLink
+            href="https://medium.com/@TheMagicFlut"
+            key="Medium"
+            icon={FaMediumM}
           />
-        </Link>
-        <Link
-          href="https://medium.com/@TheMagicFlut"
-          key="Medium"
-          _notFirst={{ ml: { base: 0, lg: 1 } }}
-          isExternal
-          padding="5px"
-        >
-          <Icon
-            as={FaMediumM}
-            color="grey"
-            _hover={{ color: "black", transition: "0.4s" }}
+          <HeaderLink
+            href="https://twitter.com/TheMagicFlut"
+            key="Twitter"
+            icon={FaTwitter}
           />
-        </Link>
-        <Link
-          href="https://twitter.com/TheMagicFlut"
-          key="Twitter"
-          _notFirst={{ ml: { base: 0, lg: 1 } }}
-          isExternal
-          padding="5px"
-        >
-          <Icon
-            as={FaTwitter}
-            color="grey"
-            _hover={{ color: "black", transition: "0.4s" }}
+          <HeaderLink
+            href="https://discord.gg/NXjGj9kHus"
+            key="Discord"
+            icon={FaDiscord}
           />
-        </Link>
-        <Link
-          href="https://discord.gg/NXjGj9kHus"
-          key="Discord"
-          _notFirst={{ ml: { base: 0, lg: 1 } }}
-          isExternal
-          padding="5px"
-        >
-          <Icon
-            as={FaDiscord}
-            color="grey"
-            _hover={{ color: "black", transition: "0.4s" }}
+          <HeaderLink
+            href="https://github.com/FlutEngineering"
+            key="Github"
+            icon={FaGithub}
           />
-        </Link>
-        <Link
-          href="https://github.com/FlutEngineering"
-          key="Github"
-          _notFirst={{ ml: { base: 0, lg: 1 } }}
-          isExternal
-          padding="5px"
-        >
-          <Icon
-            as={FaGithub}
-            color="grey"
-            _hover={{ color: "black", transition: "0.4s" }}
+          <HeaderLink
+            href="https://opensea.io/TheMagicFlut"
+            key="Opensea"
+            icon={GiSailboat}
           />
-        </Link>
-
-        <Link
-          href="https://opensea.io/TheMagicFlut"
-          key="Opensea"
-          _notFirst={{ ml: { base: 0, lg: 1 } }}
-          isExternal
-          padding="5px"
-        >
-          <Icon
-            as={GiSailboat}
-            color="grey"
-            _hover={{ color: "black", transition: "0.4s" }}
-          />
-        </Link>
-
-        <Box width="1vw" />
+        </HStack>
 
         <UniswapButton />
       </HStack>
