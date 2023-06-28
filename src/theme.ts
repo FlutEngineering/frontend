@@ -1,4 +1,5 @@
 import { extendTheme, type ThemeConfig } from "@chakra-ui/react";
+import { ThemeOptions } from "@rainbow-me/rainbowkit/dist/themes/baseTheme";
 
 const config: ThemeConfig = {
   initialColorMode: "dark",
@@ -70,5 +71,12 @@ const theme = extendTheme({
     },
   },
 });
+
+export const rainbotkitTheme: ThemeOptions = {
+  accentColor: "#7e35b0",
+  accentColorForeground: "white",
+  borderRadius: "small",
+  overlayBlur: "small",
+};
 
 export default theme;
