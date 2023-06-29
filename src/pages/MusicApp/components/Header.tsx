@@ -13,6 +13,7 @@ const Header: React.FC = () => {
       alignItems={{ base: "center", lg: "flex-end" }}
       justifyContent="center"
       width="100%"
+      paddingBottom="30px"
     >
       <Logo />
       <Spacer />
