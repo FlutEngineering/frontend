@@ -5,23 +5,6 @@ import Typed from "react-typed";
 
 import BigLogo from "./components/BigLogo";
 
-const CardContainer = styled(Grid)`
-  grid-template-columns: repeat(4, minmax(25%, auto));
-  max-width: 100%;
-
-  /* Mobile */
-  @media (max-width: 700px) {
-    grid-template-columns: 1fr;
-    max-width: 320px;
-    text-align: center;
-  }
-
-  /* Tablet and Smaller Desktop */
-  @media (min-width: 701px) and (max-width: 1120px) {
-    grid-template-columns: repeat(2, 50%);
-  }
-`;
-
 const Card = styled(Link)`
   padding: 1rem 1.2rem;
   margin: 0.5rem;
@@ -120,7 +103,14 @@ const Main: React.FC = () => {
         ></Typed>
       </Box>
 
-      <CardContainer>
+      <Grid
+        gridTemplateColumns={{
+          base: "1fr",
+          md: "repeat(2, 50%)",
+          lg: "repeat(4, minmax(25%, auto))",
+        }}
+        textAlign={{ base: "center", md: "left" }}
+      >
         <Card
           href="https://medium.com/@TheMagicFlut/why-flut-is-needed-now-45d3fd181cc6"
           isExternal
@@ -155,7 +145,7 @@ const Main: React.FC = () => {
           </h2>
           <p>Take a Look under the Hood</p>
         </Card>
-      </CardContainer>
+      </Grid>
     </Stack>
   );
 };
