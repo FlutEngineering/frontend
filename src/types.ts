@@ -12,6 +12,13 @@ export interface Track {
   playCount: number;
 }
 
+export interface User {
+  address: Address;
+  followedBy: Address[];
+  following: Address[];
+  likes: Track[];
+}
+
 export interface Artist {
   address: Address;
   ensName: string | null | undefined;

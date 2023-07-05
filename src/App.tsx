@@ -92,11 +92,17 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const { status, fetchStatus } = useAuthStore();
+  const { status, fetchStatus, fetchUser } = useAuthStore();
 
   useEffect(() => {
     fetchStatus();
   }, []);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchUser();
+    }
+  }, [status]);
 
   return (
     <WagmiConfig client={wagmiClient}>
