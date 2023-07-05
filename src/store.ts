@@ -4,7 +4,7 @@ import { BACKEND_API_URL } from "./config";
 import type { AuthenticationStatus } from "@rainbow-me/rainbowkit";
 import type { Address } from "wagmi";
 import type { SiweMessage } from "siwe";
-import type { Track, Tag } from "./types";
+import type { Track, Tag, User } from "./types";
 
 interface TrackStore {
   tracks: Track[];
@@ -34,8 +34,10 @@ interface AuthVerificationArgs {
 
 interface AuthStore {
   address?: Address;
+  user?: User;
   status: AuthenticationStatus;
   fetchStatus: () => Promise<void>;
+  fetchUser: () => Promise<void>;
   getNonce: () => Promise<string>;
   verify: ({ message, signature }: AuthVerificationArgs) => Promise<boolean>;
   signOut: () => Promise<void>;
@@ -129,6 +131,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
     } else {
       set({ address: undefined, status: "unauthenticated" });
     }
+  },
+  fetchUser: async () => {
+    const res = await fetch(`${BACKEND_API_URL}/v1/me`, {
+      credentials: "include",
+    });
+    const json = await res.json();
+
+    set({ user: json.artist });
   },
   getNonce: async () => {
     const response = await fetch(`${BACKEND_API_URL}/v1/auth/nonce`, {
