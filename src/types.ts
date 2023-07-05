@@ -16,7 +16,7 @@ export interface User {
   address: Address;
   followedBy: Address[];
   following: Address[];
-  likes: Track[];
+  likes: Track["id"][];
 }
 
 export interface Artist {

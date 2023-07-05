@@ -119,6 +119,7 @@ export const usePlayerStore = create<PlayerStore>()(
 );
 
 export const useAuthStore = create<AuthStore>((set) => ({
+  user: undefined,
   address: undefined,
   status: "unauthenticated",
   fetchStatus: async () => {

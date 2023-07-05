@@ -65,6 +65,7 @@ const AudioInputPlayer: React.FC<AudioInputPlayerProps> = ({ label, file }) => {
           _hover={{ borderColor: "gray.300" }}
         >
           <Text marginLeft="10" color="gray.500">
+            jiggle
             {file.name}
           </Text>
         </FormLabel>

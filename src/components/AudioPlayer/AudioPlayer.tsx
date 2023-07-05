@@ -1,14 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
-import { HStack, useToast } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { HStack, useToast, Button, Icon } from "@chakra-ui/react";
 import { ipfsCidToUrl } from "~/utils";
-import { usePlayerStore } from "~/store";
+import { usePlayerStore, useAuthStore } from "~/store";
 import PlayerControls from "./components/PlayerControls";
 import TrackInfo from "./components/TrackInfo";
 import { BACKEND_API_URL } from "~/config";
+import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai';
+import { useAccount } from "wagmi";
 type AudioPlayerProps = {};
 
 const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   const { track, isPlaying, play, pause, togglePlay } = usePlayerStore();
+  const { user, fetchUser } = useAuthStore();
+  const {address} = useAccount()
+
+  const isLiked = useMemo(() => user && track ? user?.likes.includes(track.id) : undefined, [user, track]);
+
   const toast = useToast();
   // Player hooks
   const [trackProgress, setTrackProgress] = useState(0);
@@ -136,7 +143,23 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
         onSeekEnd={onSeekEnd}
         onPlayPauseClick={() => togglePlay()}
       />
-
+      {!!user && !!address && <Button borderRadius="50%" width={'40px'} height={'40px'} onClick={()=>{
+        if(isLiked){
+          fetch(`${BACKEND_API_URL}/v1/me/unlike/${track?.id}`, {
+            method: "GET",
+            credentials: "include",
+          }).then(()=>{fetchUser()})
+            
+        }else{
+          fetch(`${BACKEND_API_URL}/v1/me/like/${track?.id}`, {
+            method: "GET",
+            credentials: "include",
+          }).then(()=>{fetchUser()})
+        }
+      }}>
+        <Icon as={isLiked ? AiFillHeart: AiOutlineHeart}/>
+      </Button>}
+      
       <TrackInfo track={track} marginLeft="4 !important" />
     </HStack>
   ) : null;
