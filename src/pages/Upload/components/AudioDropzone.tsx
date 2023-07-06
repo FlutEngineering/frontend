@@ -55,12 +55,12 @@ const AudioDropzone: React.FC<DropzoneProps> = ({ onSelect }) => {
 
   const borderColor = useMemo(() => {
     if (isDragAccept) {
-      return "blue.300";
+      return "green.500";
     }
     if (isDragReject) {
-      return "red.300";
+      return "red.500";
     }
-    return "#eeeeee";
+    return "currentColor";
   }, [isDragAccept, isDragReject]);
 
   return (
@@ -76,13 +76,12 @@ const AudioDropzone: React.FC<DropzoneProps> = ({ onSelect }) => {
       borderRadius="2px"
       borderStyle="dashed"
       borderColor={borderColor}
-      backgroundColor="#fafafa"
-      color="#bdbdbd"
+      color="gray.100"
       outline="none"
       transition="border 0.15s ease-in-out"
       cursor="pointer"
-      _hover={{ borderColor: "blue.300" }}
-      _focus={{ borderColor: "blue.300" }}
+      _hover={{ borderColor: "purple.300" }}
+      _focus={{ borderColor: "purple.300" }}
     >
       <input {...getInputProps()} />
       <Text fontSize="lg">Drag 'n' drop files here, or click to select</Text>

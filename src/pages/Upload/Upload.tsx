@@ -15,7 +15,7 @@ function Upload(): JSX.Element {
   const clear = () => setFiles([]);
 
   return address ? (
-    <VStack width="100%" marginTop={{ base: 4, lg: 0 }}>
+    <VStack width="100%" marginTop={{ base: 4, lg: 0 }} overflowY="scroll">
       {files.length === 0 ? (
         <AudioDropzone onSelect={(files) => setFiles(files)} />
       ) : (
