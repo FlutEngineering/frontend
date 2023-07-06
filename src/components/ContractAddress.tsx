@@ -1,13 +1,15 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { Code, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
+import {
+  Code,
+  LinkBox,
+  LinkBoxProps,
+  LinkOverlay,
+  Text,
+} from "@chakra-ui/react";
 
-const ContractAddress: React.FC = () => {
+const ContractAddress: React.FC<LinkBoxProps> = (props) => {
   return (
-    <LinkBox
-      padding={2}
-      marginX={2}
-      _hover={{ code: { bg: "whiteAlpha.300" } }}
-    >
+    <LinkBox _hover={{ code: { bg: "whiteAlpha.300" } }} {...props}>
       <Text as="sub" color="gray">
         Ethereum Mainnet Contract
       </Text>

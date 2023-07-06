@@ -1,4 +1,4 @@
-import { Text } from "@chakra-ui/react";
+import { Text, TextProps } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -58,7 +58,7 @@ const WavyText = styled(Text)`
   }
 `;
 
-const Logo: React.FC = () => (
+const Logo: React.FC<TextProps> = (props) => (
   <WavyText
     as={RouterLink}
     to="/"
@@ -66,6 +66,7 @@ const Logo: React.FC = () => (
     fontWeight="extrabold"
     lineHeight="1.1"
     userSelect="none"
+    {...props}
   >
     FLUT
   </WavyText>

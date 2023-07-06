@@ -9,6 +9,7 @@ import Sidebar from "./components/Sidebar";
 const Body: React.FC = () => (
   <Grid
     width="100%"
+    maxWidth="var(--chakra-breakpoints-lg)"
     flexGrow="1"
     columnGap={{ base: 0, lg: 5 }}
     gridTemplateColumns={{ base: "1fr", lg: "160px minmax(0, 1fr)" }}

@@ -1,4 +1,4 @@
-import { HStack, Flex, Spacer } from "@chakra-ui/react";
+import { HStack, Grid } from "@chakra-ui/react";
 
 import Logo from "~/components/Logo";
 import ContractAddress from "~/components/ContractAddress";
@@ -8,23 +8,34 @@ import ConnectButton from "./ConnectButton";
 
 const Header: React.FC = () => {
   return (
-    <Flex
-      direction={{ base: "column", lg: "row" }}
-      alignItems={{ base: "center", lg: "flex-end" }}
-      justifyContent="center"
-      width="100%"
+    <Grid
+      maxWidth="var(--chakra-breakpoints-lg)"
+      gridTemplateColumns={{
+        base: "auto auto",
+        lg: "minmax(auto, 160px) minmax(auto, 1fr) auto auto",
+      }}
+      gridTemplateRows={{ base: "1fr 1fr", lg: "auto" }}
+      gridTemplateAreas={{
+        base: `"logo contract-address" "buttons buttons"`,
+        lg: `"logo contract-address buttons"`,
+      }}
+      gridColumnGap={0}
+      alignItems="flex-end"
       paddingBottom="30px"
     >
-      <Logo />
-      <Spacer />
-      <ContractAddress />
-      <Spacer />
-      <HStack>
+      <Logo gridArea="logo" />
+      <ContractAddress
+        gridArea="contract-address"
+        marginX={5}
+        marginBottom="-2px"
+        paddingY={2}
+      />
+      <HStack gridArea="buttons" justifyContent="center">
         <SocialButtons />
         <UniswapButton />
         <ConnectButton />
       </HStack>
-    </Flex>
+    </Grid>
   );
 };
 
