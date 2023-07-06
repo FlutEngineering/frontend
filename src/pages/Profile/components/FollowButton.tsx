@@ -15,7 +15,6 @@ const FollowButton: React.FC<FollowButtonProps> = ({ artist, isFollowing }) => {
   if (isFollowing) {
     return (
       <Button
-        colorScheme="blue"
         width="5rem"
         variant="outline"
         onClick={() =>
@@ -39,7 +38,6 @@ const FollowButton: React.FC<FollowButtonProps> = ({ artist, isFollowing }) => {
 
   return (
     <Button
-      colorScheme="blue"
       width="5rem"
       variant="outline"
       onClick={() => {

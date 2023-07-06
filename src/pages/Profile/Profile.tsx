@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Text, Box, Stack, Flex, Heading, Link } from "@chakra-ui/react";
+import { Text, Box, Stack, Flex, Heading, Link, Grid } from "@chakra-ui/react";
 import { isAddress } from "ethers/lib/utils.js";
 import { useTrackStore } from "~/store";
 import { useLoaderData } from "react-router-dom";
@@ -10,6 +10,7 @@ import FollowButton from "./components/FollowButton";
 import AudioItem from "~/components/AudioItem";
 import { BACKEND_API_URL } from "~/config";
 import { Artist } from "~/types";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface ProfileParams {
   artist: Artist;
@@ -49,72 +50,83 @@ function Profile(): JSX.Element {
   }, [artist]);
 
   return (
-    <Flex direction="column" width="100%">
-      <Text
-        gridArea="header"
-        marginY="1rem"
-        textAlign="center"
-        fontSize="3xl"
-        fontWeight="bold"
-        color="gray.600"
-      >
-        {artist?.ensName ? (
-          <Text>{artist?.ensName}</Text>
-        ) : (
-          <>
-            <Text>This Artist has no ENS Name.</Text>
-            <Text fontSize="lg">
-              Get it here 👉{" "}
-              <Link href="https://ens.domains" isExternal>
-                https://ens.domains
-              </Link>
-            </Text>
-          </>
-        )}
-      </Text>
-
-      <Text gridArea="header" textAlign="center" fontSize="sm" color="gray.600">
-        <Link
-          href={`https://etherscan.io/address/${artist.address}`}
-          isExternal
+    <Grid
+      gridTemplateRows="auto auto minmax(0, 1fr)"
+      gridTemplateColumns="1fr"
+      gridTemplateAreas={`"header" "follows" "track-list"`}
+      width="100%"
+      gridRowGap={4}
+    >
+      <Stack gridArea="header">
+        <Text
+          marginY="1rem"
+          textAlign="center"
+          fontSize="2xl"
+          fontWeight="bold"
+          margin="0"
         >
-          {artist.address}
-        </Link>
-      </Text>
+          {artist?.ensName ? (
+            <Text>{artist?.ensName}</Text>
+          ) : (
+            <>
+              <Text>This Artist has no ENS Name.</Text>
+              <Text fontSize="lg">
+                Get it here 👉{" "}
+                <Link href="https://ens.domains" isExternal>
+                  https://ens.domains
+                </Link>
+              </Text>
+            </>
+          )}
+        </Text>
 
-      <Stack spacing="4">
+        <Text textAlign="center" fontSize="sm" color="gray.100">
+          <Link
+            href={`https://etherscan.io/address/${artist.address}`}
+            isExternal
+          >
+            {artist.address}
+            <ExternalLinkIcon marginLeft="1" marginTop="-4px" />
+          </Link>
+        </Text>
+      </Stack>
+
+      <Stack gridArea="follows" spacing="2">
         {artist.address !== address ? (
           <FollowButton
             artist={artist}
             isFollowing={!!address && artist.followedBy.includes(address)}
           />
         ) : null}
+        {artist.followedBy.length > 0 && (
+          <>
+            <Heading size="md">Followed By</Heading>
+            {artist.followedBy.map((follow, index) => (
+              <ProfileLinkButton address={follow} key={index} />
+            ))}
+          </>
+        )}
+        {artist.following.length > 0 && (
+          <>
+            <Heading size="md">Following</Heading>
+            {artist.following.map((follow, index) => (
+              <ProfileLinkButton address={follow} key={index} />
+            ))}
+          </>
+        )}
+      </Stack>
 
-        <Heading size="md">Followed By</Heading>
-        {artist.followedBy.map((follow, index) => (
-          <ProfileLinkButton address={follow} key={index} />
-        ))}
-        <Heading size="md">Following</Heading>
-        {artist.following.map((follow, index) => (
-          <ProfileLinkButton address={follow} key={index} />
-        ))}
-        <Box>
-          <Heading size="md">Uploads</Heading>
-          <Box
-            gridArea="track-list"
-            alignSelf="stretch"
-            overflowY="auto"
-            marginTop="6"
-          >
-            <Stack spacing={2} overflowY="auto">
-              {tracks.map((track) => (
-                <AudioItem track={track} key={track.title} />
-              ))}
-            </Stack>
-          </Box>
+      <Stack gridArea="track-list">
+        <Heading size="md">Uploads</Heading>
+        <Box alignSelf="stretch" overflowY="auto">
+          <Stack spacing={2} paddingBottom="2">
+            {tracks.map((track) => (
+              <AudioItem track={track} key={track.title} />
+            ))}
+          </Stack>
         </Box>
       </Stack>
-    </Flex>
+    </Grid>
   );
 }
 
