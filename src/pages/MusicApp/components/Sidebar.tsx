@@ -35,7 +35,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
   return (
     <Button
       width="100%"
-      justifyContent="flex-start"
+      justifyContent={{ base: "center", lg: "flex-start" }}
       as={RouterLink}
       to={to}
       leftIcon={icon}
@@ -62,6 +62,7 @@ const Sidebar: React.FC<StackProps> = (props) => {
       alignItems="flex-start"
       direction={{ base: "row", lg: "column" }}
       justifyContent={{ base: "center", lg: "flex-start" }}
+      paddingBottom="2"
       {...props}
     >
       {/* <IconButton

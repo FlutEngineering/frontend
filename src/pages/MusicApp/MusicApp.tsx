@@ -22,6 +22,7 @@ const Body: React.FC = () => (
            "navbar page-content"
            "navbar player"`,
     }}
+    overflow="hidden"
   >
     <Sidebar gridArea="navbar" />
     <Flex
