@@ -120,7 +120,7 @@ const AudioPlayer: React.FC<StackProps> = (props) => {
   };
 
   return !!track ? (
-    <HStack padding="2" background="gray.700" borderRadius="4" {...props}>
+    <HStack padding="6px" background="gray.700" borderRadius="4" {...props}>
       <PlayerControls
         isPlaying={isPlaying}
         current={trackProgress}

@@ -31,7 +31,7 @@ const formatTime = (time?: number) => {
 };
 
 const TimeLabel: React.FC<{ time: string }> = ({ time }) => (
-  <Text paddingBottom="2px" color="gray.600" fontSize="md" userSelect="none">
+  <Text paddingBottom="2px" color="gray.100" fontSize="md" userSelect="none">
     {time}
   </Text>
 );
@@ -80,7 +80,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
         aria-label="track-progress"
       >
         <SliderTrack>
-          <SliderFilledTrack hidden={!duration} />
+          <SliderFilledTrack bg="purple.500" hidden={!duration} />
         </SliderTrack>
         {/* <SliderThumb hidden={!duration} /> */}
       </Slider>
