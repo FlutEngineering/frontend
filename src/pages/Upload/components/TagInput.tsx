@@ -43,6 +43,7 @@ const TagInput: React.FC<TagInputProps> = ({
           margin="0"
           marginInlineStart="-2"
           verticalAlign="top"
+          color="red.500"
         >
           Add at least 3 tags
         </FormErrorMessage>
@@ -51,16 +52,14 @@ const TagInput: React.FC<TagInputProps> = ({
         position="relative"
         css={css`
           &:hover > label {
-            border-color: #cbd5e0;
+            border-color: var(--chakra-colors-whiteAlpha-400);
           }
           input:focus ~ label {
-            border-color: #3182ce;
-            box-shadow: 0 0 0 1px #3182ce;
+            border-color: var(--chakra-colors-purple-500);
           }
           input[aria-invalid="true"] ~ label,
           input[data-invalid] ~ label {
-            border-color: #e53e3e;
-            box-shadow: 0 0 0 1px #e53e3e;
+            border-color: var(--chakra-colors-red-500);
           }
         `}
       >
@@ -103,7 +102,6 @@ const TagInput: React.FC<TagInputProps> = ({
           onFocus={() => setInputBlurred(false)}
         />
         <FormLabel
-          // size="sm"
           position="absolute"
           width="100%"
           height="8"
@@ -113,7 +111,6 @@ const TagInput: React.FC<TagInputProps> = ({
           borderRadius="sm"
           outline="2px solid transparent"
           pointerEvents="none"
-          _hover={{ borderColor: "gray.300" }}
           requiredIndicator={<div />}
         />
       </InputGroup>

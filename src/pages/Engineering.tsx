@@ -21,29 +21,37 @@ function Engineering(): JSX.Element {
       >
         {`How We're Building It`}
       </Text>
-      <Text fontSize="xl" marginX={{ base: "0", medium: "15vw" }}>
+      <Text
+        fontSize="xl"
+        marginX={{ base: "0", medium: "15vw" }}
+        textIndent="2rem"
+      >
         {`We're big fans of Music here at FLUT. Most of us are musicians
           ourselves. We're building the platform that we want to use. Our
           techstack includes a hybrid of web2 and web3 technologies such as:`}
       </Text>
       <UnorderedList paddingY="2vh" fontSize="xl">
         <ListItem>
-          <Link href="https://reactjs.org/" isExternal color="blue.300">
+          <Link href="https://reactjs.org/" isExternal color="purple.400">
             React
           </Link>
         </ListItem>
         <ListItem>
-          <Link href="https://expressjs.com/" isExternal color="blue.300">
+          <Link href="https://expressjs.com/" isExternal color="purple.400">
             Express
           </Link>
         </ListItem>
         <ListItem>
-          <Link href="https://www.postgresql.org/" isExternal color="blue.300">
+          <Link
+            href="https://www.postgresql.org/"
+            isExternal
+            color="purple.400"
+          >
             PostgreSQL
           </Link>
         </ListItem>
         <ListItem>
-          <Link href="https://soliditylang.org/" isExternal color="blue.300">
+          <Link href="https://soliditylang.org/" isExternal color="purple.400">
             Solidity
           </Link>
         </ListItem>
@@ -68,7 +76,7 @@ function Engineering(): JSX.Element {
       </Text>
       <UnorderedList paddingY="2vh" fontSize="xl">
         <ListItem>
-          <Link href="https://ipfs.tech/" isExternal color="blue.300">
+          <Link href="https://ipfs.tech/" isExternal color="purple.400">
             IPFS
           </Link>
         </ListItem>

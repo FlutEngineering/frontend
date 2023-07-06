@@ -28,7 +28,9 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
       cursor="pointer"
       borderRadius="sm"
       overflow="hidden"
-      _hover={{ background: "gray.50" }}
+      border="1px solid"
+      borderColor="transparent"
+      _hover={{ background: "gray.600", borderColor: "gray.600" }}
       {...props}
     >
       <IPFSImage
@@ -41,7 +43,7 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
         cid={track.image}
       />
       <Box paddingBottom="0" overflow="hidden">
-        <Text color="gray.500" fontSize="xs" lineHeight="1">
+        <Text color="gray.300" fontSize="xs" lineHeight="1">
           {artist}
         </Text>
         <Text

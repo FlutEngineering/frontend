@@ -134,10 +134,10 @@ const AudioFile: React.FC<AudioFileProps> = ({
   }, [isExpanded, isUploading]);
 
   const backgroundColor = useMemo(() => {
-    if (isUploading) return "yellow.50";
-    if (isUploaded) return "blue.50";
-    if (isUploadError) return "red.50";
-    return "white";
+    if (isUploading) return "yellow.500";
+    if (isUploaded) return "green.600";
+    if (isUploadError) return "red.600";
+    return "transparent";
   }, [isUploading, isUploaded]);
 
   return (
@@ -176,7 +176,7 @@ const AudioFile: React.FC<AudioFileProps> = ({
       <Stack width="100%">
         <CardBody paddingY="0" paddingRight="0">
           <Stack paddingTop="20px" hidden={isExpanded}>
-            <Text color="gray.600">
+            <Text>
               {formatArtistName({
                 address,
                 ensName,
@@ -193,7 +193,6 @@ const AudioFile: React.FC<AudioFileProps> = ({
                 verticalAlign="top"
                 fontSize="sm"
                 fontWeight="bold"
-                color="gray.600"
               >
                 Track title
               </FormLabel>
@@ -205,6 +204,7 @@ const AudioFile: React.FC<AudioFileProps> = ({
                 maxLength={100}
                 minLength={1}
                 isDisabled={isUploading || isUploaded}
+                _focusVisible={{ borderColor: "purple.500" }}
               />
             </FormControl>
             <TagInput
@@ -215,7 +215,6 @@ const AudioFile: React.FC<AudioFileProps> = ({
                   verticalAlign="top"
                   fontSize="sm"
                   fontWeight="bold"
-                  color="gray.600"
                 >
                   Tags
                 </FormLabel>
@@ -234,7 +233,6 @@ const AudioFile: React.FC<AudioFileProps> = ({
                   verticalAlign="top"
                   fontSize="sm"
                   fontWeight="bold"
-                  color="gray.600"
                 >
                   Audio
                 </FormLabel>

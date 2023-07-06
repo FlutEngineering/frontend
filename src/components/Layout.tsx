@@ -9,9 +9,10 @@ const Layout = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      padding="6rem"
-      paddingY="6rem"
+      paddingX={{ base: 3, lg: "3rem" }}
+      paddingY={{ base: 3, lg: "1rem" }}
       minHeight="100vh"
+      height="100vh"
     >
       <Header />
       <Outlet />

@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HStack, useToast } from "@chakra-ui/react";
+import { HStack, StackProps, useToast } from "@chakra-ui/react";
 import { ipfsCidToUrl } from "~/utils";
 import { usePlayerStore } from "~/store";
 import PlayerControls from "./components/PlayerControls";
 import TrackInfo from "./components/TrackInfo";
 import { BACKEND_API_URL } from "~/config";
-type AudioPlayerProps = {};
 
-const AudioPlayer: React.FC<AudioPlayerProps> = () => {
+const AudioPlayer: React.FC<StackProps> = (props) => {
   const { track, isPlaying, play, pause, togglePlay } = usePlayerStore();
   const toast = useToast();
   // Player hooks
@@ -121,13 +120,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   };
 
   return !!track ? (
-    <HStack
-      flexGrow="1"
-      padding="2"
-      paddingLeft="3"
-      background="gray.100"
-      borderRadius="4"
-    >
+    <HStack padding="6px" background="gray.700" borderRadius="4" {...props}>
       <PlayerControls
         isPlaying={isPlaying}
         current={trackProgress}

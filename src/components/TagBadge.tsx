@@ -7,7 +7,7 @@ interface TagBadgeProps {
 const TagBadge: React.FC<TagBadgeProps & BadgeProps> = ({ tag, ...props }) => (
   <Badge
     variant="subtle"
-    colorScheme="blue"
+    colorScheme="purple"
     cursor="pointer"
     opacity={0.7}
     _notFirst={{ marginLeft: "1" }}

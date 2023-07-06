@@ -75,17 +75,17 @@ const ImageDropzone: React.FC<DropzoneProps> = ({
     }
   }, [fileRejections]);
 
-  const borderColor = useMemo(() => {
+  const activeColor = useMemo(() => {
     if (isDragAccept) {
-      return "blue.300";
+      return "green.500";
     }
     if (isDragReject) {
-      return "red.300";
+      return "red.500";
     }
     if (isInvalid) {
-      return "red.300";
+      return "red.500";
     }
-    return "#eeeeee";
+    return "currentColor";
   }, [isInvalid, isDragAccept, isDragReject]);
 
   return (
@@ -100,22 +100,30 @@ const ImageDropzone: React.FC<DropzoneProps> = ({
         borderWidth="2px"
         borderRadius="md"
         borderStyle={image && !isDragAccept ? "solid" : "dashed"}
-        borderColor={borderColor}
-        backgroundColor="#fafafa"
-        color="#bdbdbd"
+        borderColor={activeColor}
+        backgroundColor="transparent"
+        color="gray.100"
         outline="none"
         transition="border 0.15s ease-in-out"
         cursor="pointer"
         _hover={{
-          borderColor: image ? "#eeeeee" : "blue.300",
+          borderColor: image ? "currentColor" : "purple.500",
         }}
-        _focus={{ borderColor: "blue.300" }}
+        _focus={{ borderColor: "purple.500" }}
         background="none"
         onClick={() => !image && open()}
         overflow="hidden"
       >
         <input {...getInputProps()} />
-        {!image && <Text fontSize="lg">Drag 'n' drop an image</Text>}
+        {!image && (
+          <Text
+            fontSize="lg"
+            color={activeColor}
+            transition="color 0.15s ease-in-out"
+          >
+            Drag 'n' drop an image
+          </Text>
+        )}
         {image && (
           <Box
             position="relative"
@@ -144,7 +152,6 @@ const ImageDropzone: React.FC<DropzoneProps> = ({
             />
             <IconButton
               icon={<FaPen />}
-              colorScheme="blue"
               position="absolute"
               top="10px"
               right="10px"

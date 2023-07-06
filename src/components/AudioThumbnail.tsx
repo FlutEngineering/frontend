@@ -14,7 +14,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FaPause, FaPlay } from "react-icons/fa";
-import { ipfsCidToUrl } from "~/utils";
+import { formatArtistName, ipfsCidToUrl } from "~/utils";
 import { Track } from "~/types";
 import { css } from "@emotion/react";
 import { usePlayerStore } from "~/store";
@@ -22,6 +22,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import TagBadge from "./TagBadge";
 import ProfileLinkButton from "~/components/ProfileLinkButton";
 import { Link as RouterLink } from "react-router-dom";
+import { useEnsName } from "wagmi";
 
 type AudioItemProps = {
   track: Track;
@@ -36,7 +37,7 @@ const trimTitle = (title: string) => {
 
 const AudioThumbnail: React.FC<AudioItemProps> = ({ track }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
-  // const { data: ensName } = useEnsName({ address: track.artistAddress });
+  const { data: ensName } = useEnsName({ address: track.artistAddress });
 
   const isCurrentTrack = current && current?.audio === track.audio;
   return (
@@ -78,27 +79,30 @@ const AudioThumbnail: React.FC<AudioItemProps> = ({ track }) => {
           />
         </Box>
       </Card>
-      <Stack paddingTop="1" spacing="0">
-        <ProfileLinkButton address={track.artistAddress} />
-      </Stack>
+      {/* <Stack paddingTop="1" spacing="0"> */}
+      {/*   <ProfileLinkButton address={track.artistAddress} /> */}
+      {/* </Stack> */}
+      <Text
+        as={RouterLink}
+        to={`/${track.artistAddress}`}
+        margin="2px !important"
+        color="gray.300"
+        fontSize="sm"
+        _hover={{ textDecoration: "underline" }}
+      >
+        {formatArtistName({ address: track.artistAddress, ensName })}
+      </Text>
 
       <Text
+        as={RouterLink}
+        to={`/${track?.artistAddress}/${track?.slug}`}
         size="sm"
-        fontSize="lg"
+        margin="0 !important"
+        fontSize="md"
         fontWeight="bold"
-        paddingBottom="6px"
-        paddingTop="2px"
         lineHeight="1"
       >
-        <Button
-          as={RouterLink}
-          to={`/${track?.artistAddress}/${track?.slug}`}
-          height={5}
-          variant="ghost"
-          colorScheme="blue"
-        >
-          {trimTitle(track.title)}
-        </Button>
+        {trimTitle(track.title)}
       </Text>
     </VStack>
   );

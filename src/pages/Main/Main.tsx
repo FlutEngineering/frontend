@@ -1,8 +1,67 @@
 import { Link as RouterLink } from "react-router-dom";
-import { Box, Text, Link, Stack, Button } from "@chakra-ui/react";
+import { Box, Link, Stack, Button, Flex, Grid } from "@chakra-ui/react";
+import styled from "@emotion/styled";
 import Typed from "react-typed";
 
-import "./Main.css";
+import BigLogo from "./components/BigLogo";
+
+const Card = styled(Link)`
+  padding: 1rem 1.2rem;
+  margin: 0.5rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: background 200ms, border 200ms;
+
+  span {
+    display: inline-block;
+    transition: transform 200ms;
+  }
+
+  h2 {
+    font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.6;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 30ch;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  /* Enable hover only on non-touch devices */
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: rgba(180, 185, 188, 0.1);
+      border-color: rgba(131, 134, 135, 0.15);
+    }
+
+    &:hover span {
+      transform: translateX(4px);
+    }
+  }
+
+  @media (prefers-reduced-motion) {
+    &:hover span {
+      transform: none;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 700px) {
+    padding: 1rem 2.5rem;
+
+    h2 {
+      margin-bottom: 0.5rem;
+    }
+  }
+`;
 
 const Main: React.FC = () => {
   return (
@@ -12,22 +71,24 @@ const Main: React.FC = () => {
       justifyContent="space-between"
       paddingTop="1rem"
     >
-      <Text
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        fontSize="9xl"
-      >
-        FLUT
-      </Text>
-
-      <Button as={RouterLink} to="/search" colorScheme="blue">
-        Launch App
-      </Button>
+      <Flex grow="1" direction="column" justifyContent="center">
+        <BigLogo />
+      </Flex>
+      <Flex grow="1" direction="row" justifyContent="center">
+        <Button
+          as={RouterLink}
+          to="/search"
+          colorScheme="gray"
+          _hover={{ bg: "purple.600" }}
+        >
+          Launch App
+        </Button>
+      </Flex>
       <Box
         display="flex"
         justifyContent="center"
         alignItems="center"
+        width="100%"
         fontSize="xl"
       >
         <Typed
@@ -42,44 +103,49 @@ const Main: React.FC = () => {
         ></Typed>
       </Box>
 
-      <div className="grid">
-        <Link
+      <Grid
+        gridTemplateColumns={{
+          base: "1fr",
+          md: "repeat(2, 50%)",
+          lg: "repeat(4, minmax(25%, auto))",
+        }}
+        textAlign={{ base: "center", md: "left" }}
+      >
+        <Card
           href="https://medium.com/@TheMagicFlut/why-flut-is-needed-now-45d3fd181cc6"
           isExternal
-          className="card"
         >
           <h2>
             Ethos <span>-&gt;</span>
           </h2>
           <p>Why does this matter in the world that we live?</p>
-        </Link>
+        </Card>
 
-        <Link className="card" target="_blank">
+        <Card target="_blank">
           <h2>
             Contact Us <span>-&gt;</span>
           </h2>
 
           <p>at team@flut.cloud</p>
-        </Link>
+        </Card>
 
-        <Link
+        <Card
           href="https://medium.com/@TheMagicFlut/manifesto-9de8fa7439d0"
           isExternal
-          className="card"
         >
           <h2>
             White Paper <span>-&gt;</span>
           </h2>
           <p>The Original Manifesto</p>
-        </Link>
+        </Card>
 
-        <Link as={RouterLink} to="/engineering" className="card">
+        <Card as={RouterLink} to="/engineering">
           <h2>
             Architecture <span>-&gt;</span>
           </h2>
           <p>Take a Look under the Hood</p>
-        </Link>
-      </div>
+        </Card>
+      </Grid>
     </Stack>
   );
 };

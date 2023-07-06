@@ -31,6 +31,8 @@ import Upload from "./pages/Upload";
 import Profile, { loader as profileLoader } from "./pages/Profile";
 import TrackPage, { loader as trackLoader } from "./pages/TrackPage";
 import { useAuthStore } from "./store";
+import { rainbotkitTheme } from "./theme";
+import CustomAvatar from "./components/CustomAvatar";
 
 const { chains, provider } = configureChains(
   [mainnet],
@@ -102,7 +104,11 @@ function App() {
         adapter={authenticationAdapter}
         status={status}
       >
-        <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        <RainbowKitProvider
+          chains={chains}
+          theme={darkTheme(rainbotkitTheme)}
+          avatar={CustomAvatar}
+        >
           <RouterProvider router={router} />
         </RainbowKitProvider>
       </RainbowKitAuthenticationProvider>
