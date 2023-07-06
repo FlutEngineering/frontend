@@ -11,16 +11,15 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react";
-import { useAccount } from "wagmi";
+import { useEnsName } from "wagmi";
 import { Link as RouterLink } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { css } from "@emotion/react";
-import { ipfsCidToUrl } from "~/utils";
+import { formatArtistName, ipfsCidToUrl } from "~/utils";
 import { usePlayerStore } from "~/store";
 import { Track } from "~/types";
 import TagBadge from "./TagBadge";
-import ProfileLinkButton from "./ProfileLinkButton";
 import IPFSImage from "./IPFSImage";
 
 type AudioItemProps = {
@@ -29,8 +28,7 @@ type AudioItemProps = {
 
 const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
-  // const { data: ensName } = useEnsName({ address: track.artistAddress });
-  const { address } = useAccount();
+  const { data: ensName } = useEnsName({ address: track.artistAddress });
   const isCurrentTrack = current && current?.audio === track.audio;
 
   return (
@@ -43,7 +41,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
       variant="outline"
       transition="all 200ms linear"
       cursor="default"
-      borderColor={isCurrentTrack ? "blue.300" : undefined}
+      borderColor={isCurrentTrack ? "purple.500" : undefined}
       css={css`
         &:hover .play-icon {
           opacity: 1;
@@ -88,31 +86,35 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           overflow="hidden"
         >
           <Stack paddingTop="1" spacing="0">
-            <ProfileLinkButton address={track.artistAddress} />
-            {/* <Text color="gray.500" fontSize="sm" margin="0">
-                {formatArtistName({ address: track.artistAddress, ensName })}
-            </Text> */}
-
-            <Text
-              size="sm"
-              fontSize="lg"
-              fontWeight="bold"
-              paddingBottom="6px"
-              paddingTop="2px"
-              lineHeight="1"
-              overflow="hidden"
-              textOverflow="ellipsis"
-            >
-              <Button
+            <Box>
+              <Text
                 as={RouterLink}
-                to={`/${track?.artistAddress}/${track?.slug}`}
-                height={5}
-                variant="ghost"
-                colorScheme="blue"
+                to={`/${track.artistAddress}`}
+                color="gray.300"
+                fontSize="sm"
+                margin="0"
+                _hover={{ textDecoration: "underline" }}
+              >
+                {formatArtistName({ address: track.artistAddress, ensName })}
+              </Text>
+            </Box>
+
+            <Box>
+              <Text
+                as={RouterLink}
+                to={`/${track.artistAddress}/${track.slug}`}
+                size="sm"
+                fontSize="lg"
+                fontWeight="bold"
+                paddingBottom="6px"
+                paddingTop="2px"
+                lineHeight="1"
+                overflow="hidden"
+                textOverflow="ellipsis"
               >
                 {track.title}
-              </Button>
-            </Text>
+              </Text>
+            </Box>
 
             <HStack>
               {track.tags.map((tag) => (
@@ -130,7 +132,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           href={ipfsCidToUrl(track.audio)}
           isExternal
           ml={1}
-          color="gray.700"
+          color="gray.200"
           fontSize="xs"
           fontWeight="bold"
           whiteSpace="nowrap"
