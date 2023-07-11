@@ -10,7 +10,7 @@ import {
   darkTheme,
   RainbowKitAuthenticationProvider,
 } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig, useAccount } from "wagmi";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -91,20 +91,16 @@ const router = createBrowserRouter([
 
 function App() {
   const { status, fetchStatus, fetchUser } = useAuthStore();
-  const { address } = useAccount();
 
   useEffect(() => {
-    console.log("fetch status from app")
-
     fetchStatus();
-  }, [address]);
+  }, []);
 
   useEffect(() => {
     if (status === "authenticated") {
-      console.log("fetch user from app")
       fetchUser();
     }
-  }, [status, address]);
+  }, [status]);
 
   return (
     <WagmiConfig client={wagmiClient}>
