@@ -11,6 +11,9 @@ interface TrackStore {
   fetchTracks: () => Promise<void>;
   fetchTracksByAddress: (address: string) => Promise<void>;
   fetchTracksByTag: (tagID: string) => Promise<void>;
+  refetchTrack: (address: string, slug: string) => Promise<void>;
+  like: (id: string) => Promise<void>;
+  unlike: (id: string) => Promise<void>;
 }
 
 interface TagStore {
@@ -43,7 +46,7 @@ interface AuthStore {
   signOut: () => Promise<void>;
 }
 
-export const useTrackStore = create<TrackStore>((set, _get) => ({
+export const useTrackStore = create<TrackStore>((set, get) => ({
   tracks: [],
   fetchTracks: () =>
     fetch(`${BACKEND_API_URL}/v1/tracks`)
@@ -88,6 +91,43 @@ export const useTrackStore = create<TrackStore>((set, _get) => ({
         return [];
       })
       .then((tracks) => set({ tracks })),
+  refetchTrack: (address, slug) =>
+    fetch(`${BACKEND_API_URL}/v1/tracks/${address}/${slug}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log("Track fetch error:", data.error);
+        } else if (data.track) {
+          set({
+            tracks: [
+              ...get().tracks.filter(({ id }) => id !== data.track.id),
+              data.track,
+            ],
+          });
+        }
+      }),
+  like: (id) =>
+    fetch(`${BACKEND_API_URL}/v1/me/like/${id}`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log("Track like error:", data.error);
+        }
+      }),
+  unlike: (id) =>
+    fetch(`${BACKEND_API_URL}/v1/me/unlike/${id}`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log("Track unlike error:", data.error);
+        }
+      }),
 }));
 
 export const useTagStore = create<TagStore>((set, _get) => ({

@@ -5,18 +5,14 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import {
-  getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
   RainbowKitAuthenticationProvider,
 } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet } from "wagmi/chains";
-import { infuraProvider } from "wagmi/providers/infura";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-// import { publicProvider } from "wagmi/providers/public";
+import { useAccount } from "wagmi";
 import { authenticationAdapter } from "./services/auth";
-import { INFURA_API_KEY, ALCHEMY_API_KEY } from "./config";
+import { useAuthStore } from "./store";
+import type { RainbowKitChain } from "@rainbow-me/rainbowkit/dist/components/RainbowKitProvider/RainbowKitChainContext";
 
 import Main from "./pages/Main";
 import Layout from "./components/Layout";
@@ -30,27 +26,10 @@ import Search from "./pages/Search";
 import Upload from "./pages/Upload";
 import Profile, { loader as profileLoader } from "./pages/Profile";
 import TrackPage, { loader as trackLoader } from "./pages/TrackPage";
-import { useAuthStore } from "./store";
 
-const { chains, provider } = configureChains(
-  [mainnet],
-  [
-    infuraProvider({ apiKey: INFURA_API_KEY, priority: 0 }),
-    alchemyProvider({ apiKey: ALCHEMY_API_KEY, priority: 1 }),
-    // publicProvider({ priority: 2 }),
-  ]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: "FLUT",
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: false,
-  connectors,
-  provider,
-});
+interface AppProps {
+  chains: RainbowKitChain[];
+}
 
 const router = createBrowserRouter([
   {
@@ -89,12 +68,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-function App() {
+function App({ chains }: AppProps) {
+  const { address } = useAccount();
   const { status, fetchStatus, fetchUser } = useAuthStore();
 
   useEffect(() => {
     fetchStatus();
-  }, []);
+  }, [address]);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -103,16 +83,14 @@ function App() {
   }, [status]);
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitAuthenticationProvider
-        adapter={authenticationAdapter}
-        status={status}
-      >
-        <RainbowKitProvider chains={chains} theme={darkTheme()}>
-          <RouterProvider router={router} />
-        </RainbowKitProvider>
-      </RainbowKitAuthenticationProvider>
-    </WagmiConfig>
+    <RainbowKitAuthenticationProvider
+      adapter={authenticationAdapter}
+      status={status}
+    >
+      <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        <RouterProvider router={router} />
+      </RainbowKitProvider>
+    </RainbowKitAuthenticationProvider>
   );
 }
 

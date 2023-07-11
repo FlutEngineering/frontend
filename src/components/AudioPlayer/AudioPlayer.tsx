@@ -1,22 +1,30 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { HStack, useToast, Button, Icon } from "@chakra-ui/react";
+import { useAccount } from "wagmi";
+import { HStack, Button, Icon } from "@chakra-ui/react";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { BACKEND_API_URL } from "~/config";
 import { ipfsCidToUrl } from "~/utils";
-import { usePlayerStore, useAuthStore } from "~/store";
+import { usePlayerStore, useAuthStore, useTrackStore } from "~/store";
+
 import PlayerControls from "./components/PlayerControls";
 import TrackInfo from "./components/TrackInfo";
-import { BACKEND_API_URL } from "~/config";
-import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai';
-import { useAccount } from "wagmi";
+
 type AudioPlayerProps = {};
 
 const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   const { track, isPlaying, play, pause, togglePlay } = usePlayerStore();
+  const { like, unlike } = useTrackStore();
   const { user, fetchUser } = useAuthStore();
-  const {address} = useAccount()
+  const { address } = useAccount();
 
-  const isLiked = useMemo(() => user && track ? user?.likes.includes(track.id) : undefined, [user, track]);
+  const isLiked = useMemo(
+    () => (user && track ? user.likes.includes(track.id) : undefined),
+    [user, track]
+  );
 
-  const toast = useToast();
+  const handleLike = (id: string) =>
+    (isLiked ? unlike(id) : like(id)).then(fetchUser);
+
   // Player hooks
   const [trackProgress, setTrackProgress] = useState(0);
   const [totalPlayTime, setTotalPlayTime] = useState(0);
@@ -36,13 +44,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
       })
         .then(() => {
           setIsPlaycountUpdated(true);
-          toast({
-            title: "Playcount",
-            description: `increased!`,
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-          });
+          // toast({
+          //   title: "Playcount",
+          //   description: `increased!`,
+          //   status: "success",
+          //   duration: 4000,
+          //   isClosable: true,
+          // });
         })
         .catch(() => {
           // console.log("👾", "Playcount was not increased");
@@ -143,23 +151,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
         onSeekEnd={onSeekEnd}
         onPlayPauseClick={() => togglePlay()}
       />
-      {!!user && !!address && <Button borderRadius="50%" width={'40px'} height={'40px'} onClick={()=>{
-        if(isLiked){
-          fetch(`${BACKEND_API_URL}/v1/me/unlike/${track?.id}`, {
-            method: "GET",
-            credentials: "include",
-          }).then(()=>{fetchUser()})
-            
-        }else{
-          fetch(`${BACKEND_API_URL}/v1/me/like/${track?.id}`, {
-            method: "GET",
-            credentials: "include",
-          }).then(()=>{fetchUser()})
-        }
-      }}>
-        <Icon as={isLiked ? AiFillHeart: AiOutlineHeart}/>
-      </Button>}
-      
+      {user && address && (
+        <Button
+          borderRadius="50%"
+          width="40px"
+          height="40px"
+          onClick={() => handleLike(track.id)}
+        >
+          <Icon as={isLiked ? AiFillHeart : AiOutlineHeart} />
+        </Button>
+      )}
       <TrackInfo track={track} marginLeft="4 !important" />
     </HStack>
   ) : null;
