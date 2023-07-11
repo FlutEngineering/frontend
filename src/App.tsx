@@ -10,6 +10,7 @@ import {
   RainbowKitAuthenticationProvider,
 } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
+import { useColorMode } from "@chakra-ui/react";
 import { authenticationAdapter } from "./services/auth";
 import { useAuthStore } from "./store";
 import { rainbotkitTheme } from "./theme";
@@ -73,6 +74,9 @@ const router = createBrowserRouter([
 function App({ chains }: AppProps) {
   const { address } = useAccount();
   const { status, fetchStatus, fetchUser } = useAuthStore();
+  const { setColorMode } = useColorMode();
+
+  useEffect(() => setColorMode("dark"), []);
 
   useEffect(() => {
     fetchStatus();
