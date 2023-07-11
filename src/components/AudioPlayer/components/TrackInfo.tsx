@@ -23,7 +23,7 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
     <HStack
       as={RouterLink}
       to={`/${track.artistAddress}/${track.slug}`}
-      maxWidth="200px"
+      width="180px"
       paddingRight="2"
       cursor="pointer"
       borderRadius="sm"
