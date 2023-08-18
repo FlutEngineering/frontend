@@ -209,7 +209,7 @@ function TrackPage(): JSX.Element {
                 strokeLinecap="round"
                 strokeDasharray="8, 8"
                 style={
-                  isPlaying
+                  isCurrentTrack && isPlaying
                     ? {
                         strokeDashoffset: 0,
                         transition: "all 200s linear",
