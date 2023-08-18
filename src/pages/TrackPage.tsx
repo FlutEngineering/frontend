@@ -1,5 +1,6 @@
 import { useMemo, useState, useCallback } from "react";
-import { Form, useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { create } from "zustand";
 import {
   HStack,
   VStack,
@@ -10,19 +11,20 @@ import {
   Image,
   Link,
   FormLabel,
-  FormControl,
-  FormErrorMessage,
   Input,
-  useToast
+  useToast,
+  Icon,
 } from "@chakra-ui/react";
+import { FaPause, FaPlay } from "react-icons/fa";
 import { isAddress } from "ethers/lib/utils.js";
 import { useEnsName, useAccount } from "wagmi";
 import { BACKEND_API_URL } from "~/config";
 import { Track } from "~/types";
 import { ipfsCidToUrl } from "~/utils";
-import { create } from "zustand";
-import TagBadge from "~/components/TagBadge";
+import { usePlayerStore } from "~/store";
+
 import TagInput from "~/pages/Upload/components/TagInput";
+import TagBadge from "~/components/TagBadge";
 
 const MAX_TAGS = 10;
 
@@ -72,6 +74,9 @@ function TrackPage(): JSX.Element {
   const image = ipfsCidToUrl(track.image);
   const { address } = useAccount();
   const navigate = useNavigate();
+  const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
+  const { data: ensName } = useEnsName({ address: track.artistAddress });
+  const isCurrentTrack = current && current?.audio === track.audio;
 
   const [useTagStore] = useState<() => TagStore>(() =>
     create<TagStore>((set, get) => ({
@@ -92,7 +97,7 @@ function TrackPage(): JSX.Element {
   const [newTitle, setNewTitle] = useState(track.title || "");
   const [uploadState, setUploadState] = useState<UploadStates>("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const toast = useToast()
+  const toast = useToast();
 
   const handleTrackUpdate = useCallback(async () => {
     setUploadState("initiated");
@@ -110,10 +115,10 @@ function TrackPage(): JSX.Element {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ title: newTitle, tags })
+        body: JSON.stringify({ title: newTitle, tags }),
       }
     );
-    
+
     if (!response.ok) {
       setErrorMessage("Update error");
     }
@@ -126,15 +131,14 @@ function TrackPage(): JSX.Element {
     }
 
     setUploadState("success");
-    navigate(`/${track?.artistAddress}/${json.track?.slug}`)
+    navigate(`/${track?.artistAddress}/${json.track?.slug}`);
     toast({
-      title: 'Update Successful',
+      title: "Update Successful",
       description: "Your track has been updated",
-      status: 'success',
+      status: "success",
       duration: 2000,
       isClosable: true,
-    })
-
+    });
   }, [address, tags]);
   const isUploadInitiated = uploadState === "initiated";
   const isUploading = uploadState === "uploading";
@@ -175,75 +179,112 @@ function TrackPage(): JSX.Element {
           {track.tags.map((tag) => (
             <TagBadge tag={tag} key={tag} />
           ))}
+          <Box
+            position="relative"
+            width="80px"
+            height="80px"
+            minWidth="80px"
+            marginTop="20px"
+            onClick={() => (!isCurrentTrack ? playTrack(track) : togglePlay())}
+            cursor="pointer"
+          >
+            <Icon
+              position="absolute"
+              left={isCurrentTrack && isPlaying ? "25px" : "27px"}
+              top="25px"
+              width="30px"
+              height="30px"
+              color="white"
+              as={isCurrentTrack && isPlaying ? FaPause : FaPlay}
+              className="play-icon"
+            />
+            <svg viewBox="0 0 80 80">
+              <circle
+                cx="40"
+                cy="40"
+                r="38"
+                fill="transparent"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="8, 8"
+                style={
+                  isPlaying
+                    ? {
+                        strokeDashoffset: 0,
+                        transition: "all 200s linear",
+                      }
+                    : {
+                        strokeDashoffset: 1000,
+                        transition: "all 1s ease",
+                      }
+                }
+              />
+            </svg>
+          </Box>
         </Box>
       </HStack>
 
       {address === track.artistAddress ? (
         <Box>
-            <Box
-              flex="1"
-              textAlign="left"
-              fontWeight="bold"
-              color="gray.600"
-              marginBottom='1.5rem'
-            >
-              Edit Track Details
-            </Box>
-            <FormLabel
-              fontSize="sm"
-              fontWeight="bold"
-              color="gray.600"
-            >
-              Update Title
-            </FormLabel>
-            
-            <Input
-              placeholder="Track title"
-              value={newTitle}
-              onChange={(event) => setNewTitle(event.target.value)}
-              maxLength={100}
-              minLength={1}
-              marginY={3}
-              isDisabled={isUploading}
-              
-            />
-            
-            
-            <TagInput
-              size="sm"
-              label={
-                <FormLabel
-                  display="inline-block"
-                  verticalAlign="top"
-                  fontSize="sm"
-                  fontWeight="bold"
-                  color="gray.600"
-                >
-                  Update Tags
-                </FormLabel>
-              }
-              maxTags={MAX_TAGS}
-              tags={tags}
-              addTag={addTag}
-              removeTag={removeTag}
-              isInvalid={!tags.length}
-              isDisabled={isUploading}
-            />
-            <Button
-              marginY={3}
-              isLoading={uploadState === 'uploading'}
-              loadingText="Updating"
-              isDisabled={
-                !newTitle.length || !tags.length || tags.length < 3 || isUploading
-              }
-              onClick={() => handleTrackUpdate()}
-            >
-              Update
-            </Button>
-            <Text paddingLeft="2" fontSize="sm" color="red.500">
-              {errorMessage}
-            </Text>
+          <Box
+            flex="1"
+            textAlign="left"
+            fontWeight="bold"
+            color="gray.600"
+            marginBottom="1.5rem"
+          >
+            Edit Track Details
           </Box>
+          <FormLabel fontSize="sm" fontWeight="bold" color="gray.600">
+            Update Title
+          </FormLabel>
+
+          <Input
+            placeholder="Track title"
+            value={newTitle}
+            onChange={(event) => setNewTitle(event.target.value)}
+            maxLength={100}
+            minLength={1}
+            marginY={3}
+            isDisabled={isUploading}
+          />
+
+          <TagInput
+            size="sm"
+            label={
+              <FormLabel
+                display="inline-block"
+                verticalAlign="top"
+                fontSize="sm"
+                fontWeight="bold"
+                color="gray.600"
+              >
+                Update Tags
+              </FormLabel>
+            }
+            maxTags={MAX_TAGS}
+            tags={tags}
+            addTag={addTag}
+            removeTag={removeTag}
+            isInvalid={!tags.length}
+            isDisabled={isUploading}
+          />
+          <Button
+            marginY={3}
+            isLoading={uploadState === "uploading"}
+            loadingText="Updating"
+            isDisabled={
+              !newTitle.length || !tags.length || tags.length < 3 || isUploading
+            }
+            onClick={() => handleTrackUpdate()}
+          >
+            Update
+          </Button>
+          <Text paddingLeft="2" fontSize="sm" color="red.500">
+            {errorMessage}
+          </Text>
+        </Box>
       ) : (
         <></>
       )}
