@@ -3,7 +3,7 @@ import { Text, Box, Stack, Flex, Heading, Link, Grid } from "@chakra-ui/react";
 import { isAddress } from "ethers/lib/utils.js";
 import { useTrackStore } from "~/store";
 import { useLoaderData } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { useAccount, useEnsName } from "wagmi";
 import { fetchEnsName } from "@wagmi/core";
 import ProfileLinkButton from "~/components/ProfileLinkButton";
 import FollowButton from "./components/FollowButton";
@@ -35,15 +35,17 @@ export async function loader({ params }: any) {
 
   const json = await response.json();
   const artist: Artist = json.artist;
-  const ensName = await fetchEnsName({ address: artist.address });
 
-  return { artist: { ...artist, ensName } };
+  return { artist };
 }
 
 function Profile(): JSX.Element {
   const { tracks, fetchTracksByAddress } = useTrackStore();
   const { artist } = useLoaderData() as ProfileParams;
   const { address } = useAccount();
+  const { data: ensName, isSuccess: isEnsLoaded } = useEnsName({
+    address: artist.address,
+  });
 
   useEffect(() => {
     fetchTracksByAddress(artist.address);
@@ -65,11 +67,10 @@ function Profile(): JSX.Element {
           fontWeight="bold"
           margin="0"
         >
-          {artist?.ensName ? (
-            <Text>{artist?.ensName}</Text>
-          ) : (
+          {ensName && <Text>{ensName}</Text>}
+          {isEnsLoaded && !ensName && address === artist.address && (
             <>
-              <Text>This Artist has no ENS Name.</Text>
+              <Text>You have no ENS Name.</Text>
               <Text fontSize="lg">
                 Get it here 👉{" "}
                 <Link href="https://ens.domains" isExternal>
