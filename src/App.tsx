@@ -88,12 +88,6 @@ function App({ chains }: AppProps) {
     }
   }, [status]);
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      fetchUser();
-    }
-  }, [status]);
-
   return (
     <RainbowKitAuthenticationProvider
       adapter={authenticationAdapter}
