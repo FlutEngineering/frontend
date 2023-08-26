@@ -1,28 +1,13 @@
 import React from "react";
-import {
-  Stack,
-  Text,
-  Image,
-  CardBody,
-  Card,
-  Box,
-  Icon,
-  Link,
-  CardFooter,
-  Button,
-  HStack,
-  VStack,
-} from "@chakra-ui/react";
-import { FaPause, FaPlay } from "react-icons/fa";
-import { formatArtistName, ipfsCidToUrl } from "~/utils";
-import { Track } from "~/types";
-import { css } from "@emotion/react";
-import { usePlayerStore } from "~/store";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
-import TagBadge from "./TagBadge";
-import ProfileLinkButton from "~/components/ProfileLinkButton";
 import { Link as RouterLink } from "react-router-dom";
 import { useEnsName } from "wagmi";
+import { css } from "@emotion/react";
+import { Text, Image, Card, Box, Icon, VStack } from "@chakra-ui/react";
+import { FaPause, FaPlay } from "react-icons/fa";
+import { formatArtistName } from "~/utils";
+import { usePlayerStore } from "~/store";
+import { Track } from "~/types";
+import { ASSETS_URL } from "~/config";
 
 type AudioItemProps = {
   track: Track;
@@ -74,14 +59,11 @@ const AudioThumbnail: React.FC<AudioItemProps> = ({ track }) => {
             objectFit="cover"
             maxWidth="120"
             maxHeight="120px"
-            src={ipfsCidToUrl(track.image)}
+            src={`${ASSETS_URL}/thumbnails/${track.image}_160.jpg`}
             alt="Cover"
           />
         </Box>
       </Card>
-      {/* <Stack paddingTop="1" spacing="0"> */}
-      {/*   <ProfileLinkButton address={track.artistAddress} /> */}
-      {/* </Stack> */}
       <Text
         as={RouterLink}
         to={`/${track.artistAddress}`}

@@ -10,6 +10,7 @@ import {
   CardFooter,
   Button,
   HStack,
+  Image,
 } from "@chakra-ui/react";
 import { useEnsName } from "wagmi";
 import { Link as RouterLink } from "react-router-dom";
@@ -20,7 +21,7 @@ import { formatArtistName, ipfsCidToUrl } from "~/utils";
 import { usePlayerStore } from "~/store";
 import { Track } from "~/types";
 import TagBadge from "./TagBadge";
-import IPFSImage from "./IPFSImage";
+import { ASSETS_URL } from "~/config";
 
 type AudioItemProps = {
   track: Track;
@@ -67,12 +68,13 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
           as={isCurrentTrack && isPlaying ? FaPause : FaPlay}
           className="play-icon"
         />
-        <IPFSImage
+        <Image
           objectFit="cover"
           maxWidth="80px"
           maxHeight="80px"
-          cid={track.image}
+          loading="lazy"
           alt="Cover"
+          src={`${ASSETS_URL}/thumbnails/${track.image}_160.jpg`}
         />
       </Box>
 

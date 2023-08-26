@@ -10,14 +10,7 @@ const IPFSImage: React.FC<IPFSImageProps & ImageProps> = ({ cid, ...rest }) => {
   const { url, rotateGateway } = useIpfsAsset(cid);
 
   const renderImage = useCallback(
-    () => (
-      <Image
-        src={url}
-        loading="lazy"
-        onError={() => rotateGateway()}
-        {...rest}
-      />
-    ),
+    () => <Image src={url} onError={() => rotateGateway()} {...rest} />,
     [url, rest]
   );
 

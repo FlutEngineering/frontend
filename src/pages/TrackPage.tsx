@@ -25,6 +25,7 @@ import { usePlayerStore } from "~/store";
 
 import TagInput from "~/pages/Upload/components/TagInput";
 import TagBadge from "~/components/TagBadge";
+import IPFSImage from "~/components/IPFSImage";
 
 const MAX_TAGS = 10;
 
@@ -71,7 +72,7 @@ function TrackPage(): JSX.Element {
   const { track, slug } = useLoaderData() as TrackParams;
   const { data: ens } = useEnsName({ address: track.artistAddress });
   const artist = useMemo(() => ens || track.artistAddress, [track, ens]);
-  const image = ipfsCidToUrl(track.image);
+  const imageUrl = ipfsCidToUrl(track.image);
   const { address } = useAccount();
   const navigate = useNavigate();
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
@@ -131,7 +132,7 @@ function TrackPage(): JSX.Element {
     }
 
     setUploadState("success");
-    navigate(`/${track?.artistAddress}/${json.track?.slug}`);
+    navigate(`/${track.artistAddress}/${json.track.slug}`);
     toast({
       title: "Update Successful",
       description: "Your track has been updated",
@@ -140,6 +141,7 @@ function TrackPage(): JSX.Element {
       isClosable: true,
     });
   }, [address, tags]);
+
   const isUploadInitiated = uploadState === "initiated";
   const isUploading = uploadState === "uploading";
   const isUploaded = uploadState === "success";
@@ -159,15 +161,15 @@ function TrackPage(): JSX.Element {
         gap={4}
       >
         <Box>
-          <Link href={image} isExternal>
-            <Image
+          <Link href={imageUrl} isExternal>
+            <IPFSImage
               width="200"
               height="200"
               minWidth="200"
               minHeight="200"
               borderRadius="md"
               overflow="hidden"
-              src={image}
+              cid={track.image}
             />
           </Link>
         </Box>
