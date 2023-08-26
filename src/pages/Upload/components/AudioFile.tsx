@@ -76,6 +76,7 @@ const AudioFile: React.FC<AudioFileProps> = ({
 
   const handleFileUpload = useCallback(async () => {
     setUploadState("initiated");
+    setErrorMessage("");
     const canvas = imageEditor.current?.getImage();
 
     if (!canvas || !tags.length) {
@@ -134,7 +135,6 @@ const AudioFile: React.FC<AudioFileProps> = ({
   }, [isExpanded, isUploading]);
 
   const backgroundColor = useMemo(() => {
-    if (isUploading) return "yellow.500";
     if (isUploaded) return "green.600";
     if (isUploadError) return "red.600";
     return "transparent";
@@ -246,6 +246,8 @@ const AudioFile: React.FC<AudioFileProps> = ({
             <Button
               size="sm"
               leftIcon={<AiOutlineCloudUpload />}
+              isLoading={isUploading}
+              loadingText="Uploading..."
               variant="outline"
               colorScheme="gray"
               marginTop="2px"
@@ -255,14 +257,6 @@ const AudioFile: React.FC<AudioFileProps> = ({
             >
               Upload
             </Button>
-            {uploadState === "uploading" && (
-              <Button
-                isLoading
-                loadingText="Uploading"
-                colorScheme="teal"
-                variant="outline"
-              />
-            )}
             <Text paddingLeft="2" fontSize="sm" color="red.500">
               {errorMessage}
             </Text>
