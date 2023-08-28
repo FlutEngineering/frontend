@@ -52,7 +52,7 @@ export const useTrackStore = create<TrackStore>((set, get) => ({
     fetch(`${BACKEND_API_URL}/v1/tracks`)
       .then((response) => response.json())
       .then((data) => {
-        set({ tracks: [] }); //clear before updating
+        set({ tracks: [] }); // clear before updating
 
         if (data.error) {
           console.log("Tracks fetch error:", data.error);
@@ -69,7 +69,8 @@ export const useTrackStore = create<TrackStore>((set, get) => ({
     )
       .then((response) => response.json())
       .then((data) => {
-        set({ tracks: [] }); //clear before updating
+        set({ tracks: [] }); // clear before updating
+
         if (data.error) {
           console.log("Tracks fetch error:", data.error);
         } else if (data.tracks) {
@@ -82,7 +83,8 @@ export const useTrackStore = create<TrackStore>((set, get) => ({
     fetch(`${BACKEND_API_URL}/v1/tracks/?` + new URLSearchParams({ tag }))
       .then((response) => response.json())
       .then((data) => {
-        set({ tracks: [] }); //clear before updating
+        set({ tracks: [] }); // clear before updating
+
         if (data.error) {
           console.log("Tracks fetch error:", data.error);
         } else if (data.tracks) {

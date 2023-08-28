@@ -25,7 +25,7 @@ function Browse(): JSX.Element {
       <HStack alignSelf="stretch" overflowX="auto">
         {tracks
           .sort((a, b) => {
-            return Date.parse(b.createdAt) - Date.parse(a.createdAt);
+            return b.updatedAt - a.updatedAt;
           })
           .map((track) => (
             <AudioThumbnail track={track} key={track.title} />

@@ -13,3 +13,7 @@ export const ipfsCidToUrl = (
   cid: string,
   opts = { gateway: IPFS_GATEWAY_URL }
 ) => `${opts.gateway}/${cid}`;
+
+export function absurd<A>(_: never): A {
+  throw new Error("Called `absurd` function which should be uncallable");
+}

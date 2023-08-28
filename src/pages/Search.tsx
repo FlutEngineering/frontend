@@ -1,131 +1,135 @@
-import { useEffect, useState } from "react";
-import { Box, Stack, Grid, Text, Input, Button } from "@chakra-ui/react";
+import { useEffect, useMemo, useState } from "react";
+import { Box, Stack, Grid, Input, Select, HStack } from "@chakra-ui/react";
 import { RiArrowUpDownFill } from "react-icons/ri";
-
+import { matchSorter } from "match-sorter";
 import { useTagStore, useTrackStore } from "~/store";
+import { Track } from "~/types";
+import { absurd } from "~/utils";
+
 import AudioItem from "~/components/AudioItem";
 
+type SortingMode = "latest" | "oldest" | "alphabetically" | "best-match";
+
+const getSorter = (mode: SortingMode) => {
+  if (mode === "best-match") return undefined;
+  if (mode === "latest")
+    return (a: Track, b: Track) => b.updatedAt - a.updatedAt;
+  if (mode === "oldest")
+    return (a: Track, b: Track) => a.updatedAt - b.updatedAt;
+  if (mode === "alphabetically")
+    return (a: Track, b: Track) => a.title.localeCompare(b.title);
+  absurd(mode);
+};
+
+const fuzzySearch = (tracks: Track[], filterValue: string) => {
+  const terms = filterValue.split(" ");
+  return terms.reduceRight<Track[]>((results, term) => {
+    if (term[0] === "#") {
+      return matchSorter(results, term.slice(1), { keys: ["tags"] });
+    } else {
+      return matchSorter(results, term, {
+        keys: [
+          "title",
+          { key: "tags", maxRanking: matchSorter.rankings.CONTAINS },
+        ],
+      });
+    }
+  }, tracks);
+};
+
 function Search(): JSX.Element {
-  const [selectedTag, setSelectedTag] = useState<string>();
-  const tagsPerPage = 10;
-  const [page, setPage] = useState(0);
-  const { tags, fetchTags } = useTagStore();
-  const { tracks, fetchTracks, fetchTracksByTag } = useTrackStore();
+  // const { tags, fetchTags } = useTagStore();
+  const { tracks, fetchTracks } = useTrackStore();
+  const [searchInput, setSearchInput] = useState("");
+  const [sortingMode, setSortingMode] = useState<SortingMode>("latest");
+  const [itemLimit, setItemLimit] = useState(10);
+
+  const loadMore = () => setItemLimit(itemLimit + 5);
 
   useEffect(() => {
     fetchTracks();
-    fetchTags();
+    // fetchTags(); // TODO: tags autocompletion
   }, []);
 
-  useEffect(() => {
-    if (selectedTag) {
-      fetchTracksByTag(selectedTag);
+  const filteredTracks = useMemo(() => {
+    setItemLimit(10);
+
+    if (!searchInput) {
+      setSortingMode("latest");
+      return tracks;
     }
-  }, [selectedTag, fetchTracksByTag]);
+
+    setSortingMode("best-match");
+    return fuzzySearch(tracks, searchInput);
+  }, [searchInput, tracks]);
+
+  const sortedTracks = useMemo(() => {
+    if (filteredTracks.length && sortingMode !== "best-match") {
+      const sorter = getSorter(sortingMode);
+      return filteredTracks.sort(sorter);
+    }
+    return filteredTracks;
+  }, [filteredTracks, sortingMode]);
+
+  const handleListScroll: React.UIEventHandler<HTMLDivElement> = (event) => {
+    const target = event.target as HTMLDivElement;
+    const scrollTopMax = target.scrollHeight - target.offsetHeight;
+    if (scrollTopMax - target.scrollTop < 40) {
+      loadMore();
+    }
+  };
 
   return (
     <Grid
       gridTemplateRows="auto auto minmax(0, 1fr)"
       gridTemplateColumns="1fr"
-      gridTemplateAreas={`"track-list"`}
+      gridTemplateAreas={`"searchbar" "track-list"`}
       width="100%"
     >
-      {/* <Box gridArea="tag-list"> */}
-      {/*   <Flex */}
-      {/*     width="100%" */}
-      {/*     height="12vh" */}
-      {/*     direction="row" */}
-      {/*     justifyContent="space-between" */}
-      {/*     borderRadius="25px" */}
-      {/*   > */}
-      {/*     <Button */}
-      {/*       variant="outline" */}
-      {/*       onClick={() => { */}
-      {/*         if (page > 0) { */}
-      {/*           setPage(page - 1); */}
-      {/*         } */}
-      {/*       }} */}
-      {/*     > */}
-      {/*       <Icon as={BiLeftArrow}></Icon> */}
-      {/*     </Button> */}
-      {/*     <Box overflowX="auto"> */}
-      {/*       {tags.map((tag, key) => { */}
-      {/*         if (key >= page * tagsPerPage && key < (page + 1) * tagsPerPage) { */}
-      {/*           return ( */}
-      {/*             <Button */}
-      {/*               key={key} */}
-      {/*               variant={selectedTag === tag.name ? "solid" : "outline"} */}
-      {/*               borderWidth="1px" */}
-      {/*               _notLast={{ marginRight: 1 }} */}
-      {/*               onClick={() => setSelectedTag(tag.name)} */}
-      {/*             > */}
-      {/*               <Text>{tag.name}</Text> */}
-      {/*             </Button> */}
-      {/*           ); */}
-      {/*         } */}
-      {/*       })} */}
-      {/*     </Box> */}
-      {/*     <Button */}
-      {/*       variant="outline" */}
-      {/*       onClick={() => { */}
-      {/*         if ((page + 1) * tagsPerPage < tags.length) { */}
-      {/*           setPage(page + 1); */}
-      {/*         } */}
-      {/*       }} */}
-      {/*     > */}
-      {/*       <Icon as={BiRightArrow}></Icon> */}
-      {/*     </Button> */}
-      {/*   </Flex> */}
-      {/* </Box> */}
+      <HStack gridArea="searchbar" marginBottom="4">
+        <Input
+          variant="filled"
+          _focusVisible={{ borderColor: "purple.500" }}
+          _placeholder={{ color: "white" }}
+          placeholder="Search"
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value)}
+        />
+        <Select
+          flex="1 0 auto"
+          width="max-content"
+          variant="filled"
+          icon={<RiArrowUpDownFill />}
+          textAlign="center"
+          value={sortingMode}
+          onChange={(event) =>
+            setSortingMode(event.target.value as SortingMode)
+          }
+        >
+          <option value="best-match" hidden={!searchInput}>
+            Best Match
+          </option>
+          <option value="latest">Latest</option>
+          <option value="oldest">Oldest</option>
+          <option value="alphabetically">A-Z</option>
+        </Select>
+      </HStack>
 
-      {/* <Input */}
-      {/*   gridArea="searchbar" */}
-      {/*   variant="filled" */}
-      {/*   placeholder="Search by Name (Coming Soon)" */}
-      {/*   disabled */}
-      {/*   marginBottom="4" */}
-      {/* /> */}
-
-      {/* <Stack */}
-      {/*   gridArea="sort-buttons" */}
-      {/*   direction="row" */}
-      {/*   spacing={4} */}
-      {/*   paddingY="1" */}
-      {/*   paddingBottom="4" */}
-      {/* > */}
-      {/*   <Button */}
-      {/*     leftIcon={<RiArrowUpDownFill />} */}
-      {/*     colorScheme="gray" */}
-      {/*     variant="outline" */}
-      {/*     size="sm" */}
-      {/*     disabled */}
-      {/*   > */}
-      {/*     Ranking */}
-      {/*   </Button> */}
-      {/*   <Button */}
-      {/*     leftIcon={<RiArrowUpDownFill />} */}
-      {/*     colorScheme="gray" */}
-      {/*     variant="outline" */}
-      {/*     size="sm" */}
-      {/*     disabled */}
-      {/*   > */}
-      {/*     Recent */}
-      {/*   </Button> */}
-      {/*   <Button */}
-      {/*     leftIcon={<RiArrowUpDownFill />} */}
-      {/*     colorScheme="gray" */}
-      {/*     variant="outline" */}
-      {/*     size="sm" */}
-      {/*     disabled */}
-      {/*   > */}
-      {/*     Unranked */}
-      {/*   </Button> */}
-      {/* </Stack> */}
-
-      <Box gridArea="track-list" alignSelf="stretch" overflowY="auto">
+      <Box
+        gridArea="track-list"
+        alignSelf="stretch"
+        overflowY="auto"
+        onScroll={handleListScroll}
+      >
         <Stack spacing={2} paddingBottom="2">
-          {tracks.map((track) => (
-            <AudioItem track={track} key={track.title} />
+          {sortedTracks.slice(0, itemLimit).map((track) => (
+            <AudioItem
+              track={track}
+              key={track.id}
+              onTagClick={(tag) =>
+                setSearchInput(`#${tag}`.replace(/^##/, "#"))
+              }
+            />
           ))}
         </Stack>
       </Box>

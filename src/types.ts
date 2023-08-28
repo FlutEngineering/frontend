@@ -7,7 +7,8 @@ export interface Track {
   slug: string;
   artistAddress: Address;
   tags: string[];
-  createdAt: string;
+  createdAt: number;
+  updatedAt: number;
   id: string;
   playCount: number;
 }

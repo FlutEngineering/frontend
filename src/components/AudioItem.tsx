@@ -19,15 +19,17 @@ import { FaPause, FaPlay } from "react-icons/fa";
 import { css } from "@emotion/react";
 import { formatArtistName, ipfsCidToUrl } from "~/utils";
 import { usePlayerStore } from "~/store";
-import { Track } from "~/types";
-import TagBadge from "./TagBadge";
 import { ASSETS_URL } from "~/config";
+import type { Track } from "~/types";
+
+import TagBadge from "./TagBadge";
 
 type AudioItemProps = {
   track: Track;
+  onTagClick?: (tag: string) => void;
 };
 
-const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
+const AudioItem: React.FC<AudioItemProps> = ({ track, onTagClick }) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   const { data: ensName } = useEnsName({ address: track.artistAddress });
   const isCurrentTrack = current && current?.audio === track.audio;
@@ -120,7 +122,11 @@ const AudioItem: React.FC<AudioItemProps> = ({ track }) => {
 
             <HStack>
               {track.tags.map((tag) => (
-                <TagBadge tag={tag} key={tag} />
+                <TagBadge
+                  tag={tag}
+                  key={tag}
+                  onClick={onTagClick ? () => onTagClick(tag) : undefined}
+                />
               ))}
             </HStack>
           </Stack>
