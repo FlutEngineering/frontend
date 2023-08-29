@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Stack, Grid, Input, Select, HStack } from "@chakra-ui/react";
+import { useSearchParams } from "react-router-dom";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { matchSorter } from "match-sorter";
 import { useTagStore, useTrackStore } from "~/store";
@@ -40,11 +41,14 @@ const fuzzySearch = (tracks: Track[], filterValue: string) => {
 function Search(): JSX.Element {
   // const { tags, fetchTags } = useTagStore();
   const { tracks, fetchTracks } = useTrackStore();
-  const [searchInput, setSearchInput] = useState("");
   const [sortingMode, setSortingMode] = useState<SortingMode>("latest");
   const [itemLimit, setItemLimit] = useState(10);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const loadMore = () => setItemLimit(itemLimit + 5);
+  const searchInput = searchParams.get("q") || "";
+  const setSearchInput = (value: string) =>
+    setSearchParams(value ? { q: value } : undefined);
 
   useEffect(() => {
     fetchTracks();
