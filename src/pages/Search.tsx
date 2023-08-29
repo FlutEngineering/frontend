@@ -29,12 +29,25 @@ function Search(): JSX.Element {
     setItemLimit(itemLimit + n);
   };
 
-  useEffect(() => reset, []);
+  useEffect(() => reset, [reset]);
 
   useEffect(() => {
     fetchTracks();
     // fetchTags(); // TODO: tags autocompletion
-  }, []);
+  }, [fetchTracks]);
+
+  useEffect(() => {
+    filter(searchInput);
+    if (searchInput) {
+      setSortingMode("best-match");
+    }
+  }, [searchInput, filter, setSortingMode]);
+
+  useEffect(() => {
+    if (sortingMode !== "best-match") {
+      sort(sortingMode);
+    }
+  }, [sortingMode, sort]);
 
   useEffect(() => {
     if (!searchInput || sortingMode === "best-match") {
@@ -42,7 +55,7 @@ function Search(): JSX.Element {
     } else {
       sort(sortingMode);
     }
-  }, [searchInput, sortingMode]);
+  }, [searchInput, sortingMode, filter, sort]);
 
   const handleSearchInputChange: React.ChangeEventHandler<HTMLInputElement> = (
     event
