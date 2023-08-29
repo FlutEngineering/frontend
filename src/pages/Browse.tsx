@@ -28,7 +28,7 @@ function Browse(): JSX.Element {
             return b.updatedAt - a.updatedAt;
           })
           .map((track) => (
-            <AudioThumbnail track={track} key={track.title} />
+            <AudioThumbnail track={track} key={track.id} />
           ))}
       </HStack>
 
@@ -48,7 +48,7 @@ function Browse(): JSX.Element {
             return b.playCount - a.playCount;
           })
           .map((track) => (
-            <AudioThumbnail track={track} key={track.title} />
+            <AudioThumbnail track={track} key={track.id} />
           ))}
       </HStack>
     </Box>
