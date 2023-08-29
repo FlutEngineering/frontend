@@ -1,91 +1,74 @@
-import { useEffect, useMemo, useState } from "react";
-import { Box, Stack, Grid, Input, Select, HStack } from "@chakra-ui/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Box, Grid, Input, Select, HStack, Stack } from "@chakra-ui/react";
 import { RiArrowUpDownFill } from "react-icons/ri";
-import { matchSorter } from "match-sorter";
+import InfiniteScroll from "react-infinite-scroller";
 import { useTagStore, useTrackStore } from "~/store";
-import { Track } from "~/types";
-import { absurd } from "~/utils";
 
-import AudioItem from "~/components/AudioItem";
-
-type SortingMode = "latest" | "oldest" | "alphabetically" | "best-match";
-
-const getSorter = (mode: SortingMode) => {
-  if (mode === "best-match") return undefined;
-  if (mode === "latest")
-    return (a: Track, b: Track) => b.updatedAt - a.updatedAt;
-  if (mode === "oldest")
-    return (a: Track, b: Track) => a.updatedAt - b.updatedAt;
-  if (mode === "alphabetically")
-    return (a: Track, b: Track) => a.title.localeCompare(b.title);
-  absurd(mode);
-};
-
-const fuzzySearch = (tracks: Track[], filterValue: string) => {
-  const terms = filterValue.split(" ");
-  return terms.reduceRight<Track[]>((results, term) => {
-    if (term[0] === "#") {
-      return matchSorter(results, term.slice(1), { keys: ["tags"] });
-    } else {
-      return matchSorter(results, term, {
-        keys: [
-          "title",
-          { key: "tags", maxRanking: matchSorter.rankings.CONTAINS },
-        ],
-      });
-    }
-  }, tracks);
-};
+import AudioItem, { AudioItemLoader } from "~/components/AudioItem";
+import useTrackSearch, { SortingMode } from "~/hooks/useTrackSearch";
 
 function Search(): JSX.Element {
   // const { tags, fetchTags } = useTagStore();
   const { tracks, fetchTracks } = useTrackStore();
   const [sortingMode, setSortingMode] = useState<SortingMode>("latest");
-  const [itemLimit, setItemLimit] = useState(10);
+  const listRef = useRef<HTMLDivElement>(null);
+  const defaultItemLimit = useMemo(
+    () => (listRef.current?.offsetHeight || 80) / 88,
+    [listRef.current]
+  );
+  const [itemLimit, setItemLimit] = useState(defaultItemLimit);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { sortedTracks, filter, sort, reset } = useTrackSearch(tracks);
 
-  const loadMore = () => setItemLimit(itemLimit + 5);
   const searchInput = searchParams.get("q") || "";
   const setSearchInput = (value: string) =>
     setSearchParams(value ? { q: value } : undefined);
+
+  const loadMore = (n: number) => {
+    setItemLimit(itemLimit + n);
+  };
+
+  useEffect(() => reset, []);
 
   useEffect(() => {
     fetchTracks();
     // fetchTags(); // TODO: tags autocompletion
   }, []);
 
-  const filteredTracks = useMemo(() => {
-    setItemLimit(10);
-
-    if (!searchInput) {
-      setSortingMode("latest");
-      return tracks;
+  useEffect(() => {
+    if (!searchInput || sortingMode === "best-match") {
+      filter(searchInput);
+    } else {
+      sort(sortingMode);
     }
+  }, [searchInput, sortingMode]);
 
-    setSortingMode("best-match");
-    return fuzzySearch(tracks, searchInput);
-  }, [searchInput, tracks]);
+  const handleSearchInputChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    const value = event.target.value;
+    const mode = value ? "best-match" : "latest";
+    listRef.current?.scrollTo({ top: 0 });
+    setItemLimit(defaultItemLimit);
 
-  const sortedTracks = useMemo(() => {
-    if (filteredTracks.length && sortingMode !== "best-match") {
-      const sorter = getSorter(sortingMode);
-      return filteredTracks.sort(sorter);
-    }
-    return filteredTracks;
-  }, [filteredTracks, sortingMode]);
-
-  const handleListScroll: React.UIEventHandler<HTMLDivElement> = (event) => {
-    const target = event.target as HTMLDivElement;
-    const scrollTopMax = target.scrollHeight - target.offsetHeight;
-    if (scrollTopMax - target.scrollTop < 40) {
-      loadMore();
-    }
+    setSortingMode(mode);
+    setSearchInput(value);
   };
+
+  const handleSortingModeChange: React.ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
+    const mode = event.target.value as SortingMode;
+    setItemLimit(defaultItemLimit);
+    setSortingMode(mode);
+  };
+
+  const tracksToRender = sortedTracks.slice(0, itemLimit);
 
   return (
     <Grid
-      gridTemplateRows="auto auto minmax(0, 1fr)"
+      gridTemplateRows="auto minmax(0, 100%)"
       gridTemplateColumns="1fr"
       gridTemplateAreas={`"searchbar" "track-list"`}
       width="100%"
@@ -97,7 +80,7 @@ function Search(): JSX.Element {
           _placeholder={{ color: "white" }}
           placeholder="Search"
           value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
+          onChange={handleSearchInputChange}
         />
         <Select
           flex="1 0 auto"
@@ -106,9 +89,7 @@ function Search(): JSX.Element {
           icon={<RiArrowUpDownFill />}
           textAlign="center"
           value={sortingMode}
-          onChange={(event) =>
-            setSortingMode(event.target.value as SortingMode)
-          }
+          onChange={handleSortingModeChange}
         >
           <option value="best-match" hidden={!searchInput}>
             Best Match
@@ -123,19 +104,26 @@ function Search(): JSX.Element {
         gridArea="track-list"
         alignSelf="stretch"
         overflowY="auto"
-        onScroll={handleListScroll}
+        ref={listRef}
       >
-        <Stack spacing={2} paddingBottom="2">
-          {sortedTracks.slice(0, itemLimit).map((track) => (
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={() => loadMore(20)}
+          hasMore={tracksToRender.length < sortedTracks.length}
+          loader={<AudioItemLoader key="loader" marginBottom={2} />}
+          useWindow={false}
+        >
+          {tracksToRender.map((track) => (
             <AudioItem
               track={track}
               key={track.id}
               onTagClick={(tag) =>
                 setSearchInput(`#${tag}`.replace(/^##/, "#"))
               }
+              marginBottom={2}
             />
           ))}
-        </Stack>
+        </InfiniteScroll>
       </Box>
     </Grid>
   );

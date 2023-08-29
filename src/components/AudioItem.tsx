@@ -11,6 +11,7 @@ import {
   Button,
   HStack,
   Image,
+  CardProps,
 } from "@chakra-ui/react";
 import { useEnsName } from "wagmi";
 import { Link as RouterLink } from "react-router-dom";
@@ -29,7 +30,30 @@ type AudioItemProps = {
   onTagClick?: (tag: string) => void;
 };
 
-const AudioItem: React.FC<AudioItemProps> = ({ track, onTagClick }) => {
+export const AudioItemLoader: React.FC<CardProps> = (props) => (
+  <Card
+    flex="1 0 auto"
+    direction="row"
+    justifyContent="center"
+    alignItems="center"
+    bg="whiteAlpha.100"
+    color="whiteAlpha.700"
+    height="40px"
+    padding="0"
+    variant="filled"
+    overflow="hidden"
+    cursor="default"
+    transition="all 200ms linear"
+    {...props}
+  >
+    Loading
+  </Card>
+);
+const AudioItem: React.FC<AudioItemProps & CardProps> = ({
+  track,
+  onTagClick,
+  ...rest
+}) => {
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   const { data: ensName } = useEnsName({ address: track.artistAddress });
   const isCurrentTrack = current && current?.audio === track.audio;
@@ -51,6 +75,7 @@ const AudioItem: React.FC<AudioItemProps> = ({ track, onTagClick }) => {
           transition: opacity 200ms ease;
         }
       `}
+      {...rest}
     >
       <Box
         width="80px"
