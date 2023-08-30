@@ -96,6 +96,7 @@ function Search(): JSX.Element {
           placeholder="Search"
           value={searchInput}
           onChange={handleSearchInputChange}
+          tabIndex={1}
         />
         <Select
           flex="1 0 auto"
