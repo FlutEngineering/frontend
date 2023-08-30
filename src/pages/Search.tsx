@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Grid, Input, Select, HStack, Stack } from "@chakra-ui/react";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import InfiniteScroll from "react-infinite-scroller";
@@ -7,9 +7,11 @@ import { useTagStore, useTrackStore } from "~/store";
 
 import AudioItem, { AudioItemLoader } from "~/components/AudioItem";
 import useTrackSearch, { SortingMode } from "~/hooks/useTrackSearch";
+import { tagSearchURL } from "~/utils";
 
 function Search(): JSX.Element {
   // const { tags, fetchTags } = useTagStore();
+  const navigate = useNavigate();
   const { tracks, fetchTracks } = useTrackStore();
   const [sortingMode, setSortingMode] = useState<SortingMode>("latest");
   const listRef = useRef<HTMLDivElement>(null);
@@ -130,9 +132,7 @@ function Search(): JSX.Element {
             <AudioItem
               track={track}
               key={track.id}
-              onTagClick={(tag) =>
-                setSearchInput(`#${tag}`.replace(/^##/, "#"))
-              }
+              onTagClick={(tag) => navigate(tagSearchURL(tag))}
               marginBottom={2}
             />
           ))}

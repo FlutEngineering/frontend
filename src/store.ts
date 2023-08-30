@@ -14,6 +14,11 @@ interface TrackStore {
   refetchTrack: (address: string, slug: string) => Promise<void>;
   like: (id: string) => Promise<void>;
   unlike: (id: string) => Promise<void>;
+  updateTrack: (
+    track: Track,
+    data: { title?: string; tags?: string[] }
+  ) => Promise<Track>;
+  deleteTrack: (track: Track) => Promise<void>;
 }
 
 interface TagStore {
@@ -27,6 +32,7 @@ interface PlayerStore {
   playTrack: (track: Track) => void;
   play: () => void;
   pause: () => void;
+  stop: () => void;
   togglePlay: () => void;
 }
 
@@ -130,6 +136,33 @@ export const useTrackStore = create<TrackStore>((set, get) => ({
           console.log("Track unlike error:", data.error);
         }
       }),
+  updateTrack: (track, { title, tags }) =>
+    fetch(`${BACKEND_API_URL}/v1/tracks/${track.artistAddress}/${track.slug}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ title: title || track.title, tags }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        return data.track;
+      }),
+  deleteTrack: (track) =>
+    fetch(`${BACKEND_API_URL}/v1/tracks/${track.artistAddress}/${track.slug}`, {
+      method: "DELETE",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        } else {
+          set({ tracks: get().tracks.filter((t: Track) => t.id !== track.id) });
+        }
+      }),
 }));
 
 export const useTagStore = create<TagStore>((set, _get) => ({
@@ -156,6 +189,7 @@ export const usePlayerStore = create<PlayerStore>()(
     playTrack: (track) => set({ track, isPlaying: true }),
     play: () => set({ isPlaying: true }),
     pause: () => set({ isPlaying: false }),
+    stop: () => set({ track: undefined, isPlaying: false }),
     togglePlay: () => set({ isPlaying: !get().isPlaying }),
   }))
 );

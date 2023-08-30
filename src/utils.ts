@@ -14,6 +14,9 @@ export const ipfsCidToUrl = (
   opts = { gateway: IPFS_GATEWAY_URL }
 ) => `${opts.gateway}/${cid}`;
 
+export const tagSearchURL = (tag: string) =>
+  `/search?q=${encodeURIComponent(("#" + tag).replace(/^##/, "#"))}`;
+
 export function absurd<A>(_: never): A {
   throw new Error("Called `absurd` function which should be uncallable");
 }
