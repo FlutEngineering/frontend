@@ -19,6 +19,7 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
     () => formatArtistName({ address: track.artistAddress, ensName }),
     [track, ensName]
   );
+
   return (
     <HStack
       as={RouterLink}
@@ -43,7 +44,7 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
         alt="Cover"
         src={`${ASSETS_URL}/thumbnails/${track.image}_160.jpg`}
       />
-      <Box paddingBottom="0" overflow="hidden">
+      <Box width="126px" paddingBottom="0" overflow="hidden">
         <Text color="gray.300" fontSize="xs" lineHeight="1">
           {artist}
         </Text>

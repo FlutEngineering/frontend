@@ -60,6 +60,7 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
 
   return (
     <Card
+      position="relative"
       flex="1 0 auto"
       direction="row"
       overflow="hidden"
@@ -105,7 +106,7 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
         />
       </Box>
 
-      <Stack width="100%">
+      <Stack paddingRight="100px" overflow="hidden">
         <CardBody
           as={Stack}
           width="100%"
@@ -158,7 +159,7 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
         </CardBody>
       </Stack>
 
-      <CardFooter alignItems="center">
+      <CardFooter position="absolute" right="0" alignItems="center">
         <Button
           size="sm"
           as={Link}
