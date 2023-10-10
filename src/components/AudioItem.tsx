@@ -24,6 +24,7 @@ import { ASSETS_URL } from "~/config";
 import type { Track } from "~/types";
 
 import TagBadge from "./TagBadge";
+import Marquee from "./Marquee";
 
 type AudioItemProps = {
   track: Track;
@@ -129,21 +130,22 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
               </Text>
             </Box>
 
-            <Box>
-              <Text
-                as={RouterLink}
-                to={`/${track.artistAddress}/${track.slug}`}
-                size="sm"
-                fontSize="lg"
-                fontWeight="bold"
-                paddingBottom="6px"
-                paddingTop="2px"
-                lineHeight="1"
-                overflow="hidden"
-                textOverflow="ellipsis"
-              >
-                {track.title}
-              </Text>
+            <Box
+              as={RouterLink}
+              to={`/${track.artistAddress}/${track.slug}`}
+              fontSize="lg"
+              fontWeight="bold"
+              paddingBottom="4px"
+              lineHeight="1.2"
+              title={track.title}
+            >
+              {isCurrentTrack ? (
+                <Marquee>{track.title}</Marquee>
+              ) : (
+                <Box overflow="hidden" textOverflow="ellipsis">
+                  {track.title}
+                </Box>
+              )}
             </Box>
 
             <HStack>

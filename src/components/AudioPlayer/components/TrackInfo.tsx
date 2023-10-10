@@ -6,6 +6,8 @@ import { formatArtistName } from "~/utils";
 import { Track } from "~/types";
 import { ASSETS_URL } from "~/config";
 
+import Marquee from "~/components/Marquee";
+
 interface TrackInfoProps {
   track: Track;
 }
@@ -48,15 +50,9 @@ const TrackInfo: React.FC<TrackInfoProps & StackProps> = ({
         <Text color="gray.300" fontSize="xs" lineHeight="1">
           {artist}
         </Text>
-        <Text
-          fontSize="sm"
-          fontWeight="bold"
-          overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-        >
+        <Marquee fontSize="sm" fontWeight="bold">
           {track.title}
-        </Text>
+        </Marquee>
       </Box>
     </HStack>
   );
