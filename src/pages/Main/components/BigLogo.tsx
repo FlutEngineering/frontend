@@ -108,6 +108,7 @@ const BigLogo: React.FC = () => {
       >
         {range(BARS).map((i) => (
           <Line
+            key={i}
             css={`
               --x: ${i};
               --random: ${0.5 + 0.5 * Math.random()};
