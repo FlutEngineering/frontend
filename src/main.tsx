@@ -15,6 +15,7 @@ import App from "./App";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import "./index.css";
+import { ToastContainer } from "./services/toast";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <WagmiConfig client={wagmiClient}>
           <ColorModeScript />
           <App chains={chains} />
+          <ToastContainer />
         </WagmiConfig>
       </QueryClientProvider>
     </ChakraProvider>

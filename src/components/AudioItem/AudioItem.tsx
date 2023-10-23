@@ -8,23 +8,32 @@ import {
   Icon,
   Link,
   CardFooter,
-  Button,
   HStack,
   Image,
   CardProps,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  Portal,
 } from "@chakra-ui/react";
-import { useEnsName } from "wagmi";
+import { useAccount, useEnsName } from "wagmi";
 import { Link as RouterLink } from "react-router-dom";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { css } from "@emotion/react";
 import { formatArtistName, ipfsCidToUrl } from "~/utils";
-import { usePlayerStore } from "~/store";
+import {
+  usePlayerStore,
+  usePlaylistSelectModalStore,
+  usePlaylistStore,
+} from "~/store";
 import { ASSETS_URL } from "~/config";
 import type { Track } from "~/types";
 
-import TagBadge from "./TagBadge";
-import Marquee from "./Marquee";
+import TagBadge from "~/components/TagBadge";
+import Marquee from "~/components/Marquee";
 
 type AudioItemProps = {
   track: Track;
@@ -55,7 +64,10 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
   onTagClick,
   ...rest
 }) => {
+  const { address } = useAccount();
   const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
+  const { addTrackToPlaylist } = usePlaylistStore();
+  const { selectPlaylist } = usePlaylistSelectModalStore();
   const { data: ensName } = useEnsName({ address: track.artistAddress });
   const isCurrentTrack = current && current?.audio === track.audio;
 
@@ -107,7 +119,7 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
         />
       </Box>
 
-      <Stack paddingRight="100px" overflow="hidden">
+      <Stack paddingRight="70px" overflow="hidden">
         <CardBody
           as={Stack}
           width="100%"
@@ -161,21 +173,52 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
         </CardBody>
       </Stack>
 
-      <CardFooter position="absolute" right="0" alignItems="center">
-        <Button
-          size="sm"
-          as={Link}
-          href={ipfsCidToUrl(track.audio)}
-          isExternal
-          ml={1}
-          color="gray.200"
-          fontSize="xs"
-          fontWeight="bold"
-          whiteSpace="nowrap"
-        >
-          IPFS
-          <ExternalLinkIcon mx="2px" />
-        </Button>
+      <CardFooter
+        position="absolute"
+        right="0"
+        top="0"
+        bottom="0"
+        alignItems="center"
+      >
+        {!!address && (
+          <Menu isLazy>
+            {({ isOpen }) => (
+              <>
+                <MenuButton
+                  as={IconButton}
+                  size="sm"
+                  aria-label="Track Menu"
+                  icon={<HamburgerIcon />}
+                />
+                {isOpen && (
+                  <Portal>
+                    <MenuList fontSize="sm">
+                      <MenuItem
+                        onClick={() =>
+                          selectPlaylist(async (playlist) =>
+                            addTrackToPlaylist(playlist, track.id)
+                          )
+                        }
+                      >
+                        Add to Playlist
+                      </MenuItem>
+                      <MenuItem
+                        as={Link}
+                        href={ipfsCidToUrl(track.audio)}
+                        isExternal
+                        textDecoration="none !important"
+                        justifyContent="space-between"
+                      >
+                        IPFS
+                        <ExternalLinkIcon mx="2px" />
+                      </MenuItem>
+                    </MenuList>
+                  </Portal>
+                )}
+              </>
+            )}
+          </Menu>
+        )}
       </CardFooter>
     </Card>
   );

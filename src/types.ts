@@ -18,6 +18,7 @@ export interface User {
   followedBy: Address[];
   following: Address[];
   likes: Track["id"][];
+  playlists: Playlist[];
 }
 
 export interface Artist {
@@ -29,5 +30,14 @@ export interface Artist {
 
 export interface Tag {
   name: string;
+  trackCount: number;
+}
+
+export interface Playlist {
+  id: string;
+  slug: string;
+  title: string;
+  userId: string;
+  tracks?: Track[];
   trackCount: number;
 }

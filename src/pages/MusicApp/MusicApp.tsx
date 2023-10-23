@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import { Flex, Grid, useDisclosure } from "@chakra-ui/react";
+import { Flex, Grid, Portal } from "@chakra-ui/react";
 
-import SettingsDrawer from "./components/SettingsDrawer";
+import PlaylistSelectModal from "~/components/PlaylistSelectModal";
 import Header from "./components/Header";
 import AudioPlayer from "~/components/AudioPlayer";
 import Sidebar from "./components/Sidebar";
@@ -57,6 +57,9 @@ function MusicApp(): JSX.Element {
     >
       <Header />
       <Body />
+      <Portal>
+        <PlaylistSelectModal />
+      </Portal>
     </Flex>
   );
 }
