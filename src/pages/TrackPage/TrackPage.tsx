@@ -1,5 +1,9 @@
-import { useMemo, useState, useCallback, useRef, useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
+import {
+  useLoaderData,
+  useNavigate,
+  Link as RouterLink,
+} from "react-router-dom";
 import {
   Stack,
   VStack,
@@ -12,6 +16,7 @@ import {
   IconButton,
   useToast,
   useDisclosure,
+  HStack,
 } from "@chakra-ui/react";
 import { FaEdit, FaPause, FaPlay } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -24,6 +29,7 @@ import { usePlayerStore, useTrackStore } from "~/store";
 
 import TagBadge from "~/components/TagBadge";
 import IPFSImage from "~/components/IPFSImage";
+import Identicon from "~/components/Identicon";
 import TrackEditForm from "./components/TrackEditForm";
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
 
@@ -146,9 +152,17 @@ function TrackPage(): JSX.Element {
           </Link>
         </Box>
         <Box>
-          <Text color="gray.500" fontSize="sm">
-            {artist}
-          </Text>
+          <HStack
+            as={RouterLink}
+            to={`/${track.artistAddress}`}
+            color="gray.500"
+            _hover={{ textDecoration: "none", color: "gray.400" }}
+          >
+            <Identicon address={track.artistAddress} size={16} />
+            <Box fontSize="sm" paddingLeft={0} paddingTop="3px">
+              {artist}
+            </Box>
+          </HStack>
           <Heading>{track.title}</Heading>
           <Box mb={2}>
             {track.tags.map((tag) => (
