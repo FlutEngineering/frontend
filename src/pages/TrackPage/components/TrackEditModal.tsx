@@ -8,6 +8,11 @@ import {
   ButtonGroup,
   FormLabel,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
+  ModalProps,
   Text,
   useDisclosure,
   useToast,
@@ -17,8 +22,9 @@ import type { Track } from "~/types";
 
 import TagInput from "~/pages/Upload/components/TagInput";
 
-interface TrackEditFormProps {
+interface TrackEditModalProps {
   track: Track;
+  isOpen: boolean;
   onClose: () => void;
 }
 
@@ -33,10 +39,10 @@ type UpdateParams = { title?: string; tags?: string[] };
 
 const MAX_TAGS = 10;
 
-const TrackEditForm: React.FC<TrackEditFormProps & BoxProps> = ({
+const TrackEditModal: React.FC<TrackEditModalProps> = ({
   track,
+  isOpen,
   onClose,
-  ...rest
 }) => {
   const [title, setTitle] = useState(track.title);
   const useTagStore = useMemo(
@@ -101,61 +107,72 @@ const TrackEditForm: React.FC<TrackEditFormProps & BoxProps> = ({
   };
 
   return (
-    <Box {...rest}>
-      <FormLabel fontSize="sm" fontWeight="bold" color="gray.300">
-        Title
-      </FormLabel>
-      <Input
-        value={title}
-        size="sm"
-        mb={2}
-        onChange={(event) => setTitle(event.target.value)}
-        ref={inputRef}
-      />
-      <TagInput
-        size="sm"
-        label={
-          <FormLabel
-            display="inline-block"
-            verticalAlign="top"
-            fontSize="sm"
-            fontWeight="bold"
-            color="gray.300"
-          >
-            Tags
+    <Modal
+      size="sm"
+      isCentered
+      onClose={onClose}
+      isOpen={isOpen}
+      motionPreset="slideInBottom"
+    >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalBody>
+          <FormLabel fontSize="sm" fontWeight="bold" color="gray.300">
+            Title
           </FormLabel>
-        }
-        maxTags={MAX_TAGS}
-        tags={tags}
-        addTag={addTag}
-        removeTag={removeTag}
-        isInvalid={!tags.length}
-        isDisabled={isLoading}
-      />
-      <ButtonGroup>
-        <Button
-          marginY={3}
-          isLoading={isLoading}
-          loadingText="Updating"
-          isDisabled={
-            !title.length || !tags.length || tags.length < 3 || isLoading
-          }
-          onClick={() => update({ title, tags })}
-        >
-          Update
-        </Button>
-        <Button
-          marginY={3}
-          isDisabled={
-            !title.length || !tags.length || tags.length < 3 || isLoading
-          }
-          onClick={() => onClose()}
-        >
-          Cancel
-        </Button>
-      </ButtonGroup>
-    </Box>
+          <Input
+            value={title}
+            size="sm"
+            mb={2}
+            onChange={(event) => setTitle(event.target.value)}
+            ref={inputRef}
+          />
+          <TagInput
+            size="sm"
+            label={
+              <FormLabel
+                display="inline-block"
+                verticalAlign="top"
+                fontSize="sm"
+                fontWeight="bold"
+                color="gray.300"
+              >
+                Tags
+              </FormLabel>
+            }
+            maxTags={MAX_TAGS}
+            tags={tags}
+            addTag={addTag}
+            removeTag={removeTag}
+            isInvalid={!tags.length}
+            isDisabled={isLoading}
+          />
+          <ButtonGroup>
+            <Button
+              marginY={3}
+              isLoading={isLoading}
+              loadingText="Updating"
+              isDisabled={
+                !title.length || !tags.length || tags.length < 3 || isLoading
+              }
+              onClick={() => update({ title, tags })}
+            >
+              Update
+            </Button>
+            <Button
+              marginY={3}
+              isDisabled={
+                !title.length || !tags.length || tags.length < 3 || isLoading
+              }
+              onClick={() => onClose()}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 
-export default TrackEditForm;
+export default TrackEditModal;

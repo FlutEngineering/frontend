@@ -7,7 +7,6 @@ import {
 import {
   Stack,
   VStack,
-  Text,
   Box,
   Link,
   Heading,
@@ -27,11 +26,11 @@ import { Track } from "~/types";
 import { ipfsCidToUrl, tagSearchURL } from "~/utils";
 import { usePlayerStore, useTrackStore } from "~/store";
 
+import DeleteConfirmationModal from "~/components/DeleteConfirmationModal";
 import TagBadge from "~/components/TagBadge";
 import IPFSImage from "~/components/IPFSImage";
 import Identicon from "~/components/Identicon";
-import TrackEditForm from "./components/TrackEditForm";
-import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
+import TrackEditModal from "./components/TrackEditModal";
 
 interface TrackParams {
   track: Track;
@@ -82,7 +81,12 @@ function TrackPage(): JSX.Element {
   } = usePlayerStore();
   const { deleteTrack } = useTrackStore();
   const isCurrentTrack = current && current?.audio === track.audio;
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
+  const {
+    isOpen: isTrackEditModalOpen,
+    onOpen: openTrackEditModal,
+    onClose: closeTrackEditModal,
+  } = useDisclosure();
   const {
     isOpen: isConfirmModalOpen,
     onOpen: openConfirmModal,
@@ -187,7 +191,7 @@ function TrackPage(): JSX.Element {
               <>
                 <IconButton
                   icon={<FaEdit size="18" />}
-                  onClick={() => setIsEditing(!isEditing)}
+                  onClick={openTrackEditModal}
                   aria-label="edit"
                 />
                 <IconButton
@@ -204,8 +208,12 @@ function TrackPage(): JSX.Element {
         </Box>
       </Stack>
 
-      {isEditing ? (
-        <TrackEditForm track={track} onClose={() => setIsEditing(false)} />
+      {isTrackEditModalOpen ? (
+        <TrackEditModal
+          track={track}
+          isOpen={isTrackEditModalOpen}
+          onClose={closeTrackEditModal}
+        />
       ) : null}
       <DeleteConfirmationModal
         title="Delete track?"
