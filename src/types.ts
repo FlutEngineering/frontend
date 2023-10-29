@@ -37,7 +37,7 @@ export interface Playlist {
   id: string;
   slug: string;
   title: string;
-  userId: string;
+  userId: Address;
   tracks?: Track[];
   trackCount: number;
 }
