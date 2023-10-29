@@ -1,9 +1,4 @@
-import { useState, useMemo } from "react";
-import {
-  useLoaderData,
-  useNavigate,
-  Link as RouterLink,
-} from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import {
   Stack,
   VStack,
@@ -15,12 +10,13 @@ import {
   IconButton,
   useToast,
   useDisclosure,
-  HStack,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "@chakra-ui/react";
 import { FaEdit, FaPause, FaPlay } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { isAddress } from "ethers/lib/utils.js";
-import { useEnsName, useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import { BACKEND_API_URL } from "~/config";
 import { Track } from "~/types";
 import { ipfsCidToUrl, tagSearchURL } from "~/utils";
@@ -29,8 +25,9 @@ import { usePlayerStore, useTrackStore } from "~/store";
 import DeleteConfirmationModal from "~/components/DeleteConfirmationModal";
 import TagBadge from "~/components/TagBadge";
 import IPFSImage from "~/components/IPFSImage";
-import Identicon from "~/components/Identicon";
 import TrackEditModal from "./components/TrackEditModal";
+import ProfileLink from "~/components/ProfileLink";
+import { ChevronRightIcon } from "@chakra-ui/icons";
 
 interface TrackParams {
   track: Track;
@@ -64,11 +61,6 @@ export async function loader({ params }: any) {
 
 function TrackPage(): JSX.Element {
   const { track, slug } = useLoaderData() as TrackParams;
-  const { data: ensName } = useEnsName({ address: track.artistAddress });
-  const artist = useMemo(
-    () => ensName || track.artistAddress,
-    [track, ensName]
-  );
   const imageUrl = ipfsCidToUrl(track.image);
   const { address } = useAccount();
   const navigate = useNavigate();
@@ -81,7 +73,6 @@ function TrackPage(): JSX.Element {
   } = usePlayerStore();
   const { deleteTrack } = useTrackStore();
   const isCurrentTrack = current && current?.audio === track.audio;
-  // const [isEditing, setIsEditing] = useState(false);
   const {
     isOpen: isTrackEditModalOpen,
     onOpen: openTrackEditModal,
@@ -156,17 +147,18 @@ function TrackPage(): JSX.Element {
           </Link>
         </Box>
         <Box>
-          <HStack
-            as={RouterLink}
-            to={`/${track.artistAddress}`}
-            color="gray.500"
-            _hover={{ textDecoration: "none", color: "gray.400" }}
+          <Breadcrumb
+            spacing="2px"
+            separator={<ChevronRightIcon color="gray.500" />}
           >
-            <Identicon address={track.artistAddress} size={16} />
-            <Box fontSize="sm" paddingLeft={0} paddingTop="3px">
-              {artist}
-            </Box>
-          </HStack>
+            <BreadcrumbItem>
+              <ProfileLink address={track.artistAddress} />
+            </BreadcrumbItem>
+
+            <BreadcrumbItem cursor="default">
+              <Box fontSize="sm">tracks</Box>
+            </BreadcrumbItem>
+          </Breadcrumb>
           <Heading>{track.title}</Heading>
           <Box mb={2}>
             {track.tags.map((tag) => (

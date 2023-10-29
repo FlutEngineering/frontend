@@ -1,9 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import {
-  useLoaderData,
-  useNavigate,
-  Link as RouterLink,
-} from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import {
   Stack,
   Box,
@@ -11,8 +7,9 @@ import {
   ButtonGroup,
   Button,
   useToast,
-  HStack,
   Grid,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "@chakra-ui/react";
 import { FaEdit, FaPause, FaPlay } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -24,10 +21,11 @@ import { tagSearchURL } from "~/utils";
 import { usePlayerStore, usePlaylistStore } from "~/store";
 
 import DeleteConfirmationModal from "~/components/DeleteConfirmationModal";
-import Identicon from "~/components/Identicon";
 import InfiniteScroll from "react-infinite-scroller";
 import AudioItem, { AudioItemLoader } from "~/components/AudioItem";
 import PlaylistImage from "~/components/PlaylistImage";
+import { ChevronRightIcon } from "@chakra-ui/icons";
+import ProfileLink from "~/components/ProfileLink";
 
 interface PlaylistParams {
   playlist: Playlist;
@@ -62,12 +60,10 @@ export async function loader({ params }: any) {
 function PlaylistPage(): JSX.Element {
   const navigate = useNavigate();
   const { playlist, slug } = useLoaderData() as PlaylistParams;
-  const { data: ensName } = useEnsName({ address: playlist.userId });
-  const artist = useMemo(() => ensName || playlist.userId, [playlist, ensName]);
-  const toast = useToast();
   const listRef = useRef<HTMLDivElement>(null);
   const { fetchPlaylistTracks } = usePlaylistStore();
-  const { address } = useAccount();
+  // const toast = useToast();
+  // const { address } = useAccount();
   const defaultItemLimit = useMemo(
     () => (listRef.current?.offsetHeight || 80) / 88,
     [listRef.current]
@@ -79,7 +75,7 @@ function PlaylistPage(): JSX.Element {
     isPlaying,
     playTrack,
     togglePlay,
-    stop,
+    // stop,
   } = usePlayerStore();
   // const { deletePlaylist } = usePlaylistStore();
   const isCurrentPlaylist = useMemo(
@@ -155,18 +151,22 @@ function PlaylistPage(): JSX.Element {
           <PlaylistImage playlist={playlist} size={100} />
         </Box>
         <Box>
-          <HStack
-            as={RouterLink}
-            to={`/${playlist.userId}`}
+          <Breadcrumb
+            spacing="2px"
+            separator={<ChevronRightIcon color="gray.500" />}
             marginTop="-7px"
-            color="gray.500"
-            _hover={{ textDecoration: "none", color: "gray.400" }}
           >
-            <Identicon address={playlist.userId} size={16} />
-            <Box fontSize="sm" paddingLeft={0} paddingTop="3px">
-              {artist}
-            </Box>
-          </HStack>
+            <BreadcrumbItem>
+              <ProfileLink address={playlist.userId} />
+            </BreadcrumbItem>
+
+            <BreadcrumbItem cursor="default">
+              <Box fontSize="sm">playlists</Box>
+              {/* <BreadcrumbLink href={`/${address}/playlists`} fontSize="sm"> */}
+              {/*   playlists */}
+              {/* </BreadcrumbLink> */}
+            </BreadcrumbItem>
+          </Breadcrumb>
           <Heading marginBottom={2}>{playlist.title}</Heading>
           {/* <Box mb={2}> */}
           {/*   {track.tags.map((tag) => ( */}
