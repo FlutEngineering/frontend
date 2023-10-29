@@ -23,11 +23,13 @@ import Community from "./pages/Community";
 import Engineering from "./pages/Engineering";
 import MusicApp from "./pages/MusicApp";
 import Browse from "./pages/Browse";
-import Library from "./pages/Library";
+// import Library from "./pages/Library";
+import Playlists from "./pages/Playlists";
 import Search from "./pages/Search";
 import Upload from "./pages/Upload";
 import Profile, { loader as profileLoader } from "./pages/Profile";
 import TrackPage, { loader as trackLoader } from "./pages/TrackPage";
+import PlaylistPage, { loader as playlistLoader } from "./pages/PlaylistPage";
 import CustomAvatar from "./components/CustomAvatar";
 
 interface AppProps {
@@ -53,12 +55,19 @@ const router = createBrowserRouter([
     children: [
       { path: "/browse", element: <Browse /> },
       { path: "/search", element: <Search /> },
+      { path: "/playlists", element: <Playlists /> },
       // { path: "/profile", element: <Profile /> },
       { path: "/upload", element: <Upload /> },
       {
         path: "/:address",
         element: <Profile />,
         loader: profileLoader,
+        errorElement: <Navigate to="/" />,
+      },
+      {
+        path: "/:address/playlists/:slug",
+        element: <PlaylistPage />,
+        loader: playlistLoader,
         errorElement: <Navigate to="/" />,
       },
       {

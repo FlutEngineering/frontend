@@ -9,6 +9,7 @@ import { useAccount } from "wagmi";
 import {
   AiOutlineCloudUpload,
   AiOutlineHome,
+  AiOutlineOrderedList,
   AiOutlineSearch,
   // AiOutlineSetting
 } from "react-icons/ai";
@@ -79,6 +80,13 @@ const Sidebar: React.FC<StackProps> = (props) => {
       </SidebarLink>
       {isConnected && (
         <>
+          <SidebarLink
+            to="/playlists"
+            label="playlists"
+            icon={<AiOutlineOrderedList />}
+          >
+            Playlists
+          </SidebarLink>
           <SidebarLink
             to={`/${address}`}
             label="profile"
