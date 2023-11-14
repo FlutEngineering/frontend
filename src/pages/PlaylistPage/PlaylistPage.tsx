@@ -10,22 +10,25 @@ import {
   Grid,
   Breadcrumb,
   BreadcrumbItem,
+  IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { ChevronRightIcon } from "@chakra-ui/icons";
 import { FaEdit, FaPause, FaPlay } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import InfiniteScroll from "react-infinite-scroller";
 import { isAddress } from "ethers/lib/utils.js";
-import { useEnsName, useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import { BACKEND_API_URL } from "~/config";
 import { Playlist, Track } from "~/types";
 import { tagSearchURL } from "~/utils";
 import { usePlayerStore, usePlaylistStore } from "~/store";
 
 import DeleteConfirmationModal from "~/components/DeleteConfirmationModal";
-import InfiniteScroll from "react-infinite-scroller";
 import AudioItem, { AudioItemLoader } from "~/components/AudioItem";
 import PlaylistImage from "~/components/PlaylistImage";
-import { ChevronRightIcon } from "@chakra-ui/icons";
 import ProfileLink from "~/components/ProfileLink";
+import PlaylistEditModal from "./components/PlaylistEditModal";
 
 interface PlaylistParams {
   playlist: Playlist;
@@ -59,11 +62,10 @@ export async function loader({ params }: any) {
 
 function PlaylistPage(): JSX.Element {
   const navigate = useNavigate();
-  const { playlist, slug } = useLoaderData() as PlaylistParams;
+  const { playlist } = useLoaderData() as PlaylistParams;
   const listRef = useRef<HTMLDivElement>(null);
-  const { fetchPlaylistTracks } = usePlaylistStore();
-  // const toast = useToast();
-  // const { address } = useAccount();
+  const { fetchPlaylistTracks, deletePlaylist } = usePlaylistStore();
+  const { address } = useAccount();
   const defaultItemLimit = useMemo(
     () => (listRef.current?.offsetHeight || 80) / 88,
     [listRef.current]
@@ -75,19 +77,22 @@ function PlaylistPage(): JSX.Element {
     isPlaying,
     playTrack,
     togglePlay,
-    // stop,
   } = usePlayerStore();
-  // const { deletePlaylist } = usePlaylistStore();
   const isCurrentPlaylist = useMemo(
     () =>
       current && playlistTracks.map((track) => track.id).includes(current.id),
     [current, playlistTracks]
   );
-  // const {
-  //   isOpen: isConfirmModalOpen,
-  //   onOpen: openConfirmModal,
-  //   onClose: closeConfirmModal,
-  // } = useDisclosure();
+  const {
+    isOpen: isPlaylistEditModalOpen,
+    onOpen: openPlaylistEditModal,
+    onClose: closePlaylistEditModal,
+  } = useDisclosure();
+  const {
+    isOpen: isConfirmModalOpen,
+    onOpen: openConfirmModal,
+    onClose: closeConfirmModal,
+  } = useDisclosure();
 
   useEffect(() => {
     fetchPlaylistTracks(playlist).then(setPlaylistTracks);
@@ -97,37 +102,39 @@ function PlaylistPage(): JSX.Element {
     setItemLimit(itemLimit + n);
   };
 
-  // const handlePlaylistDelete = async () => {
-  //   try {
-  //     // await deletePlaylist(playlist);
-  //     toast({
-  //       title: "Deleted",
-  //       status: "success",
-  //       duration: 2000,
-  //       isClosable: true,
-  //     });
-  //     if (isCurrentPlaylist) {
-  //       stop();
-  //     }
-  //     navigate(`/search`);
-  //   } catch (e) {
-  //     if (e instanceof Error) {
-  //       toast({
-  //         title: "Error",
-  //         description: e.message,
-  //         status: "error",
-  //         isClosable: true,
-  //       });
-  //     } else {
-  //       toast({
-  //         title: "Error",
-  //         status: "error",
-  //         isClosable: true,
-  //       });
-  //       console.log("👾", "Playlist delete error =>", e);
-  //     }
-  //   }
-  // };
+  const toast = useToast();
+
+  const handlePlaylistDelete = async () => {
+    try {
+      await deletePlaylist(playlist);
+      toast({
+        title: "Deleted",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      if (isCurrentPlaylist) {
+        stop();
+      }
+      navigate(`/playlists`);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast({
+          title: "Error",
+          description: e.message,
+          status: "error",
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Error",
+          status: "error",
+          isClosable: true,
+        });
+        console.log("👾", "Playlist delete error =>", e);
+      }
+    }
+  };
 
   const tracksToRender = playlistTracks.slice(0, itemLimit);
 
@@ -162,6 +169,7 @@ function PlaylistPage(): JSX.Element {
 
             <BreadcrumbItem cursor="default">
               <Box fontSize="sm">playlists</Box>
+              {/* TODO: uncomment after implementing public playlists */}
               {/* <BreadcrumbLink href={`/${address}/playlists`} fontSize="sm"> */}
               {/*   playlists */}
               {/* </BreadcrumbLink> */}
@@ -177,8 +185,8 @@ function PlaylistPage(): JSX.Element {
           {/*     /> */}
           {/*   ))} */}
           {/* </Box> */}
-          {playlistTracks.length > 0 && (
-            <ButtonGroup size="sm">
+          <ButtonGroup size="sm">
+            {playlistTracks.length > 0 && (
               <Button
                 leftIcon={
                   isCurrentPlaylist && isPlaying ? <FaPause /> : <FaPlay />
@@ -192,25 +200,25 @@ function PlaylistPage(): JSX.Element {
               >
                 Play
               </Button>
-              {/* {address === playlist.userId && ( */}
-              {/*   <> */}
-              {/*     <IconButton */}
-              {/*       icon={<FaEdit size="18" />} */}
-              {/*       onClick={() => setIsEditing(!isEditing)} */}
-              {/*       aria-label="edit" */}
-              {/*     /> */}
-              {/*     <IconButton */}
-              {/*       icon={<MdDelete size="20" />} */}
-              {/*       bg="red.500" */}
-              {/*       _hover={{ bg: "red.400" }} */}
-              {/*       _active={{ bg: "red.600" }} */}
-              {/*       onClick={() => openConfirmModal()} */}
-              {/*       aria-label="edit" */}
-              {/*     /> */}
-              {/*   </> */}
-              {/* )} */}
-            </ButtonGroup>
-          )}
+            )}
+            {address === playlist.userId && (
+              <>
+                <IconButton
+                  icon={<FaEdit size="18" />}
+                  onClick={() => openPlaylistEditModal()}
+                  aria-label="edit"
+                />
+                <IconButton
+                  icon={<MdDelete size="20" />}
+                  bg="red.500"
+                  _hover={{ bg: "red.400" }}
+                  _active={{ bg: "red.600" }}
+                  onClick={() => openConfirmModal()}
+                  aria-label="edit"
+                />
+              </>
+            )}
+          </ButtonGroup>
         </Box>
       </Stack>
 
@@ -265,6 +273,19 @@ function PlaylistPage(): JSX.Element {
           ))}
         </InfiniteScroll>
       </Box>
+      {isPlaylistEditModalOpen ? (
+        <PlaylistEditModal
+          playlist={playlist}
+          isOpen={isPlaylistEditModalOpen}
+          onClose={closePlaylistEditModal}
+        />
+      ) : null}
+      <DeleteConfirmationModal
+        title="Delete playlist?"
+        isOpen={isConfirmModalOpen}
+        onConfirm={handlePlaylistDelete}
+        onClose={closeConfirmModal}
+      />
     </Grid>
   );
 }

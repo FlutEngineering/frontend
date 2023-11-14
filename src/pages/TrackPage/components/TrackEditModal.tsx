@@ -2,8 +2,6 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { create } from "zustand";
 import {
-  Box,
-  BoxProps,
   Button,
   ButtonGroup,
   FormLabel,
@@ -12,9 +10,6 @@ import {
   ModalBody,
   ModalContent,
   ModalOverlay,
-  ModalProps,
-  Text,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useTrackStore } from "~/store";

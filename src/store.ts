@@ -56,7 +56,11 @@ interface AuthStore {
 interface PlaylistStore {
   fetchPlaylistTracks: (playlist: Playlist) => Promise<Track[]>;
   createPlaylist: (title: string, address: Address) => Promise<Playlist>;
-  // deletePlaylist: (id: string) => Promise<void>;
+  updatePlaylist: (
+    playlist: Playlist,
+    data: { title: string }
+  ) => Promise<Playlist>;
+  deletePlaylist: (playlist: Playlist) => Promise<void>;
   addTrackToPlaylist: (playlist: Playlist, trackId: string) => Promise<void>;
   // removeTrackFromPlaylist: (playlist: Playlist, trackId: string) => Promise<void>;
 }
@@ -309,6 +313,37 @@ export const usePlaylistStore = create<PlaylistStore>((_set) => ({
       .then(handleResponse)
       .then((json) => json.playlist?.tracks || [])
       .catch(() => console.log("👾", "Failed to load playlist data")),
+  updatePlaylist: async (playlist, { title }) =>
+    fetch(
+      `${BACKEND_API_URL}/v1/playlists/${playlist.userId}/${playlist.slug}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ title }),
+      }
+    )
+      .then(handleResponse)
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        return data.playlist;
+      }),
+  deletePlaylist: async (playlist) =>
+    fetch(
+      `${BACKEND_API_URL}/v1/playlists/${playlist.userId}/${playlist.slug}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    )
+      .then(handleResponse)
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+      }),
   createPlaylist: async (title, address) => {
     const playlist = await fetch(`${BACKEND_API_URL}/v1/playlists/${address}`, {
       method: "POST",
