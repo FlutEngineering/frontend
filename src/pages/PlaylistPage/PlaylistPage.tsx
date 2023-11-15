@@ -12,8 +12,9 @@ import {
   BreadcrumbItem,
   IconButton,
   useDisclosure,
+  Tooltip,
 } from "@chakra-ui/react";
-import { ChevronRightIcon } from "@chakra-ui/icons";
+import { ChevronRightIcon, CloseIcon } from "@chakra-ui/icons";
 import { FaEdit, FaPause, FaPlay } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroller";
@@ -64,7 +65,8 @@ function PlaylistPage(): JSX.Element {
   const navigate = useNavigate();
   const { playlist } = useLoaderData() as PlaylistParams;
   const listRef = useRef<HTMLDivElement>(null);
-  const { fetchPlaylistTracks, deletePlaylist } = usePlaylistStore();
+  const { fetchPlaylistTracks, deletePlaylist, removeTrackFromPlaylist } =
+    usePlaylistStore();
   const { address } = useAccount();
   const defaultItemLimit = useMemo(
     () => (listRef.current?.offsetHeight || 80) / 88,
@@ -72,12 +74,9 @@ function PlaylistPage(): JSX.Element {
   );
   const [itemLimit, setItemLimit] = useState(defaultItemLimit);
   const [playlistTracks, setPlaylistTracks] = useState<Track[]>([]);
-  const {
-    track: current,
-    isPlaying,
-    playTrack,
-    togglePlay,
-  } = usePlayerStore();
+  const [updated, setUpdated] = useState(Date.now());
+  const refresh = () => setUpdated(Date.now());
+  const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
   const isCurrentPlaylist = useMemo(
     () =>
       current && playlistTracks.map((track) => track.id).includes(current.id),
@@ -96,7 +95,7 @@ function PlaylistPage(): JSX.Element {
 
   useEffect(() => {
     fetchPlaylistTracks(playlist).then(setPlaylistTracks);
-  }, [playlist.id]);
+  }, [playlist.id, updated]);
 
   const loadMore = (n: number) => {
     setItemLimit(itemLimit + n);
@@ -268,6 +267,25 @@ function PlaylistPage(): JSX.Element {
               track={track}
               key={track.id}
               onTagClick={(tag) => navigate(tagSearchURL(tag))}
+              showMenu={false}
+              buttons={
+                <Tooltip
+                  label="Remove from playlist"
+                  placement="top"
+                  openDelay={500}
+                >
+                  <IconButton
+                    size="sm"
+                    icon={<CloseIcon />}
+                    variant="ghost"
+                    onClick={async () => {
+                      await removeTrackFromPlaylist(playlist, track.id);
+                      refresh();
+                    }}
+                    aria-label="Remove from playlist"
+                  />
+                </Tooltip>
+              }
               marginBottom={2}
             />
           ))}

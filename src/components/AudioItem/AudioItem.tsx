@@ -38,6 +38,8 @@ import Marquee from "~/components/Marquee";
 type AudioItemProps = {
   track: Track;
   onTagClick?: (tag: string) => void;
+  showMenu?: boolean;
+  buttons?: React.ReactNode;
 };
 
 export const AudioItemLoader: React.FC<CardProps> = (props) => (
@@ -62,6 +64,8 @@ export const AudioItemLoader: React.FC<CardProps> = (props) => (
 const AudioItem: React.FC<AudioItemProps & CardProps> = ({
   track,
   onTagClick,
+  showMenu = true,
+  buttons = null,
   ...rest
 }) => {
   const { address } = useAccount();
@@ -180,7 +184,8 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
         bottom="0"
         alignItems="center"
       >
-        {!!address && (
+        {buttons}
+        {!!address && showMenu && (
           <Menu isLazy>
             {({ isOpen }) => (
               <>

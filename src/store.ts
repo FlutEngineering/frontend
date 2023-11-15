@@ -62,7 +62,10 @@ interface PlaylistStore {
   ) => Promise<Playlist>;
   deletePlaylist: (playlist: Playlist) => Promise<void>;
   addTrackToPlaylist: (playlist: Playlist, trackId: string) => Promise<void>;
-  // removeTrackFromPlaylist: (playlist: Playlist, trackId: string) => Promise<void>;
+  removeTrackFromPlaylist: (
+    playlist: Playlist,
+    trackId: string
+  ) => Promise<void>;
 }
 
 type PlaylistSelectCallback = (playlist: Playlist) => Promise<void>;
@@ -357,9 +360,9 @@ export const usePlaylistStore = create<PlaylistStore>((_set) => ({
 
     return playlist;
   },
-  addTrackToPlaylist: async (playlist, trackId) => {
-    await fetch(
-      `${BACKEND_API_URL}/v1/playlists/${playlist.userId}/${playlist.slug}`,
+  addTrackToPlaylist: (playlist, trackId) =>
+    fetch(
+      `${BACKEND_API_URL}/v1/playlists/${playlist.userId}/${playlist.slug}/tracks`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -368,8 +371,19 @@ export const usePlaylistStore = create<PlaylistStore>((_set) => ({
       }
     )
       .then(handleResponse)
-      .catch(() => console.log("👾", "Failed to add track to playlist"));
-  },
+      .catch(() => console.log("👾", "Failed to add track to playlist")),
+  removeTrackFromPlaylist: (playlist, trackId) =>
+    fetch(
+      `${BACKEND_API_URL}/v1/playlists/${playlist.userId}/${playlist.slug}/tracks`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ trackId }),
+      }
+    )
+      .then(handleResponse)
+      .catch(() => console.log("👾", "Failed to remove track from playlist")),
 }));
 
 export const usePlaylistSelectModalStore = create<PlaylistSelectModalStore>(
