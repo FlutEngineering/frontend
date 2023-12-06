@@ -273,7 +273,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((json) => json.artist);
+      .then((json) => json.user);
 
     set({ user });
   },
