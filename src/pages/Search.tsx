@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box, Grid, Input, Select, HStack, Stack } from "@chakra-ui/react";
+import { Box, Grid, Input, Select, HStack } from "@chakra-ui/react";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import InfiniteScroll from "react-infinite-scroller";
-import { useTagStore, useTrackStore } from "~/store";
+import { usePlayerStore, useTrackStore } from "~/store";
 
 import AudioItem, { AudioItemLoader } from "~/components/AudioItem";
 import useTrackSearch, { SortingMode } from "~/hooks/useTrackSearch";
@@ -13,6 +13,7 @@ function Search(): JSX.Element {
   // const { tags, fetchTags } = useTagStore();
   const navigate = useNavigate();
   const { tracks, fetchTracks } = useTrackStore();
+  const { playTrack } = usePlayerStore();
   const [sortingMode, setSortingMode] = useState<SortingMode>("latest");
   const listRef = useRef<HTMLDivElement>(null);
   const defaultItemLimit = useMemo(
@@ -129,10 +130,11 @@ function Search(): JSX.Element {
           loader={<AudioItemLoader key="loader" marginBottom={2} />}
           useWindow={false}
         >
-          {tracksToRender.map((track) => (
+          {tracksToRender.map((track, index) => (
             <AudioItem
               track={track}
               key={track.id}
+              onPlayClick={() => playTrack(track, sortedTracks, index)}
               onTagClick={(tag) => navigate(tagSearchURL(tag))}
               marginBottom={2}
             />

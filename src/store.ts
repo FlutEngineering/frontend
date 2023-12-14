@@ -6,6 +6,7 @@ import type { Address } from "wagmi";
 import type { SiweMessage } from "siwe";
 import type { Track, Tag, User, Playlist } from "./types";
 import { toast } from "./services/toast";
+import { mod } from "./utils";
 
 interface TrackStore {
   tracks: Track[];
@@ -29,12 +30,16 @@ interface TagStore {
 
 interface PlayerStore {
   track: Track | null;
+  list: Track[];
+  listIndex: number;
   isPlaying: boolean;
-  playTrack: (track: Track) => void;
+  playTrack: (track: Track, list?: Track[], listIndex?: number) => void;
   play: () => void;
   pause: () => void;
   stop: () => void;
   togglePlay: () => void;
+  playPrev: () => { ok: boolean };
+  playNext: () => { ok: boolean };
 }
 
 interface AuthVerificationArgs {
@@ -244,12 +249,43 @@ export const useTagStore = create<TagStore>((set, _get) => ({
 export const usePlayerStore = create<PlayerStore>()(
   subscribeWithSelector((set, get) => ({
     track: null,
+    list: [],
+    listIndex: -1,
     isPlaying: false,
-    playTrack: (track) => set({ track, isPlaying: true }),
+    playTrack: (track, list = [], listIndex = -1) =>
+      set({ track, list, listIndex, isPlaying: true }),
     play: () => set({ isPlaying: true }),
     pause: () => set({ isPlaying: false }),
-    stop: () => set({ track: undefined, isPlaying: false }),
+    stop: () =>
+      set({ track: undefined, isPlaying: false, list: [], listIndex: -1 }),
     togglePlay: () => set({ isPlaying: !get().isPlaying }),
+    playPrev: () => {
+      const { list, listIndex } = get();
+      const prevIndex = mod(listIndex - 1, list.length);
+      const prevTrack = list.at(prevIndex);
+      if (list.length > 1 && listIndex >= 0) {
+        set({
+          track: prevTrack,
+          isPlaying: !!prevTrack,
+          listIndex: prevIndex,
+        });
+        return { ok: true };
+      } else {
+        return { ok: false };
+      }
+    },
+    playNext: () => {
+      const { list, listIndex } = get();
+      const nextIndex = mod(listIndex + 1, list.length);
+      const nextTrack = list.at(nextIndex);
+      console.log("👾", "nextTrack =>", nextTrack);
+      if (list.length > 1 && listIndex >= 0) {
+        set({ track: nextTrack, isPlaying: true, listIndex: nextIndex });
+        return { ok: true };
+      } else {
+        return { ok: false };
+      }
+    },
   }))
 );
 

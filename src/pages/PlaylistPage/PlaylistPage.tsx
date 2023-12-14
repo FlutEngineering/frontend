@@ -262,10 +262,11 @@ function PlaylistPage(): JSX.Element {
           loader={<AudioItemLoader key="loader" marginBottom={2} />}
           useWindow={false}
         >
-          {tracksToRender.map((track) => (
+          {tracksToRender.map((track, index) => (
             <AudioItem
               track={track}
               key={track.id}
+              onPlayClick={() => playTrack(track, playlistTracks, index)}
               onTagClick={(tag) => navigate(tagSearchURL(tag))}
               showMenu={false}
               buttons={

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Text, Box, Stack, Flex, Heading, Link, Grid } from "@chakra-ui/react";
 import { isAddress } from "ethers/lib/utils.js";
-import { useTrackStore } from "~/store";
+import { usePlayerStore, useTrackStore } from "~/store";
 import { useLoaderData } from "react-router-dom";
 import { useAccount, useEnsName } from "wagmi";
 import { fetchEnsName } from "@wagmi/core";
@@ -41,6 +41,7 @@ export async function loader({ params }: any) {
 
 function Profile(): JSX.Element {
   const { tracks, fetchTracksByAddress } = useTrackStore();
+  const { playTrack } = usePlayerStore();
   const { artist } = useLoaderData() as ProfileParams;
   const { address } = useAccount();
   const { data: ensName, isSuccess: isEnsLoaded } = useEnsName({
@@ -121,8 +122,12 @@ function Profile(): JSX.Element {
         <Heading size="md">Uploads</Heading>
         <Box alignSelf="stretch" overflowY="auto">
           <Stack spacing={2} paddingBottom="2">
-            {tracks.map((track) => (
-              <AudioItem track={track} key={track.title} />
+            {tracks.map((track, index) => (
+              <AudioItem
+                track={track}
+                key={track.title}
+                onPlayClick={() => playTrack(track, tracks, index)}
+              />
             ))}
           </Stack>
         </Box>

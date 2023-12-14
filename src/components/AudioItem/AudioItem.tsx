@@ -37,6 +37,7 @@ import Marquee from "~/components/Marquee";
 
 type AudioItemProps = {
   track: Track;
+  onPlayClick: () => void;
   onTagClick?: (tag: string) => void;
   showMenu?: boolean;
   buttons?: React.ReactNode;
@@ -63,13 +64,14 @@ export const AudioItemLoader: React.FC<CardProps> = (props) => (
 );
 const AudioItem: React.FC<AudioItemProps & CardProps> = ({
   track,
+  onPlayClick,
   onTagClick,
   showMenu = true,
   buttons = null,
   ...rest
 }) => {
   const { address } = useAccount();
-  const { track: current, isPlaying, playTrack, togglePlay } = usePlayerStore();
+  const { track: current, isPlaying, togglePlay } = usePlayerStore();
   const { addTrackToPlaylist } = usePlaylistStore();
   const { selectPlaylist } = usePlaylistSelectModalStore();
   const { data: ensName } = useEnsName({ address: track.artistAddress });
@@ -99,7 +101,7 @@ const AudioItem: React.FC<AudioItemProps & CardProps> = ({
         width="80px"
         height="80px"
         minWidth="80px"
-        onClick={() => (!isCurrentTrack ? playTrack(track) : togglePlay())}
+        onClick={() => (!isCurrentTrack ? onPlayClick() : togglePlay())}
         cursor="pointer"
       >
         <Icon

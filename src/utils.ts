@@ -17,6 +17,8 @@ export const ipfsCidToUrl = (
 export const tagSearchURL = (tag: string) =>
   `/search?q=${encodeURIComponent(("#" + tag).replace(/^##/, "#"))}`;
 
+export const mod = (n: number, m: number) => ((n % m) + m) % m;
+
 export function absurd<A>(_: never): A {
   throw new Error("Called `absurd` function which should be uncallable");
 }

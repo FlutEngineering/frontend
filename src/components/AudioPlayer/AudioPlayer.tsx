@@ -9,7 +9,8 @@ import PlayerControls from "./components/PlayerControls";
 import TrackInfo from "./components/TrackInfo";
 
 const AudioPlayer: React.FC<StackProps> = (props) => {
-  const { track, isPlaying, play, pause, togglePlay } = usePlayerStore();
+  const { track, isPlaying, play, pause, togglePlay, playNext } =
+    usePlayerStore();
   const { like, unlike } = useTrackStore();
   const { user, fetchUser } = useAuthStore();
   const { address } = useAccount();
@@ -73,6 +74,11 @@ const AudioPlayer: React.FC<StackProps> = (props) => {
       if (audioRef.current.ended) {
         setTrackProgress(0);
         pause();
+        clearInterval(intervalRef.current);
+        const { ok } = playNext();
+        if (ok) {
+          startTimer();
+        }
       } else {
         setTrackProgress(audioRef.current.currentTime);
       }

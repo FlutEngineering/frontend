@@ -1,5 +1,5 @@
 import { Text, Stack, Grid, Box } from "@chakra-ui/react";
-import { useTrackStore } from "~/store";
+import { usePlayerStore, useTrackStore } from "~/store";
 import { useEffect } from "react";
 import AudioItem from "~/components/AudioItem";
 import { useAccount } from "wagmi";
@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 function Library(): JSX.Element {
   const { address } = useAccount();
   const { tracks, fetchTracks } = useTrackStore();
+  const { playTrack } = usePlayerStore();
 
   useEffect(() => {
     fetchTracks();
@@ -30,9 +31,15 @@ function Library(): JSX.Element {
       </Text>
       <Box gridArea="track-list" alignSelf="stretch" overflowY="auto">
         <Stack spacing={2}>
-          {tracks.map((track) => {
+          {tracks.map((track, index) => {
             if (track?.artistAddress === address) {
-              return <AudioItem track={track} key={track.title} />;
+              return (
+                <AudioItem
+                  track={track}
+                  key={track.title}
+                  onPlayClick={() => playTrack(track, tracks, index)}
+                />
+              );
             }
           })}
         </Stack>
