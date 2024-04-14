@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, VStack, Stack, Heading, HStack } from "@chakra-ui/react";
+import { Button, VStack, Stack, Heading, HStack, Grid, GridItem, Text } from "@chakra-ui/react";
 import AudioDropzone from "./components/AudioDropzone";
 import AudioFileList from "./components/AudioFileList";
 import { useAccount, useEnsName } from "wagmi";
@@ -21,6 +21,10 @@ function Upload(): JSX.Element {
       paddingBottom="2"
       overflowY="scroll"
     >
+      <Grid templateRows='repeat(2,1fr)' templateColumns='repeat(5,1fr)' backgroundColor='pink'>
+
+        <GridItem rowSpan={1} colSpan={1}><Text>By uploading here you certify that your upload is original</Text></GridItem>
+      </Grid>
       {files.length === 0 ? (
         <AudioDropzone onSelect={(files) => setFiles(files)} />
       ) : (
