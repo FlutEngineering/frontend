@@ -84,7 +84,7 @@ const AudioDropzone: React.FC<DropzoneProps> = ({ onSelect }) => {
       _focus={{ borderColor: "purple.300" }}
     >
       <input {...getInputProps()} />
-      <Text fontSize="lg">Drag 'n' drop files here, or click to select</Text>
+      <Text fontSize="lg">Drag / Drop files here (or click to select)</Text>
     </Flex>
   );
 };
